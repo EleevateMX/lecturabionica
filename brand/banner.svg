@@ -73,7 +73,7 @@
 
   <!-- Wordmark -->
   <text x="150" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="700" fill="white" letter-spacing="-0.5">Focus</text>
-  <text x="150" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="300" fill="rgba(255,255,255,0.65)" letter-spacing="-0.5" x="337">Read</text>
+  <text x="337" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="300" fill="rgba(255,255,255,0.65)" letter-spacing="-0.5">Read</text>
 
   <!-- Tagline ES -->
   <text x="60" y="172" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="500" fill="#8B7CF8" letter-spacing="0.3">Lectura biónica para mentes brillantes</text>
