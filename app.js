@@ -609,6 +609,7 @@ function init() {
   $('input-txt').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!currentUser) { openLoginModal(); e.target.value = ''; return; }
     showLoading(t('loadingText'));
     try {
       const text = await readTxt(file);
@@ -631,6 +632,7 @@ function init() {
   $('input-pdf').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!currentUser) { openLoginModal(); e.target.value = ''; return; }
     showLoading(t('loadingPdf'));
     try {
       const text = await readPdf(file);
