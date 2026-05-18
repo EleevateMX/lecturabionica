@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="120" fill="#8b7cf8"/>
+  <!-- Subtle inner glow -->
+  <rect width="512" height="512" rx="120" fill="url(#glow)" opacity="0.3"/>
+  <defs>
+    <radialGradient id="glow" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#8b7cf8"/>
+    </radialGradient>
+  </defs>
+  <!-- F — bold part (bionic) -->
+  <text
+    x="90" y="350"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="300"
+    font-weight="800"
+    fill="#ffffff"
+    opacity="1">F</text>
+  <!-- R — lighter part -->
+  <text
+    x="265" y="350"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="300"
+    font-weight="400"
+    fill="#ffffff"
+    opacity="0.55">R</text>
+</svg>

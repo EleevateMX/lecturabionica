@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>FocusRead — Lectura Biónica</title>
+  <meta name="description" content="Lectura biónica para mentes con TDAH. Importa PDFs y textos, lee con enfoque total.">
+  <meta name="theme-color" content="#8b7cf8">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FocusRead">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+  <div id="app">
+
+    <!-- ══ HOME SCREEN ══════════════════════════════════════ -->
+    <div id="screen-home" class="screen active">
+
+      <header class="app-header">
+        <div class="logo">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <rect width="30" height="30" rx="9" fill="#8b7cf8"/>
+            <text x="15" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">FR</text>
+          </svg>
+          <span class="logo-text">FocusRead</span>
+        </div>
+        <div class="header-actions">
+          <button id="btn-lang" class="btn-chip" aria-label="Cambiar idioma">ES</button>
+          <button id="btn-theme" class="btn-icon" aria-label="Cambiar tema">
+            <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg id="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="home-main">
+
+        <section class="hero">
+          <div class="hero-badge" id="hero-badge">Para mentes con TDAH</div>
+          <h1 class="hero-title" id="hero-title">Lee más rápido.<br>Con más enfoque.</h1>
+          <p class="hero-sub" id="hero-sub">La técnica de lectura biónica resalta las primeras letras de cada palabra para guiar tu cerebro naturalmente.</p>
+        </section>
+
+        <section class="demo-section">
+          <div class="demo-label" id="demo-label">Ejemplo en vivo</div>
+          <div class="demo-card">
+            <div class="bionic-text" id="demo-text"></div>
+          </div>
+        </section>
+
+        <section class="import-section">
+          <h2 class="section-title" id="import-title">Importar texto</h2>
+
+          <div class="import-grid">
+            <button class="import-card" id="btn-paste">
+              <div class="import-card-icon">✏️</div>
+              <div class="import-card-label" id="paste-label">Pegar texto</div>
+              <div class="import-card-hint" id="paste-hint">Escribe o pega</div>
+            </button>
+            <button class="import-card" id="btn-txt">
+              <div class="import-card-icon">📄</div>
+              <div class="import-card-label" id="txt-label">Archivo TXT</div>
+              <div class="import-card-hint">.txt</div>
+            </button>
+            <button class="import-card" id="btn-pdf">
+              <div class="import-card-icon">📕</div>
+              <div class="import-card-label" id="pdf-label">Libro PDF</div>
+              <div class="import-card-hint" id="pdf-hint">.pdf · Gratis</div>
+            </button>
+          </div>
+
+          <div class="paste-area" id="paste-area">
+            <textarea id="paste-input" rows="7" spellcheck="false"></textarea>
+            <button class="btn-primary" id="btn-process">
+              <span id="btn-process-text">Leer ahora →</span>
+            </button>
+          </div>
+        </section>
+
+        <footer class="home-footer">
+          <p id="footer-text">Procesamiento 100% local · Sin servidores · Sin costos</p>
+        </footer>
+
+      </main>
+
+      <input type="file" id="input-txt" accept=".txt,text/plain" hidden>
+      <input type="file" id="input-pdf" accept=".pdf,application/pdf" hidden>
+    </div>
+
+    <!-- ══ READER SCREEN ═════════════════════════════════════ -->
+    <div id="screen-reader" class="screen">
+
+      <header class="reader-header">
+        <button id="btn-back" class="btn-back" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <h1 class="reader-title" id="reader-title">FocusRead</h1>
+        <div class="font-controls">
+          <button class="btn-font" id="btn-font-down" aria-label="Reducir fuente">A−</button>
+          <button class="btn-font" id="btn-font-up" aria-label="Aumentar fuente">A+</button>
+        </div>
+      </header>
+
+      <div class="reader-scroll" id="reader-scroll">
+        <div class="reader-content bionic-text" id="reader-content"></div>
+      </div>
+
+      <div class="reader-footer">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-label" id="progress-label">0%</span>
+      </div>
+
+    </div>
+
+    <!-- ══ LOADING OVERLAY ══════════════════════════════════ -->
+    <div id="loading" class="loading-overlay" hidden>
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <p class="loading-title" id="loading-text">Procesando...</p>
+        <p class="loading-sub" id="loading-detail"></p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
