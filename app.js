@@ -24,6 +24,17 @@ const LANG = {
     errorPdf:     'No se pudo leer el PDF. Verifica que no esté protegido.',
     errorPdfJs:   'PDF.js no cargó. Verifica tu conexión a internet.',
     demoText:     'La lectura biónica ayuda a las personas con TDAH a mantener el foco durante períodos más largos. Las primeras letras de cada palabra guían tu cerebro para completar el resto de forma natural y fluida.',
+    // Auth
+    signinBtn:    'Iniciar sesión',
+    loginTitle:   'Bienvenido a FocusRead',
+    loginSub:     'Inicia sesión para guardar tu progreso y acceder desde cualquier dispositivo',
+    googleBtn:    'Continuar con Google',
+    loginTerms:   'Al continuar aceptas nuestros',
+    linkTerms:    'Términos',
+    linkPrivacy:  'Privacidad',
+    loginOr:      'o continúa sin cuenta',
+    guestBtn:     'Explorar gratis sin iniciar sesión →',
+    signoutBtn:   'Cerrar sesión',
     // Pricing
     pricingTitle: 'Elige tu plan',
     pricingSub:   'Empieza gratis, sube cuando quieras',
@@ -84,6 +95,17 @@ const LANG = {
     errorPdf:     'Could not read the PDF. Make sure it is not password-protected.',
     errorPdfJs:   'PDF.js failed to load. Check your internet connection.',
     demoText:     'Bionic reading helps people with ADHD maintain focus for longer periods. The first letters of each word guide your brain to complete the rest naturally and fluently.',
+    // Auth
+    signinBtn:    'Sign in',
+    loginTitle:   'Welcome to FocusRead',
+    loginSub:     'Sign in to save your progress and access from any device',
+    googleBtn:    'Continue with Google',
+    loginTerms:   'By continuing you accept our',
+    linkTerms:    'Terms',
+    linkPrivacy:  'Privacy',
+    loginOr:      'or continue without an account',
+    guestBtn:     'Explore free without signing in →',
+    signoutBtn:   'Sign out',
     pricingTitle: 'Choose your plan',
     pricingSub:   'Start free, upgrade anytime',
     planFreeName: 'Free',
@@ -260,6 +282,121 @@ async function readPdf(file) {
   return fullText.trim();
 }
 
+/* ══ Firebase Auth ═════════════════════════════════════════════ */
+let currentUser = null;
+let firebaseReady = false;
+
+function initFirebase() {
+  const cfg = window.FOCUSREAD_FIREBASE;
+  if (!cfg || cfg.apiKey.includes('REPLACE')) return; // not configured yet
+
+  // Wait for Firebase SDKs to load (they're deferred)
+  const waitForFirebase = () => {
+    if (typeof firebase === 'undefined') {
+      setTimeout(waitForFirebase, 200);
+      return;
+    }
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(cfg);
+      firebaseReady = true;
+      const auth = firebase.auth();
+      auth.languageCode = lang;
+
+      auth.onAuthStateChanged(user => {
+        currentUser = user;
+        updateAuthUI(user);
+      });
+    } catch (e) {
+      console.warn('Firebase init error:', e);
+    }
+  };
+  waitForFirebase();
+}
+
+function updateAuthUI(user) {
+  const signedIn  = !!user;
+  const profileEl = $('user-profile');
+  const signinEl  = $('btn-signin-header');
+
+  signinEl.hidden  = signedIn;
+  profileEl.hidden = !signedIn;
+
+  if (user) {
+    // Photo
+    const photo = $('user-photo');
+    const fallback = $('user-avatar-fallback');
+    if (user.photoURL) {
+      photo.src = user.photoURL;
+      photo.hidden = false;
+      fallback.hidden = true;
+    } else {
+      photo.hidden = true;
+      fallback.hidden = false;
+      fallback.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+    }
+    // Name + email
+    $('user-display-name').textContent = user.displayName || '';
+    $('user-email').textContent = user.email || '';
+  }
+}
+
+async function googleSignIn() {
+  if (!firebaseReady) {
+    alert(lang === 'es'
+      ? 'Firebase no está configurado aún. Revisa firebase-config.js'
+      : 'Firebase is not configured yet. Check firebase-config.js');
+    return;
+  }
+  const btn = $('btn-google-signin');
+  btn.disabled = true;
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
+    provider.addScope('profile');
+
+    // Try popup first; fall back to redirect on mobile Safari
+    try {
+      await firebase.auth().signInWithPopup(provider);
+    } catch (e) {
+      if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+        await firebase.auth().signInWithRedirect(provider);
+      } else throw e;
+    }
+    closeLoginModal();
+  } catch (e) {
+    console.error('Sign-in error:', e);
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+      alert(lang === 'es' ? 'Error al iniciar sesión. Intenta de nuevo.' : 'Sign-in failed. Please try again.');
+    }
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function signOut() {
+  if (!firebaseReady) return;
+  try {
+    await firebase.auth().signOut();
+    closeUserDropdown();
+  } catch (e) { console.error(e); }
+}
+
+function openLoginModal() {
+  $('modal-login').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeLoginModal() {
+  $('modal-login').hidden = true;
+  document.body.style.overflow = '';
+}
+function toggleUserDropdown() {
+  const dd = $('user-dropdown');
+  dd.hidden = !dd.hidden;
+}
+function closeUserDropdown() {
+  $('user-dropdown').hidden = true;
+}
+
 /* ══ Stripe / Pricing ══════════════════════════════════════════ */
 let selectedPeriod = 'month';
 
@@ -377,6 +514,16 @@ function applyLang() {
     if (el) el.textContent = t(key);
   }
 
+  // Auth strings
+  $('btn-signin-text').textContent  = t('signinBtn');
+  $('login-title').textContent      = t('loginTitle');
+  $('login-sub').textContent        = t('loginSub');
+  $('btn-google-text').textContent  = t('googleBtn');
+  $('login-or-text').textContent    = t('loginOr');
+  $('btn-guest-text').textContent   = t('guestBtn');
+  $('btn-signout-text').textContent = t('signoutBtn');
+  if (firebaseReady) firebase.auth().languageCode = lang;
+
   // innerHTML updates
   $('hero-title').innerHTML = t('heroTitle');
   $('paste-input').placeholder = t('pastePlaceholder');
@@ -417,6 +564,7 @@ function init() {
   applyLang();
   initBio();
   initStripe();
+  initFirebase();
 
   /* Language toggle */
   $('btn-lang').addEventListener('click', () => {
@@ -496,6 +644,30 @@ function init() {
   $('reader-scroll').addEventListener('scroll', updateProgress, { passive: true });
   $('reader-bio-close').addEventListener('click', () => {
     $('reader-bio-tip').classList.add('hidden');
+  });
+
+  /* Auth */
+  $('btn-signin-header').addEventListener('click', openLoginModal);
+  $('login-modal-close').addEventListener('click', closeLoginModal);
+  $('modal-login').addEventListener('click', e => {
+    if (e.target === $('modal-login')) closeLoginModal();
+  });
+  $('btn-google-signin').addEventListener('click', googleSignIn);
+  $('btn-guest').addEventListener('click', closeLoginModal);
+  $('user-avatar-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    toggleUserDropdown();
+  });
+  $('btn-signout').addEventListener('click', signOut);
+  if ($('btn-upgrade-dropdown')) {
+    $('btn-upgrade-dropdown').addEventListener('click', () => {
+      closeUserDropdown();
+      openUpgradeModal();
+    });
+  }
+  // Close dropdown clicking outside
+  document.addEventListener('click', e => {
+    if (!$('user-area').contains(e.target)) closeUserDropdown();
   });
 
   /* Pricing / upgrade */
