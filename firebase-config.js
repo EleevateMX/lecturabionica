@@ -1,23 +1,14 @@
 /**
  * FocusRead — Firebase Configuration
- *
- * Pasos para activar Google Sign-In (gratis):
- * ─────────────────────────────────────────────
- * 1. Ve a https://console.firebase.google.com
- * 2. "Agregar proyecto" → nombre: FocusRead → continuar
- * 3. En el proyecto: "Agregar app" → ícono </> (Web)
- * 4. Registra la app, copia el objeto firebaseConfig y pégalo abajo
- * 5. Ve a Authentication → "Comenzar" → pestaña Sign-in method
- * 6. Activa "Google" → guarda
- * 7. En Authentication → Settings → Authorized domains:
- *    agrega tu dominio de GitHub Pages (tuusuario.github.io)
- * 8. Listo — los usuarios ya pueden iniciar sesión con Google
+ * La API key de Firebase es segura en el código cliente — Firebase
+ * controla el acceso mediante reglas de seguridad, no ocultando la key.
  */
 window.FOCUSREAD_FIREBASE = {
-  apiKey:            'REPLACE_WITH_apiKey',
-  authDomain:        'REPLACE_WITH_authDomain',
-  projectId:         'REPLACE_WITH_projectId',
-  storageBucket:     'REPLACE_WITH_storageBucket',
-  messagingSenderId: 'REPLACE_WITH_messagingSenderId',
-  appId:             'REPLACE_WITH_appId',
+  apiKey:            'AIzaSyDDsCFYRwmpwCOgG_trW4ekI7whPHfBT64',
+  authDomain:        'focusread-836a7.firebaseapp.com',
+  projectId:         'focusread-836a7',
+  storageBucket:     'focusread-836a7.firebasestorage.app',
+  messagingSenderId: '658178863056',
+  appId:             '1:658178863056:web:b6456c4e7e9a55f0cbd3d5',
+  measurementId:     'G-WTELQ5Z5XD',
 };
