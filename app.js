@@ -389,6 +389,9 @@ function closeLoginModal() {
   $('modal-login').hidden = true;
   document.body.style.overflow = '';
 }
+function requireAuth(callback) {
+  if (currentUser) { callback(); } else { openLoginModal(); }
+}
 function toggleUserDropdown() {
   const dd = $('user-dropdown');
   dd.hidden = !dd.hidden;
@@ -519,8 +522,6 @@ function applyLang() {
   $('login-title').textContent      = t('loginTitle');
   $('login-sub').textContent        = t('loginSub');
   $('btn-google-text').textContent  = t('googleBtn');
-  $('login-or-text').textContent    = t('loginOr');
-  $('btn-guest-text').textContent   = t('guestBtn');
   $('btn-signout-text').textContent = t('signoutBtn');
   if (firebaseReady) firebase.auth().languageCode = lang;
 
@@ -582,25 +583,29 @@ function init() {
 
   /* Paste toggle */
   $('btn-paste').addEventListener('click', () => {
-    const area = $('paste-area');
-    const open = area.classList.toggle('visible');
-    $('btn-paste').classList.toggle('active', open);
-    if (open) $('paste-input').focus();
+    requireAuth(() => {
+      const area = $('paste-area');
+      const open = area.classList.toggle('visible');
+      $('btn-paste').classList.toggle('active', open);
+      if (open) $('paste-input').focus();
+    });
   });
 
   /* Process pasted text */
   $('btn-process').addEventListener('click', () => {
-    const text = $('paste-input').value.trim();
-    if (!text) { alert(t('errorNoText')); return; }
-    const title = text.split('\n')[0].slice(0, 70);
-    openReader(text, title);
+    requireAuth(() => {
+      const text = $('paste-input').value.trim();
+      if (!text) { alert(t('errorNoText')); return; }
+      const title = text.split('\n')[0].slice(0, 70);
+      openReader(text, title);
+    });
   });
   $('paste-input').addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('btn-process').click();
   });
 
   /* TXT upload */
-  $('btn-txt').addEventListener('click', () => $('input-txt').click());
+  $('btn-txt').addEventListener('click', () => requireAuth(() => $('input-txt').click()));
   $('input-txt').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -618,8 +623,10 @@ function init() {
 
   /* PDF upload */
   $('btn-pdf').addEventListener('click', () => {
-    if (typeof pdfjsLib === 'undefined') { alert(t('errorPdfJs')); return; }
-    $('input-pdf').click();
+    requireAuth(() => {
+      if (typeof pdfjsLib === 'undefined') { alert(t('errorPdfJs')); return; }
+      $('input-pdf').click();
+    });
   });
   $('input-pdf').addEventListener('change', async e => {
     const file = e.target.files[0];
@@ -653,7 +660,6 @@ function init() {
     if (e.target === $('modal-login')) closeLoginModal();
   });
   $('btn-google-signin').addEventListener('click', googleSignIn);
-  $('btn-guest').addEventListener('click', closeLoginModal);
   $('user-avatar-btn').addEventListener('click', e => {
     e.stopPropagation();
     toggleUserDropdown();
