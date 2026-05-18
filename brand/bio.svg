@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" width="200" height="260">
+  <defs>
+    <!-- Head gradient -->
+    <radialGradient id="bio-headGrad" cx="45%" cy="40%" r="58%">
+      <stop offset="0%" stop-color="#B8AEFF"/>
+      <stop offset="55%" stop-color="#9B8CFF"/>
+      <stop offset="100%" stop-color="#7065E0"/>
+    </radialGradient>
+    <!-- Body gradient -->
+    <radialGradient id="bio-bodyGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#A899FF"/>
+      <stop offset="100%" stop-color="#7065E0"/>
+    </radialGradient>
+    <!-- Book gradient -->
+    <linearGradient id="bio-bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE08A"/>
+      <stop offset="100%" stop-color="#FFD166"/>
+    </linearGradient>
+    <!-- Drop shadow filter -->
+    <filter id="bio-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#6B5CE7" flood-opacity="0.35"/>
+    </filter>
+    <!-- Glow filter for sparkle -->
+    <filter id="bio-sparkleGlow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- === DROP SHADOW === -->
+  <ellipse cx="100" cy="252" rx="42" ry="7" fill="#4A3B9C" opacity="0.22"/>
+
+  <!-- === BODY === -->
+  <ellipse cx="100" cy="210" rx="30" ry="22" fill="url(#bio-bodyGrad)" filter="url(#bio-shadow)"/>
+
+  <!-- Body neck connector -->
+  <ellipse cx="100" cy="188" rx="18" ry="10" fill="#8B7CF8"/>
+
+  <!-- === LEFT ARM (waving) === -->
+  <g stroke="#7065E0" stroke-width="9" stroke-linecap="round" fill="none">
+    <path d="M72 200 Q48 185 38 162 Q34 148 42 140"/>
+  </g>
+  <!-- Left hand (rounded cap) -->
+  <circle cx="42" cy="138" r="7" fill="#9B8CFF" stroke="#7065E0" stroke-width="2"/>
+  <!-- Waving fingers -->
+  <path d="M38 133 Q36 127 39 123" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M43 131 Q42 124 46 121" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M48 133 Q49 127 52 125" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+  <!-- === RIGHT ARM (holding book) === -->
+  <g stroke="#7065E0" stroke-width="9" stroke-linecap="round" fill="none">
+    <path d="M128 200 Q152 190 158 172 Q162 158 155 148"/>
+  </g>
+
+  <!-- === OPEN BOOK === -->
+  <g transform="translate(148, 148)">
+    <!-- Book left page -->
+    <path d="M-18 -10 Q-18 -18 -8 -18 L0 -18 L0 14 L-8 14 Q-18 14 -18 6 Z" fill="url(#bio-bookGrad)" stroke="#E8B84B" stroke-width="1"/>
+    <!-- Book right page -->
+    <path d="M18 -10 Q18 -18 8 -18 L0 -18 L0 14 L8 14 Q18 14 18 6 Z" fill="#FFF0B8" stroke="#E8B84B" stroke-width="1"/>
+    <!-- Book spine -->
+    <line x1="0" y1="-18" x2="0" y2="14" stroke="#C8963A" stroke-width="2"/>
+    <!-- Text lines on left page -->
+    <line x1="-14" y1="-8" x2="-3" y2="-8" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+    <line x1="-14" y1="-2" x2="-3" y2="-2" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+    <line x1="-14" y1="4" x2="-3" y2="4" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+    <!-- Text lines on right page -->
+    <line x1="3" y1="-8" x2="14" y2="-8" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+    <line x1="3" y1="-2" x2="14" y2="-2" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+    <line x1="3" y1="4" x2="14" y2="4" stroke="#C8963A" stroke-width="1.2" opacity="0.6"/>
+  </g>
+
+  <!-- === HEAD === -->
+  <g filter="url(#bio-shadow)">
+    <!-- Main head circle -->
+    <circle cx="100" cy="115" r="52" fill="url(#bio-headGrad)"/>
+
+    <!-- Brain lobe bumps on top -->
+    <circle cx="78" cy="66" r="16" fill="url(#bio-headGrad)"/>
+    <circle cx="100" cy="62" r="17" fill="url(#bio-headGrad)"/>
+    <circle cx="122" cy="66" r="16" fill="url(#bio-headGrad)"/>
+
+    <!-- Overlap cover to merge bumps smoothly -->
+    <rect x="64" y="75" width="72" height="20" fill="url(#bio-headGrad)" rx="2"/>
+  </g>
+
+  <!-- Brain fold details on head -->
+  <path d="M80 95 Q90 88 100 95 Q110 102 120 95" stroke="#7B6CD0" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M75 110 Q82 104 90 110" stroke="#7B6CD0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M110 108 Q118 102 126 108" stroke="#7B6CD0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- Lobe top detail lines -->
+  <path d="M88 66 Q95 60 102 66" stroke="#7B6CD0" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M73 72 Q78 66 83 72" stroke="#7B6CD0" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- === EYES === -->
+  <!-- Left eye -->
+  <ellipse cx="85" cy="116" rx="10" ry="12" fill="white"/>
+  <circle cx="86" cy="117" r="7" fill="#1E1148"/>
+  <circle cx="89" cy="113" r="2.5" fill="white"/>
+
+  <!-- Right eye -->
+  <ellipse cx="115" cy="116" rx="10" ry="12" fill="white"/>
+  <circle cx="116" cy="117" r="7" fill="#1E1148"/>
+  <circle cx="119" cy="113" r="2.5" fill="white"/>
+
+  <!-- === BLUSH === -->
+  <ellipse cx="73" cy="128" rx="10" ry="6" fill="#F857A6" opacity="0.28"/>
+  <ellipse cx="127" cy="128" rx="10" ry="6" fill="#F857A6" opacity="0.28"/>
+
+  <!-- === SMILE === -->
+  <path d="M88 136 Q100 148 112 136" stroke="#1E1148" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- === SPARKLES (gold) near top-right of head === -->
+  <g filter="url(#bio-sparkleGlow)" fill="#FFD166">
+    <!-- Main 4-pointed star -->
+    <path d="M138 68 L140 74 L146 76 L140 78 L138 84 L136 78 L130 76 L136 74 Z"/>
+    <!-- Small sparkle -->
+    <path d="M152 55 L153 58 L156 59 L153 60 L152 63 L151 60 L148 59 L151 58 Z" opacity="0.85"/>
+    <!-- Tiny dot sparkle -->
+    <circle cx="126" cy="58" r="2" opacity="0.7"/>
+  </g>
+</svg>

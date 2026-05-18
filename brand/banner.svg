@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500">
+  <defs>
+    <!-- Background -->
+    <linearGradient id="ban-bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D0D14"/>
+      <stop offset="100%" stop-color="#12101E"/>
+    </linearGradient>
+    <!-- Left purple radial glow -->
+    <radialGradient id="ban-glow" cx="20%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#4A3B9C" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#2D2270" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0D0D14" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Right pink glow -->
+    <radialGradient id="ban-glowR" cx="78%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#3D2060" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0D0D14" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Icon gradient -->
+    <linearGradient id="ban-iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9B8CFF"/>
+      <stop offset="100%" stop-color="#6B5CE7"/>
+    </linearGradient>
+    <!-- Bio head gradient -->
+    <radialGradient id="ban-headGrad" cx="45%" cy="40%" r="58%">
+      <stop offset="0%" stop-color="#B8AEFF"/>
+      <stop offset="55%" stop-color="#9B8CFF"/>
+      <stop offset="100%" stop-color="#7065E0"/>
+    </radialGradient>
+    <radialGradient id="ban-bodyGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#A899FF"/>
+      <stop offset="100%" stop-color="#7065E0"/>
+    </radialGradient>
+    <linearGradient id="ban-bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE08A"/>
+      <stop offset="100%" stop-color="#FFD166"/>
+    </linearGradient>
+    <filter id="ban-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#6B5CE7" flood-opacity="0.5"/>
+    </filter>
+    <filter id="ban-sparkleGlow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ban-textGlow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- === BACKGROUND === -->
+  <rect width="1500" height="500" fill="url(#ban-bgGrad)"/>
+  <rect width="1500" height="500" fill="url(#ban-glow)"/>
+  <rect width="1500" height="500" fill="url(#ban-glowR)"/>
+
+  <!-- Decorative dots / stars -->
+  <circle cx="420" cy="60" r="1.5" fill="white" opacity="0.2"/>
+  <circle cx="580" cy="40" r="1" fill="white" opacity="0.3"/>
+  <circle cx="880" cy="80" r="1.5" fill="white" opacity="0.2"/>
+  <circle cx="1020" cy="30" r="1" fill="white" opacity="0.25"/>
+  <circle cx="1200" cy="70" r="1.5" fill="white" opacity="0.2"/>
+  <circle cx="1380" cy="50" r="1" fill="white" opacity="0.3"/>
+
+  <!-- Subtle horizontal rule -->
+  <line x1="0" y1="420" x2="1500" y2="420" stroke="rgba(139,124,248,0.12)" stroke-width="1"/>
+
+  <!-- ===================== LEFT THIRD — LOGO + TAGLINE ===================== -->
+  <!-- Logo icon -->
+  <rect x="60" y="60" width="72" height="72" rx="20" fill="url(#ban-iconGrad)" filter="url(#ban-shadow)"/>
+  <rect x="60" y="60" width="72" height="34" rx="20" fill="white" opacity="0.07"/>
+  <text x="76" y="115" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="40" font-weight="800" fill="white">F</text>
+  <text x="104" y="115" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="40" font-weight="300" fill="white" opacity="0.88">R</text>
+
+  <!-- Wordmark -->
+  <text x="150" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="700" fill="white" letter-spacing="-0.5">Focus</text>
+  <text x="150" y="100" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="300" fill="rgba(255,255,255,0.65)" letter-spacing="-0.5" x="337">Read</text>
+
+  <!-- Tagline ES -->
+  <text x="60" y="172" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="21" font-weight="500" fill="#8B7CF8" letter-spacing="0.3">Lectura biónica para mentes brillantes</text>
+
+  <!-- Tagline EN -->
+  <text x="60" y="198" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="400" fill="#8888A8" letter-spacing="0.5">Bionic reading for brilliant minds</text>
+
+  <!-- Vertical accent bar -->
+  <rect x="60" y="222" width="3" height="140" rx="2" fill="url(#ban-iconGrad)" opacity="0.6"/>
+
+  <!-- Feature highlight bullets -->
+  <text x="78" y="252" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.75)">✦  Open source · PWA</text>
+  <text x="78" y="280" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.75)">✦  PDF + TXT · ES + EN</text>
+  <text x="78" y="308" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.75)">✦  Sin servidor · 100% privado</text>
+  <text x="78" y="336" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.75)">✦  Para mentes con TDAH</text>
+
+  <!-- ===================== CENTER — BIONIC READING DEMO ===================== -->
+  <!-- Demo label -->
+  <rect x="480" y="52" width="140" height="22" rx="11" fill="rgba(139,124,248,0.15)" stroke="#8B7CF8" stroke-width="1"/>
+  <text x="550" y="67" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#8B7CF8" letter-spacing="1.5">DEMO</text>
+
+  <!-- Demo text area background -->
+  <rect x="470" y="88" width="560" height="310" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(139,124,248,0.2)" stroke-width="1"/>
+
+  <!-- Bionic reading label -->
+  <text x="750" y="122" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="rgba(139,124,248,0.7)" letter-spacing="2">LECTURA BIÓNICA</text>
+
+  <!-- Line 1: "La lectura biónica ayuda" -->
+  <text x="500" y="162" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" fill="white">
+    <tspan font-weight="700">La</tspan><tspan font-weight="400"> </tspan><tspan font-weight="700">lec</tspan><tspan font-weight="400">tura </tspan><tspan font-weight="700">bió</tspan><tspan font-weight="400">nica </tspan><tspan font-weight="700">ay</tspan><tspan font-weight="400">uda</tspan>
+  </text>
+  <!-- Line 2: "a mantener el foco" -->
+  <text x="500" y="200" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" fill="white">
+    <tspan font-weight="700">a</tspan><tspan font-weight="400"> </tspan><tspan font-weight="700">man</tspan><tspan font-weight="400">tener </tspan><tspan font-weight="700">el</tspan><tspan font-weight="400"> </tspan><tspan font-weight="700">fo</tspan><tspan font-weight="400">co</tspan>
+  </text>
+  <!-- Line 3: "en personas con TDAH" -->
+  <text x="500" y="238" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.85)">
+    <tspan font-weight="700">en</tspan><tspan font-weight="400"> </tspan><tspan font-weight="700">per</tspan><tspan font-weight="400">sonas </tspan><tspan font-weight="700">con</tspan><tspan font-weight="400"> TDAH</tspan>
+  </text>
+  <!-- Line 4: "y dificultades lectoras" -->
+  <text x="500" y="276" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.7)">
+    <tspan font-weight="700">y</tspan><tspan font-weight="400"> </tspan><tspan font-weight="700">di</tspan><tspan font-weight="400">ficultades </tspan><tspan font-weight="700">lec</tspan><tspan font-weight="400">toras</tspan>
+  </text>
+
+  <!-- Explanation -->
+  <text x="500" y="320" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="rgba(139,124,248,0.65)">Las letras en negrita anclan la mirada · el cerebro completa el resto</text>
+  <text x="500" y="340" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="rgba(139,124,248,0.45)">Bold letters anchor the eye · the brain fills in the rest</text>
+
+  <!-- Bold / regular legend -->
+  <rect x="500" y="362" width="12" height="4" rx="2" fill="#FFFFFF"/>
+  <text x="518" y="370" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Negrita (ancla)</text>
+  <rect x="620" y="362" width="12" height="4" rx="2" fill="rgba(255,255,255,0.35)"/>
+  <text x="638" y="370" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Regular (flujo)</text>
+
+  <!-- ===================== RIGHT THIRD — BIO MASCOT ===================== -->
+  <!-- Bio mascot simplified at ~1.8x scale -->
+  <g transform="translate(1240, 320) scale(1.85)">
+    <!-- Shadow -->
+    <ellipse cx="0" cy="106" rx="42" ry="7" fill="#4A3B9C" opacity="0.22"/>
+
+    <!-- Body -->
+    <ellipse cx="0" cy="68" rx="30" ry="22" fill="url(#ban-bodyGrad)"/>
+    <ellipse cx="0" cy="48" rx="18" ry="10" fill="#8B7CF8"/>
+
+    <!-- Left arm (waving) -->
+    <path d="M-28 58 Q-46 40 -52 14 Q-56 -2 -46 -12" stroke="#7065E0" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <circle cx="-46" cy="-14" r="7" fill="#9B8CFF" stroke="#7065E0" stroke-width="2"/>
+    <path d="M-50 -20 Q-52 -28 -48 -33" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M-44 -22 Q-44 -30 -39 -34" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M-39 -18 Q-37 -26 -34 -30" stroke="#9B8CFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+    <!-- Right arm -->
+    <path d="M28 58 Q44 48 50 28 Q54 12 48 2" stroke="#7065E0" stroke-width="9" stroke-linecap="round" fill="none"/>
+
+    <!-- Book -->
+    <g transform="translate(48, 2)">
+      <path d="M-16 -10 Q-16 -18 -7 -18 L0 -18 L0 14 L-7 14 Q-16 14 -16 6 Z" fill="url(#ban-bookGrad)" stroke="#E8B84B" stroke-width="1"/>
+      <path d="M16 -10 Q16 -18 7 -18 L0 -18 L0 14 L7 14 Q16 14 16 6 Z" fill="#FFF0B8" stroke="#E8B84B" stroke-width="1"/>
+      <line x1="0" y1="-18" x2="0" y2="14" stroke="#C8963A" stroke-width="2"/>
+    </g>
+
+    <!-- HEAD -->
+    <g filter="url(#ban-shadow)">
+      <circle cx="0" cy="-30" r="52" fill="url(#ban-headGrad)"/>
+      <circle cx="-22" cy="-79" r="16" fill="url(#ban-headGrad)"/>
+      <circle cx="0" cy="-83" r="17" fill="url(#ban-headGrad)"/>
+      <circle cx="22" cy="-79" r="16" fill="url(#ban-headGrad)"/>
+      <rect x="-36" y="-70" width="72" height="20" fill="url(#ban-headGrad)" rx="2"/>
+    </g>
+
+    <!-- Brain fold details -->
+    <path d="M-20 -50 Q-10 -57 0 -50 Q10 -43 20 -50" stroke="#7B6CD0" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+    <path d="M-25 -36 Q-18 -42 -10 -36" stroke="#7B6CD0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <path d="M10 -38 Q18 -44 26 -38" stroke="#7B6CD0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+    <!-- Eyes -->
+    <ellipse cx="-15" cy="-29" rx="10" ry="12" fill="white"/>
+    <circle cx="-14" cy="-28" r="7" fill="#1E1148"/>
+    <circle cx="-11" cy="-32" r="2.5" fill="white"/>
+
+    <ellipse cx="15" cy="-29" rx="10" ry="12" fill="white"/>
+    <circle cx="16" cy="-28" r="7" fill="#1E1148"/>
+    <circle cx="19" cy="-32" r="2.5" fill="white"/>
+
+    <!-- Blush -->
+    <ellipse cx="-27" cy="-18" rx="10" ry="6" fill="#F857A6" opacity="0.28"/>
+    <ellipse cx="27" cy="-18" rx="10" ry="6" fill="#F857A6" opacity="0.28"/>
+
+    <!-- Smile -->
+    <path d="M-12 -10 Q0 2 12 -10" stroke="#1E1148" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+    <!-- Sparkles -->
+    <g filter="url(#ban-sparkleGlow)" fill="#FFD166">
+      <path d="M38 -78 L40 -72 L46 -70 L40 -68 L38 -62 L36 -68 L30 -70 L36 -72 Z"/>
+      <path d="M52 -90 L53 -87 L56 -86 L53 -85 L52 -82 L51 -85 L48 -86 L51 -87 Z" opacity="0.8"/>
+      <circle cx="26" cy="-88" r="2" opacity="0.7"/>
+    </g>
+  </g>
+
+  <!-- ===================== BOTTOM FEATURE PILLS ===================== -->
+  <!-- Pill 1: PDF + TXT -->
+  <rect x="60" y="432" width="110" height="36" rx="18" fill="#1E1E2C" stroke="#8B7CF8" stroke-width="1.5"/>
+  <text x="115" y="455" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#8B7CF8">PDF + TXT</text>
+
+  <!-- Pill 2: Sin servidor -->
+  <rect x="186" y="432" width="130" height="36" rx="18" fill="#1E1E2C" stroke="#8B7CF8" stroke-width="1.5"/>
+  <text x="251" y="455" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#8B7CF8">Sin servidor</text>
+
+  <!-- Pill 3: ES + EN -->
+  <rect x="330" y="432" width="100" height="36" rx="18" fill="#1E1E2C" stroke="#8B7CF8" stroke-width="1.5"/>
+  <text x="380" y="455" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#8B7CF8">ES + EN</text>
+
+  <!-- Pill 4: Open Source -->
+  <rect x="444" y="432" width="130" height="36" rx="18" fill="#1E1E2C" stroke="#8B7CF8" stroke-width="1.5"/>
+  <text x="509" y="455" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="600" fill="#8B7CF8">Open Source</text>
+
+  <!-- Website URL -->
+  <text x="1440" y="460" text-anchor="end" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="rgba(139,124,248,0.5)">focusread.app</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+  <defs>
+    <linearGradient id="logo-iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9B8CFF"/>
+      <stop offset="100%" stop-color="#6B5CE7"/>
+    </linearGradient>
+    <filter id="logo-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#4A3B9C" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- === ICON: Rounded square with gradient === -->
+  <rect x="8" y="8" width="64" height="64" rx="18" ry="18" fill="url(#logo-iconGrad)" filter="url(#logo-shadow)"/>
+
+  <!-- Subtle inner highlight -->
+  <rect x="8" y="8" width="64" height="30" rx="18" fill="white" opacity="0.08"/>
+
+  <!-- === "FR" LETTERMARK === -->
+  <!-- "F" — bold weight 800 -->
+  <text x="22" y="54"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="36"
+        font-weight="800"
+        fill="white"
+        letter-spacing="-1">F</text>
+
+  <!-- "R" — light weight 300 -->
+  <text x="44" y="54"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="36"
+        font-weight="300"
+        fill="white"
+        opacity="0.90">R</text>
+
+  <!-- === WORDMARK === -->
+  <!-- "Focus" — bold -->
+  <text x="88" y="50"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="32"
+        font-weight="700"
+        fill="#FFFFFF"
+        letter-spacing="-0.5">Focus</text>
+
+  <!-- "Read" — regular weight -->
+  <text x="216" y="50"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="32"
+        font-weight="400"
+        fill="rgba(255,255,255,0.65)"
+        letter-spacing="-0.5">Read</text>
+
+  <!-- Tagline under wordmark -->
+  <text x="88" y="66"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-size="11"
+        font-weight="400"
+        fill="rgba(255,255,255,0.38)"
+        letter-spacing="2">LECTURA BIÓNICA</text>
+</svg>
