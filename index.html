@@ -27,12 +27,20 @@
       <header class="app-header">
         <div class="logo">
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-            <rect width="30" height="30" rx="9" fill="#8b7cf8"/>
-            <text x="15" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">FR</text>
+            <defs>
+              <linearGradient id="hdr-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#A394FF"/>
+                <stop offset="100%" stop-color="#6B5CE7"/>
+              </linearGradient>
+            </defs>
+            <rect width="30" height="30" rx="9" fill="url(#hdr-grad)"/>
+            <text x="8" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="800" fill="white">F</text>
+            <text x="17" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="300" fill="rgba(255,255,255,0.7)">R</text>
           </svg>
           <span class="logo-text">FocusRead</span>
         </div>
         <div class="header-actions">
+          <button id="btn-upgrade-header" class="btn-pro-badge" aria-label="Ir a Pro">Pro ✦</button>
           <button id="btn-lang" class="btn-chip" aria-label="Cambiar idioma">ES</button>
           <button id="btn-theme" class="btn-icon" aria-label="Cambiar tema">
             <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -51,12 +59,73 @@
 
       <main class="home-main">
 
+        <!-- ── HERO ──────────────────────────────────────── -->
         <section class="hero">
           <div class="hero-badge" id="hero-badge">Para mentes con TDAH</div>
           <h1 class="hero-title" id="hero-title">Lee más rápido.<br>Con más enfoque.</h1>
           <p class="hero-sub" id="hero-sub">La técnica de lectura biónica resalta las primeras letras de cada palabra para guiar tu cerebro naturalmente.</p>
         </section>
 
+        <!-- ── BIO INTRO ──────────────────────────────────── -->
+        <section class="bio-intro-section" id="bio-intro">
+          <div class="bio-card" id="bio-card">
+            <div class="bio-avatar" aria-hidden="true">
+              <!-- Bio mascot inline (simplified) -->
+              <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" width="80" height="94">
+                <defs>
+                  <radialGradient id="bi-hg" cx="38%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#A394FF"/>
+                    <stop offset="100%" stop-color="#7065E0"/>
+                  </radialGradient>
+                </defs>
+                <!-- Shadow -->
+                <ellipse cx="60" cy="136" rx="28" ry="6" fill="#3D2E8A" opacity="0.22"/>
+                <!-- Body -->
+                <ellipse cx="60" cy="108" rx="22" ry="18" fill="#7C6CF0"/>
+                <!-- Neck -->
+                <ellipse cx="60" cy="92" rx="10" ry="9" fill="url(#bi-hg)"/>
+                <!-- Brain lobes top -->
+                <circle cx="44" cy="46" r="14" fill="#9B8CFF"/>
+                <circle cx="60" cy="40" r="16" fill="#9B8CFF"/>
+                <circle cx="76" cy="46" r="14" fill="#9B8CFF"/>
+                <!-- Head circle -->
+                <circle cx="60" cy="68" r="32" fill="url(#bi-hg)"/>
+                <!-- Brain fold -->
+                <path d="M44 52 Q52 46 60 52" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                <path d="M60 49 Q68 43 76 49" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                <!-- Eyes -->
+                <ellipse cx="50" cy="66" rx="8" ry="9" fill="white"/>
+                <ellipse cx="70" cy="66" rx="8" ry="9" fill="white"/>
+                <circle cx="51.5" cy="67" r="4.5" fill="#1E1148"/>
+                <circle cx="71.5" cy="67" r="4.5" fill="#1E1148"/>
+                <circle cx="53.5" cy="64.5" r="1.8" fill="white"/>
+                <circle cx="73.5" cy="64.5" r="1.8" fill="white"/>
+                <!-- Blush -->
+                <ellipse cx="39" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+                <ellipse cx="81" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+                <!-- Smile -->
+                <path d="M52 79 Q60 87 68 79" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Left arm waving -->
+                <path d="M38 100 Q22 90 18 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+                <circle cx="17" cy="75" r="6" fill="#9B8CFF"/>
+                <!-- Right arm + book -->
+                <path d="M82 100 Q98 90 102 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+                <rect x="96" y="66" width="18" height="14" rx="2" fill="#FFD166"/>
+                <rect x="96" y="66" width="9" height="14" fill="#F0BB44"/>
+                <line x1="105" y1="66" x2="105" y2="80" stroke="#C89A00" stroke-width="1"/>
+                <!-- Sparkle -->
+                <path d="M88 36 L90 30 L92 36 L98 38 L92 40 L90 46 L88 40 L82 38 Z" fill="#FFD166" transform="scale(0.7) translate(38,-12)"/>
+              </svg>
+            </div>
+            <div class="bio-speech">
+              <div class="bio-name-tag" id="bio-name-tag">Bio</div>
+              <p class="bio-message" id="bio-message">¡Hola! Soy <strong>Bio</strong>, tu guía de lectura biónica. Las primeras letras de cada palabra se resaltan para que tu cerebro complete el resto. ¡Es como un superpoder para leer!</p>
+              <button class="bio-dismiss" id="bio-dismiss" aria-label="Cerrar">×</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── DEMO ───────────────────────────────────────── -->
         <section class="demo-section">
           <div class="demo-label" id="demo-label">Ejemplo en vivo</div>
           <div class="demo-card">
@@ -64,6 +133,7 @@
           </div>
         </section>
 
+        <!-- ── IMPORT ─────────────────────────────────────── -->
         <section class="import-section">
           <h2 class="section-title" id="import-title">Importar texto</h2>
 
@@ -90,6 +160,76 @@
             <button class="btn-primary" id="btn-process">
               <span id="btn-process-text">Leer ahora →</span>
             </button>
+          </div>
+        </section>
+
+        <!-- ── PRICING ────────────────────────────────────── -->
+        <section class="pricing-section" id="pricing-section">
+          <div class="pricing-header">
+            <div class="pricing-bio-mini" aria-hidden="true">✦</div>
+            <h2 class="section-title" id="pricing-title">Elige tu plan</h2>
+            <p class="pricing-sub" id="pricing-sub">Empieza gratis, sube cuando quieras</p>
+          </div>
+
+          <div class="pricing-grid">
+            <!-- Free plan -->
+            <div class="plan-card plan-free" id="plan-free-card">
+              <div class="plan-name" id="plan-free-name">Gratis</div>
+              <div class="plan-price">$0<span class="plan-period" id="plan-period-free">/siempre</span></div>
+              <ul class="plan-features" id="plan-features-free">
+                <li>✓ Pegar cualquier texto</li>
+                <li>✓ Archivos TXT ilimitados</li>
+                <li>✓ PDFs hasta 30 páginas</li>
+                <li>✓ Tema oscuro y claro</li>
+                <li>✓ ES + EN</li>
+              </ul>
+              <div class="plan-current" id="plan-current-label">Plan actual</div>
+            </div>
+
+            <!-- Pro plan -->
+            <div class="plan-card plan-pro" id="plan-pro-card">
+              <div class="plan-badge-pro">✦ PRO</div>
+              <div class="plan-name" id="plan-pro-name">Pro</div>
+              <div class="plan-price">$4.99<span class="plan-period" id="plan-period-pro">/mes</span></div>
+              <ul class="plan-features" id="plan-features-pro">
+                <li>✓ Todo lo del plan gratis</li>
+                <li>✓ PDFs ilimitados</li>
+                <li>✓ Soporte EPUB y DOCX</li>
+                <li>✓ Intensidad biónica ajustable</li>
+                <li>✓ Colecciones de libros</li>
+                <li>✓ Soporte prioritario</li>
+              </ul>
+              <!-- Stripe Buy Button placeholder — replace buy-button-id and publishable-key -->
+              <div id="stripe-buy-btn-container">
+                <button class="btn-pro-cta" id="btn-pro-cta">
+                  <span id="btn-pro-cta-text">Probar Pro gratis 7 días →</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="pricing-note" id="pricing-note">Pagos seguros con <strong>Stripe</strong> · Cancela cuando quieras</p>
+        </section>
+
+        <!-- ── HOW IT WORKS ───────────────────────────────── -->
+        <section class="how-section">
+          <h2 class="section-title" id="how-title">¿Por qué funciona?</h2>
+          <div class="how-grid">
+            <div class="how-card">
+              <div class="how-icon">🧠</div>
+              <h3 class="how-card-title" id="how-1-title">Tu cerebro completa las palabras</h3>
+              <p class="how-card-desc" id="how-1-desc">Al ver las primeras letras en negrita, tu cerebro predice y completa el resto automáticamente, acelerando la comprensión.</p>
+            </div>
+            <div class="how-card">
+              <div class="how-icon">⚡</div>
+              <h3 class="how-card-title" id="how-2-title">Menos saltos visuales</h3>
+              <p class="how-card-desc" id="how-2-desc">Los puntos de anclaje biónico reducen los movimientos sacádicos del ojo, manteniendo el foco por más tiempo.</p>
+            </div>
+            <div class="how-card">
+              <div class="how-icon">🎯</div>
+              <h3 class="how-card-title" id="how-3-title">Diseñado para el TDAH</h3>
+              <p class="how-card-desc" id="how-3-desc">Las personas con TDAH se benefician especialmente al tener anclas visuales claras que guían la atención línea por línea.</p>
+            </div>
           </div>
         </section>
 
@@ -120,6 +260,12 @@
       </header>
 
       <div class="reader-scroll" id="reader-scroll">
+        <!-- Bio tip inside reader -->
+        <div class="reader-bio-tip" id="reader-bio-tip">
+          <span class="reader-bio-icon">🧠</span>
+          <span id="reader-bio-tip-text">Las letras en <b>negrita</b> guían tu vista. Deja que tu cerebro complete el resto.</span>
+          <button class="reader-bio-close" id="reader-bio-close">×</button>
+        </div>
         <div class="reader-content bionic-text" id="reader-content"></div>
       </div>
 
@@ -130,6 +276,73 @@
         <span class="progress-label" id="progress-label">0%</span>
       </div>
 
+    </div>
+
+    <!-- ══ STRIPE UPGRADE MODAL ══════════════════════════════ -->
+    <div id="modal-upgrade" class="modal-overlay" hidden>
+      <div class="modal-card">
+        <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+
+        <div class="modal-bio-mini" aria-hidden="true">
+          <svg viewBox="0 0 80 80" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mb-g" cx="38%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#A394FF"/>
+                <stop offset="100%" stop-color="#7065E0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="40" cy="48" r="28" fill="url(#mb-g)"/>
+            <circle cx="28" cy="23" r="12" fill="#9B8CFF"/>
+            <circle cx="40" cy="19" r="14" fill="#9B8CFF"/>
+            <circle cx="52" cy="23" r="12" fill="#9B8CFF"/>
+            <rect x="16" y="28" width="48" height="15" fill="url(#mb-g)"/>
+            <ellipse cx="32" cy="47" rx="7" ry="8" fill="white"/>
+            <ellipse cx="48" cy="47" rx="7" ry="8" fill="white"/>
+            <circle cx="33" cy="48" r="4" fill="#1E1148"/>
+            <circle cx="49" cy="48" r="4" fill="#1E1148"/>
+            <circle cx="34.5" cy="46" r="1.5" fill="white"/>
+            <circle cx="50.5" cy="46" r="1.5" fill="white"/>
+            <ellipse cx="23" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
+            <ellipse cx="57" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
+            <path d="M34 58 Q40 63 46 58" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M60 35 L62 30 L64 35 L69 37 L64 39 L62 44 L60 39 L55 37 Z" fill="#FFD166" transform="scale(0.6) translate(38,-18)"/>
+          </svg>
+        </div>
+
+        <h2 class="modal-title" id="modal-title">¡Bio dice que vale la pena! ✦</h2>
+        <p class="modal-sub" id="modal-sub">Desbloquea todo el poder de la lectura biónica</p>
+
+        <ul class="modal-features">
+          <li id="mf-1">📚 PDFs de cualquier tamaño (libros completos)</li>
+          <li id="mf-2">📖 Soporte para EPUB y DOCX</li>
+          <li id="mf-3">⚡ Intensidad biónica personalizable</li>
+          <li id="mf-4">🗂️ Biblioteca personal de libros</li>
+          <li id="mf-5">🎨 Temas y tipografías adicionales</li>
+          <li id="mf-6">💬 Soporte prioritario con el equipo</li>
+        </ul>
+
+        <div class="modal-pricing">
+          <div class="modal-price-option active" id="mpo-month" data-period="month">
+            <span class="mpo-label" id="mpo-month-label">Mensual</span>
+            <span class="mpo-price">$4.99<small id="mpo-month-per">/mes</small></span>
+          </div>
+          <div class="modal-price-option" id="mpo-year" data-period="year">
+            <span class="mpo-label" id="mpo-year-label">Anual</span>
+            <span class="mpo-price">$39.99<small id="mpo-year-per">/año</small></span>
+            <span class="mpo-save" id="mpo-save">Ahorra 33%</span>
+          </div>
+        </div>
+
+        <!-- Stripe Buy Button — configure in stripe-config.js -->
+        <div id="stripe-modal-btn-container">
+          <!-- Rendered by app.js once Stripe config is present -->
+          <button class="btn-primary btn-modal-cta" id="btn-modal-cta">
+            <span id="btn-modal-cta-text">Comenzar prueba gratis de 7 días →</span>
+          </button>
+        </div>
+
+        <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
+      </div>
     </div>
 
     <!-- ══ LOADING OVERLAY ══════════════════════════════════ -->
@@ -143,7 +356,11 @@
 
   </div>
 
+  <!-- Stripe.js — loaded async, only activates when configured -->
+  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
   <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <!-- Optional: create stripe-config.js with your keys -->
+  <script src="stripe-config.js" onerror="void 0"></script>
   <script src="app.js"></script>
 </body>
 </html>
