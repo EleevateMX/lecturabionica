@@ -1099,6 +1099,47 @@ body {
   min-height: 18px;
 }
 
+/* ── LEGAL MODALS ───────────────────────────────────────────── */
+.legal-modal-card {
+  padding: 32px 24px 36px;
+  text-align: left;
+  border-radius: 20px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.legal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-right: 32px;
+  flex-shrink: 0;
+}
+.legal-body {
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.legal-body h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 6px;
+}
+.legal-body p { margin: 0; }
+.legal-body strong { color: var(--text); }
+.legal-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  margin-top: 8px;
+}
+
 /* ── READER PREVIEW (hero section) ─────────────────────────── */
 .reader-preview-section {
   margin-bottom: 36px;

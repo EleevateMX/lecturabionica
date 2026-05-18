@@ -392,6 +392,17 @@ function closeLoginModal() {
 function requireAuth(callback) {
   if (currentUser) { callback(); } else { openLoginModal(); }
 }
+
+function openLegalModal(id) {
+  closeLoginModal();
+  $(id).hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeLegalModal(id) {
+  $(id).hidden = true;
+  document.body.style.overflow = '';
+  openLoginModal();
+}
 function toggleUserDropdown() {
   const dd = $('user-dropdown');
   dd.hidden = !dd.hidden;
@@ -662,6 +673,15 @@ function init() {
     if (e.target === $('modal-login')) closeLoginModal();
   });
   $('btn-google-signin').addEventListener('click', googleSignIn);
+
+  /* Terms & Privacy */
+  $('link-terms').addEventListener('click', e => { e.preventDefault(); openLegalModal('modal-terms'); });
+  $('link-privacy').addEventListener('click', e => { e.preventDefault(); openLegalModal('modal-privacy'); });
+  $('terms-modal-close').addEventListener('click', () => closeLegalModal('modal-terms'));
+  $('privacy-modal-close').addEventListener('click', () => closeLegalModal('modal-privacy'));
+  $('modal-terms').addEventListener('click', e => { if (e.target === $('modal-terms')) closeLegalModal('modal-terms'); });
+  $('modal-privacy').addEventListener('click', e => { if (e.target === $('modal-privacy')) closeLegalModal('modal-privacy'); });
+
   $('user-avatar-btn').addEventListener('click', e => {
     e.stopPropagation();
     toggleUserDropdown();
