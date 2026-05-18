@@ -1099,6 +1099,104 @@ body {
   min-height: 18px;
 }
 
+/* ── READER PREVIEW (hero section) ─────────────────────────── */
+.reader-preview-section {
+  margin-bottom: 36px;
+}
+.preview-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.preview-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+.reader-preview-card {
+  background: var(--card);
+  border: 1px solid rgba(139, 124, 248, 0.28);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(139,124,248,0.08), 0 8px 32px rgba(139,124,248,0.1);
+}
+.preview-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.preview-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.preview-back-icon {
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+}
+.preview-doc-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+.preview-font-chips {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+.preview-body {
+  padding: 18px 20px;
+  font-size: 15px;
+  line-height: 1.85;
+  pointer-events: none;
+  user-select: none;
+}
+.preview-bottombar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.preview-prog-track {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.preview-prog-fill {
+  width: 38%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.preview-prog-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
 /* ── SCROLLBAR ──────────────────────────────────────────────── */
 ::-webkit-scrollbar          { width: 4px; }
 ::-webkit-scrollbar-track    { background: transparent; }
