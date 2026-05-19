@@ -230,33 +230,34 @@
             <div class="plan-card plan-free" id="plan-free-card">
               <div class="plan-name" id="plan-free-name">Gratis</div>
               <div class="plan-price">$0<span class="plan-period" id="plan-period-free">/siempre</span></div>
-              <ul class="plan-features" id="plan-features-free">
-                <li>✓ Pegar cualquier texto</li>
-                <li>✓ Archivos TXT ilimitados</li>
-                <li>✓ PDFs hasta 30 páginas</li>
-                <li>✓ Tema oscuro y claro</li>
-                <li>✓ ES + EN</li>
+              <ul class="plan-features">
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Pegar texto (máx. 5)</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Archivos TXT (máx. 3)</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> PDFs hasta 20 páginas</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Tema oscuro y claro</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> ES + EN</li>
               </ul>
               <div class="plan-current" id="plan-current-label">Plan actual</div>
             </div>
 
             <!-- Pro plan -->
             <div class="plan-card plan-pro" id="plan-pro-card">
-              <div class="plan-badge-pro">✦ PRO</div>
+              <div class="plan-badge-pro">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                PRO
+              </div>
               <div class="plan-name" id="plan-pro-name">Pro</div>
-              <div class="plan-price">$4.99<span class="plan-period" id="plan-period-pro">/mes</span></div>
-              <ul class="plan-features" id="plan-features-pro">
-                <li>✓ Todo lo del plan gratis</li>
-                <li>✓ PDFs ilimitados</li>
-                <li>✓ Soporte EPUB y DOCX</li>
-                <li>✓ Intensidad biónica ajustable</li>
-                <li>✓ Colecciones de libros</li>
-                <li>✓ Soporte prioritario</li>
+              <div class="plan-price">$150<span class="plan-period" id="plan-period-pro"> MXN/mes</span></div>
+              <ul class="plan-features">
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> PDFs, TXT y texto ilimitados</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Modo rápido RSVP</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Biblioteca personal</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Índice de PDFs</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Soporte prioritario</li>
               </ul>
-              <!-- Stripe Buy Button placeholder — replace buy-button-id and publishable-key -->
               <div id="stripe-buy-btn-container">
                 <button class="btn-pro-cta" id="btn-pro-cta">
-                  <span id="btn-pro-cta-text">Probar Pro gratis 7 días →</span>
+                  <span id="btn-pro-cta-text">Probar Pro 3 días gratis →</span>
                 </button>
               </div>
             </div>
@@ -270,17 +271,17 @@
           <h2 class="section-title" id="how-title">¿Por qué funciona?</h2>
           <div class="how-grid">
             <div class="how-card">
-              <div class="how-icon">🧠</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.6 6.5a3 3 0 0 0 .4-1.4"/><path d="M6 5.1A3 3 0 0 0 6.4 6.5"/><path d="M3.5 10.9a4 4 0 0 1 .6-.4"/><path d="M19.9 10.5a4 4 0 0 1 .6.4"/><path d="M6 18a4 4 0 0 1-2-.5"/><path d="M20 17.5A4 4 0 0 1 18 18"/></svg></div>
               <h3 class="how-card-title" id="how-1-title">Tu cerebro completa las palabras</h3>
               <p class="how-card-desc" id="how-1-desc">Al ver las primeras letras en negrita, tu cerebro predice y completa el resto automáticamente, acelerando la comprensión.</p>
             </div>
             <div class="how-card">
-              <div class="how-icon">⚡</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
               <h3 class="how-card-title" id="how-2-title">Menos saltos visuales</h3>
               <p class="how-card-desc" id="how-2-desc">Los puntos de anclaje biónico reducen los movimientos sacádicos del ojo, manteniendo el foco por más tiempo.</p>
             </div>
             <div class="how-card">
-              <div class="how-icon">🎯</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg></div>
               <h3 class="how-card-title" id="how-3-title">Diseñado para el TDAH</h3>
               <p class="how-card-desc" id="how-3-desc">Las personas con TDAH se benefician especialmente al tener anclas visuales claras que guían la atención línea por línea.</p>
             </div>
@@ -290,7 +291,7 @@
         <!-- ── SUGGESTIONS ─────────────────────────────────── -->
         <section class="suggestions-section" id="suggestions-section">
           <div class="suggestions-header">
-            <span class="suggestions-icon">💡</span>
+            <span class="suggestions-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg></span>
             <div>
               <h2 class="section-title suggestions-title">¿Tienes alguna sugerencia?</h2>
               <p class="suggestions-sub">Tus ideas nos ayudan a mejorar FocusRead</p>
@@ -302,7 +303,7 @@
             <button class="btn-primary suggestions-send-btn" id="btn-suggestion-send">Enviar sugerencia →</button>
           </div>
           <div id="suggestions-thanks" class="suggestions-thanks" hidden>
-            <div class="suggestions-thanks-icon">🎉</div>
+            <div class="suggestions-thanks-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="var(--accent)" stroke-width="2"/><path d="M14 24l8 8 12-14" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <p class="suggestions-thanks-text">¡Gracias! Tu sugerencia fue recibida.<br>La leeremos con mucho gusto.</p>
             <button class="suggestions-reset-btn" id="btn-suggestion-reset">Enviar otra sugerencia →</button>
           </div>
@@ -520,6 +521,12 @@
           </div>
         </div>
 
+        <!-- Billing toggle -->
+        <div class="billing-toggle">
+          <button class="billing-opt billing-opt-active" id="bill-monthly">Mensual</button>
+          <button class="billing-opt" id="bill-annual">Anual <span class="billing-save-chip">2 meses gratis</span></button>
+        </div>
+
         <!-- Plan cards -->
         <div class="plan-cards-row">
 
@@ -527,41 +534,46 @@
           <div class="plan-crd plan-crd-basic">
             <div class="plan-crd-name">Básico</div>
             <div class="plan-crd-price">
-              <span class="plan-crd-amount">$50</span>
-              <small class="plan-crd-period">MXN/mes</small>
+              <span class="plan-crd-amount" id="price-basic">$100</span>
+              <small class="plan-crd-period" id="period-basic">MXN/mes</small>
             </div>
+            <div class="plan-crd-annual-note" id="annual-note-basic" hidden>$1,000 MXN/año · ahorras $200</div>
             <ul class="plan-crd-feats">
-              <li class="feat-yes">✓ Lectura biónica</li>
-              <li class="feat-yes">✓ PDFs y TXT</li>
-              <li class="feat-yes">✓ Pegar texto</li>
-              <li class="feat-no">✗ Modo rápido RSVP</li>
-              <li class="feat-no">✗ Biblioteca personal</li>
-              <li class="feat-no">✗ Índice de PDFs</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Lectura biónica</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> PDFs y TXT sin límite</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Pegar texto sin límite</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Modo rápido RSVP</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Biblioteca personal</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Índice de PDFs</li>
             </ul>
             <button class="plan-crd-btn plan-crd-btn-basic" id="btn-plan-basic">Elegir Básico</button>
           </div>
 
           <!-- Pro -->
           <div class="plan-crd plan-crd-pro">
-            <div class="plan-crd-badge">⭐ Recomendado</div>
+            <div class="plan-crd-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Recomendado
+            </div>
             <div class="plan-crd-name">Pro</div>
             <div class="plan-crd-price">
-              <span class="plan-crd-amount">$150</span>
-              <small class="plan-crd-period">MXN/mes</small>
+              <span class="plan-crd-amount" id="price-pro">$150</span>
+              <small class="plan-crd-period" id="period-pro">MXN/mes</small>
             </div>
+            <div class="plan-crd-annual-note" id="annual-note-pro" hidden>$1,500 MXN/año · ahorras $300</div>
             <ul class="plan-crd-feats">
-              <li class="feat-yes">✓ Todo lo de Básico</li>
-              <li class="feat-yes">✓ Modo rápido RSVP</li>
-              <li class="feat-yes">✓ Biblioteca personal</li>
-              <li class="feat-yes">✓ Índice de PDFs</li>
-              <li class="feat-yes">✓ Soporte prioritario</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Todo lo de Básico</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Modo rápido RSVP</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Biblioteca personal</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Índice de PDFs</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Soporte prioritario</li>
             </ul>
-            <button class="plan-crd-btn plan-crd-btn-pro" id="btn-plan-pro">Elegir Pro ✦</button>
+            <button class="plan-crd-btn plan-crd-btn-pro" id="btn-plan-pro">Probar Pro 3 días gratis →</button>
           </div>
 
         </div>
 
-        <p class="plan-transparency-note">💙 Estos precios nos ayudan a mantener la página activa y seguir mejorándola con nuevas funciones.</p>
+        <p class="plan-transparency-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" style="vertical-align:middle;margin-right:4px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Estos precios nos ayudan a mantener la página activa y seguir mejorándola con nuevas funciones.</p>
 
         <!-- Stripe Pricing Table — se inyecta aquí cuando Stripe está configurado -->
         <div id="stripe-pricing-table-wrap"></div>

@@ -242,7 +242,7 @@ function openReader(rawText, title) {
   saveBtn.textContent = '★';
   saveBtn.disabled = false;
   const rsvpBtn = $('btn-rsvp-open');
-  if (rsvpBtn) rsvpBtn.hidden = !currentUser;
+  if (rsvpBtn) rsvpBtn.hidden = !isPro();
   showScreen('screen-reader');
 }
 
@@ -307,9 +307,19 @@ async function readPdf(file) {
       await showTocModal(pdf, outline, file.name.replace(/\.pdf$/i, ''));
       return null;
     }
+    return await extractPages(pdf, 1, pdf.numPages);
   }
 
-  return await extractPages(pdf, 1, pdf.numPages);
+  // Free plan: max 20 pages
+  const maxPages = FREE_LIMITS.pdfPages;
+  const total = pdf.numPages;
+  if (total > maxPages) {
+    const ok = confirm(lang === 'es'
+      ? `Este PDF tiene ${total} páginas. El plan gratuito lee las primeras ${maxPages}. ¿Continuar? Actualiza a Pro para leerlo completo.`
+      : `This PDF has ${total} pages. The free plan reads the first ${maxPages}. Continue? Upgrade to Pro for the full document.`);
+    if (!ok) return null;
+  }
+  return await extractPages(pdf, 1, Math.min(total, maxPages));
 }
 
 /* ══ PDF Table of Contents ═════════════════════════════════════ */
@@ -540,6 +550,25 @@ async function dbDelete(id) {
 
 function isPro() {
   return !!currentUser && localStorage.getItem('fr-pro') === '1';
+}
+
+/* ══ Free plan limits ══════════════════════════════════════════ */
+const FREE_LIMITS = { paste: 5, txt: 3, pdfPages: 20 };
+
+function getFreeCount(type) {
+  return parseInt(localStorage.getItem('fr-free-' + type) || '0');
+}
+function incFreeCount(type) {
+  localStorage.setItem('fr-free-' + type, getFreeCount(type) + 1);
+}
+function checkFreeLimit(type) {
+  if (isPro()) return true;
+  const limit = FREE_LIMITS[type];
+  if (getFreeCount(type) >= limit) {
+    openUpgradeModal();
+    return false;
+  }
+  return true;
 }
 
 async function renderLibrary() {
@@ -812,6 +841,22 @@ function closeLegalModal(id) {
 /* ══ Stripe / Pricing ══════════════════════════════════════════ */
 let selectedPeriod = 'month';
 
+function setBillingPeriod(period) {
+  selectedPeriod = period;
+  const isAnnual = period === 'annual';
+
+  $('bill-monthly')?.classList.toggle('billing-opt-active', !isAnnual);
+  $('bill-annual')?.classList.toggle('billing-opt-active', isAnnual);
+
+  if ($('price-basic'))  $('price-basic').textContent  = isAnnual ? '$1,000' : '$100';
+  if ($('period-basic')) $('period-basic').textContent = isAnnual ? 'MXN/año' : 'MXN/mes';
+  if ($('price-pro'))    $('price-pro').textContent    = isAnnual ? '$1,500' : '$150';
+  if ($('period-pro'))   $('period-pro').textContent   = isAnnual ? 'MXN/año' : 'MXN/mes';
+
+  if ($('annual-note-basic')) $('annual-note-basic').hidden = !isAnnual;
+  if ($('annual-note-pro'))   $('annual-note-pro').hidden   = !isAnnual;
+}
+
 function initStripe() {
   const cfg = window.FOCUSREAD_STRIPE;
   if (!cfg || cfg.publishableKey.includes('REPLACE')) return;
@@ -830,28 +875,32 @@ function setupPaymentLinkButton(btnId, url) {
 function renderStripePricingTable() {
   const cfg = window.FOCUSREAD_STRIPE;
 
-  // Wire plan buttons to payment links
+  // Wire plan buttons to payment links (respects annual toggle)
   const basicBtn = $('btn-plan-basic');
   const proBtn   = $('btn-plan-pro');
   if (basicBtn) {
     basicBtn.onclick = () => {
-      if (cfg && cfg.paymentLinkBasic && !cfg.paymentLinkBasic.includes('REPLACE')) {
-        window.open(cfg.paymentLinkBasic, '_blank', 'noopener');
+      const isAnnual = selectedPeriod === 'annual';
+      const url = isAnnual ? cfg?.paymentLinkBasicAnnual : cfg?.paymentLinkBasic;
+      if (url && !url.includes('REPLACE')) {
+        window.open(url, '_blank', 'noopener');
       } else {
         alert(lang === 'es'
-          ? 'Configura el link de pago en stripe-config.js (paymentLinkBasic).'
-          : 'Set up the payment link in stripe-config.js (paymentLinkBasic).');
+          ? 'Próximamente: configura el link de pago en stripe-config.js.'
+          : 'Coming soon: set up the payment link in stripe-config.js.');
       }
     };
   }
   if (proBtn) {
     proBtn.onclick = () => {
-      if (cfg && cfg.paymentLinkMonthly && !cfg.paymentLinkMonthly.includes('REPLACE')) {
-        window.open(cfg.paymentLinkMonthly, '_blank', 'noopener');
+      const isAnnual = selectedPeriod === 'annual';
+      const url = isAnnual ? cfg?.paymentLinkYearly : cfg?.paymentLinkMonthly;
+      if (url && !url.includes('REPLACE')) {
+        window.open(url, '_blank', 'noopener');
       } else {
         alert(lang === 'es'
-          ? 'Configura el link de pago en stripe-config.js (paymentLinkMonthly).'
-          : 'Set up the payment link in stripe-config.js (paymentLinkMonthly).');
+          ? 'Próximamente: configura el link de pago en stripe-config.js.'
+          : 'Coming soon: set up the payment link in stripe-config.js.');
       }
     };
   }
@@ -1059,6 +1108,8 @@ function init() {
     requireAuth(() => {
       const text = $('paste-input').value.trim();
       if (!text) { alert(t('errorNoText')); return; }
+      if (!checkFreeLimit('paste')) return;
+      incFreeCount('paste');
       const title = text.split('\n')[0].slice(0, 70);
       openReader(text, title);
     });
@@ -1073,10 +1124,12 @@ function init() {
     const file = e.target.files[0];
     if (!file) return;
     if (!currentUser) { openLoginModal(); e.target.value = ''; return; }
+    if (!checkFreeLimit('txt')) { e.target.value = ''; return; }
     showLoading(t('loadingText'));
     try {
       const text = await readTxt(file);
       hideLoading();
+      incFreeCount('txt');
       openReader(text, file.name.replace(/\.txt$/i, ''));
     } catch {
       hideLoading();
@@ -1191,6 +1244,8 @@ function init() {
   $('modal-upgrade').addEventListener('click', e => {
     if (e.target === $('modal-upgrade')) closeUpgradeModal();
   });
+  if ($('bill-monthly')) $('bill-monthly').addEventListener('click', () => setBillingPeriod('month'));
+  if ($('bill-annual'))  $('bill-annual').addEventListener('click', () => setBillingPeriod('annual'));
 
   /* Service worker */
   if ('serviceWorker' in navigator) {

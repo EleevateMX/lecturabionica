@@ -2166,3 +2166,68 @@ body {
   padding: 4px 0;
 }
 .suggestions-reset-btn:hover { text-decoration: underline; }
+
+/* ── BILLING TOGGLE ─────────────────────────────────────────── */
+.billing-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 3px;
+  margin: 4px auto 14px;
+  width: fit-content;
+}
+.billing-opt {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 99px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .15s, color .15s;
+}
+.billing-opt-active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.billing-save-chip {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.22);
+  padding: 2px 6px;
+  border-radius: 99px;
+  letter-spacing: .02em;
+}
+.billing-opt:not(.billing-opt-active) .billing-save-chip {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.plan-crd-annual-note {
+  font-size: 11px;
+  color: var(--accent);
+  margin-top: -6px;
+  font-weight: 500;
+}
+
+/* ── PLAN FEATURES SVG ICON ALIGNMENT ──────────────────────── */
+.feat-svg, .pf-check {
+  vertical-align: middle;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+.plan-crd-feats li,
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.plan-features li { gap: 6px; }
