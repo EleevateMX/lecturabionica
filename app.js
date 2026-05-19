@@ -1233,18 +1233,20 @@ function init() {
     applyTheme();
   });
 
-  /* Paste toggle */
-  $('btn-paste').addEventListener('click', () => {
-    requireAuth(() => {
-      const area = $('paste-area');
-      const open = area.classList.toggle('visible');
-      $('btn-paste').classList.toggle('active', open);
-      if (open) $('paste-input').focus();
+  /* Paste toggle — landing page (only present when user is not logged in) */
+  if ($('btn-paste')) {
+    $('btn-paste').addEventListener('click', () => {
+      requireAuth(() => {
+        const area = $('paste-area');
+        const open = area.classList.toggle('visible');
+        $('btn-paste').classList.toggle('active', open);
+        if (open) $('paste-input').focus();
+      });
     });
-  });
+  }
 
   /* Process pasted text */
-  $('btn-process').addEventListener('click', () => {
+  if ($('btn-process')) $('btn-process').addEventListener('click', () => {
     requireAuth(() => {
       const text = $('paste-input').value.trim();
       if (!text) { alert(t('errorNoText')); return; }
@@ -1254,12 +1256,12 @@ function init() {
       openReader(text, title);
     });
   });
-  $('paste-input').addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('btn-process').click();
+  if ($('paste-input')) $('paste-input').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('btn-process')?.click();
   });
 
   /* TXT upload */
-  $('btn-txt').addEventListener('click', () => requireAuth(() => $('input-txt').click()));
+  if ($('btn-txt')) $('btn-txt').addEventListener('click', () => requireAuth(() => $('input-txt').click()));
   $('input-txt').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1279,7 +1281,7 @@ function init() {
   });
 
   /* PDF upload */
-  $('btn-pdf').addEventListener('click', () => {
+  if ($('btn-pdf')) $('btn-pdf').addEventListener('click', () => {
     requireAuth(() => {
       if (typeof pdfjsLib === 'undefined') { alert(t('errorPdfJs')); return; }
       $('input-pdf').click();
