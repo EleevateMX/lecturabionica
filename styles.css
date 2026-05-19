@@ -1959,3 +1959,210 @@ body {
   color: #ef4444;
   border-color: rgba(239,68,68,0.3);
 }
+
+/* ── PRICING PLAN CARDS (upgrade modal) ─────────────────────── */
+.plan-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 4px 0 16px;
+}
+@media (max-width: 400px) {
+  .plan-cards-row { grid-template-columns: 1fr; }
+}
+
+.plan-crd {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+}
+.plan-crd-pro {
+  border-color: var(--accent);
+  background: linear-gradient(160deg, rgba(139,124,248,0.1), rgba(107,92,231,0.05));
+}
+
+.plan-crd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 3px 8px;
+  border-radius: 99px;
+  letter-spacing: .02em;
+  width: fit-content;
+}
+
+.plan-crd-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-bold);
+}
+.plan-crd-price {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  line-height: 1;
+}
+.plan-crd-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-bold);
+}
+.plan-crd-pro .plan-crd-amount { color: var(--accent); }
+.plan-crd-period {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.plan-crd-feats {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.plan-crd-feats li {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.feat-yes { color: var(--text); }
+.feat-no  { color: var(--text-muted); opacity: .6; }
+
+.plan-crd-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 99px;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  margin-top: auto;
+}
+.plan-crd-btn:hover { opacity: .85; transform: translateY(-1px); }
+.plan-crd-btn-basic {
+  background: var(--card-hover);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.plan-crd-btn-pro {
+  background: var(--accent);
+  color: #fff;
+}
+
+.plan-transparency-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 8px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+/* ── SUGGESTIONS SECTION ────────────────────────────────────── */
+.suggestions-section {
+  margin-top: 36px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.suggestions-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.suggestions-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.suggestions-title {
+  margin: 0 0 4px;
+  text-align: left;
+}
+.suggestions-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.suggestions-textarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  display: block;
+  transition: border-color .15s;
+}
+.suggestions-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.suggestions-textarea::placeholder { color: var(--text-muted); }
+
+.suggestions-email-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  display: block;
+  transition: border-color .15s;
+}
+.suggestions-email-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.suggestions-email-input::placeholder { color: var(--text-muted); }
+
+.suggestions-send-btn {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.suggestions-thanks {
+  text-align: center;
+  padding: 12px 0 4px;
+}
+.suggestions-thanks-icon { font-size: 36px; margin-bottom: 10px; }
+.suggestions-thanks-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.suggestions-reset-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.suggestions-reset-btn:hover { text-decoration: underline; }

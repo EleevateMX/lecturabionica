@@ -287,6 +287,27 @@
           </div>
         </section>
 
+        <!-- ── SUGGESTIONS ─────────────────────────────────── -->
+        <section class="suggestions-section" id="suggestions-section">
+          <div class="suggestions-header">
+            <span class="suggestions-icon">💡</span>
+            <div>
+              <h2 class="section-title suggestions-title">¿Tienes alguna sugerencia?</h2>
+              <p class="suggestions-sub">Tus ideas nos ayudan a mejorar FocusRead</p>
+            </div>
+          </div>
+          <div id="suggestions-form">
+            <textarea id="suggestion-text" class="suggestions-textarea" rows="4" placeholder="¿Qué mejorarías? ¿Qué función te gustaría ver? Cuéntanos..."></textarea>
+            <input type="email" id="suggestion-email" class="suggestions-email-input" placeholder="Tu email (opcional, para responderte)">
+            <button class="btn-primary suggestions-send-btn" id="btn-suggestion-send">Enviar sugerencia →</button>
+          </div>
+          <div id="suggestions-thanks" class="suggestions-thanks" hidden>
+            <div class="suggestions-thanks-icon">🎉</div>
+            <p class="suggestions-thanks-text">¡Gracias! Tu sugerencia fue recibida.<br>La leeremos con mucho gusto.</p>
+            <button class="suggestions-reset-btn" id="btn-suggestion-reset">Enviar otra sugerencia →</button>
+          </div>
+        </section>
+
         <footer class="home-footer">
           <p id="footer-text">Procesamiento 100% local · Sin servidores · Sin costos</p>
         </footer>
@@ -499,37 +520,53 @@
           </div>
         </div>
 
-        <!-- Features 2-col grid -->
-        <ul class="modal-features-grid">
-          <li id="mf-1"><span class="mf-icon">📚</span><span>PDFs ilimitados</span></li>
-          <li id="mf-2"><span class="mf-icon">📖</span><span>EPUB y DOCX</span></li>
-          <li id="mf-3"><span class="mf-icon">⚡</span><span>Intensidad ajustable</span></li>
-          <li id="mf-4"><span class="mf-icon">🗂️</span><span>Biblioteca personal</span></li>
-          <li id="mf-5"><span class="mf-icon">🎨</span><span>Temas extra</span></li>
-          <li id="mf-6"><span class="mf-icon">💬</span><span>Soporte prioritario</span></li>
-        </ul>
+        <!-- Plan cards -->
+        <div class="plan-cards-row">
 
-        <!-- Stripe Pricing Table (rendered by app.js) -->
-        <div id="stripe-pricing-table-wrap">
-          <!-- Fallback mientras stripe-config.js no está configurado -->
-          <div class="stripe-fallback">
-            <div class="stripe-fallback-prices">
-              <div class="sfp-option active" id="mpo-month">
-                <span class="sfp-label" id="mpo-month-label">Mensual</span>
-                <span class="sfp-price">$4.99<small id="mpo-month-per">/mes</small></span>
-              </div>
-              <div class="sfp-option" id="mpo-year">
-                <span class="sfp-label" id="mpo-year-label">Anual</span>
-                <span class="sfp-price">$39.99<small id="mpo-year-per">/año</small></span>
-                <span class="sfp-save" id="mpo-save">Ahorra 33%</span>
-              </div>
+          <!-- Básico -->
+          <div class="plan-crd plan-crd-basic">
+            <div class="plan-crd-name">Básico</div>
+            <div class="plan-crd-price">
+              <span class="plan-crd-amount">$50</span>
+              <small class="plan-crd-period">MXN/mes</small>
             </div>
-            <button class="btn-primary" id="btn-modal-cta">
-              <span id="btn-modal-cta-text">Comenzar prueba gratis de 7 días →</span>
-            </button>
-            <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
+            <ul class="plan-crd-feats">
+              <li class="feat-yes">✓ Lectura biónica</li>
+              <li class="feat-yes">✓ PDFs y TXT</li>
+              <li class="feat-yes">✓ Pegar texto</li>
+              <li class="feat-no">✗ Modo rápido RSVP</li>
+              <li class="feat-no">✗ Biblioteca personal</li>
+              <li class="feat-no">✗ Índice de PDFs</li>
+            </ul>
+            <button class="plan-crd-btn plan-crd-btn-basic" id="btn-plan-basic">Elegir Básico</button>
           </div>
+
+          <!-- Pro -->
+          <div class="plan-crd plan-crd-pro">
+            <div class="plan-crd-badge">⭐ Recomendado</div>
+            <div class="plan-crd-name">Pro</div>
+            <div class="plan-crd-price">
+              <span class="plan-crd-amount">$150</span>
+              <small class="plan-crd-period">MXN/mes</small>
+            </div>
+            <ul class="plan-crd-feats">
+              <li class="feat-yes">✓ Todo lo de Básico</li>
+              <li class="feat-yes">✓ Modo rápido RSVP</li>
+              <li class="feat-yes">✓ Biblioteca personal</li>
+              <li class="feat-yes">✓ Índice de PDFs</li>
+              <li class="feat-yes">✓ Soporte prioritario</li>
+            </ul>
+            <button class="plan-crd-btn plan-crd-btn-pro" id="btn-plan-pro">Elegir Pro ✦</button>
+          </div>
+
         </div>
+
+        <p class="plan-transparency-note">💙 Estos precios nos ayudan a mantener la página activa y seguir mejorándola con nuevas funciones.</p>
+
+        <!-- Stripe Pricing Table — se inyecta aquí cuando Stripe está configurado -->
+        <div id="stripe-pricing-table-wrap"></div>
+
+        <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
       </div>
     </div>
 

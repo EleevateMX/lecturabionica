@@ -829,20 +829,45 @@ function setupPaymentLinkButton(btnId, url) {
 
 function renderStripePricingTable() {
   const cfg = window.FOCUSREAD_STRIPE;
+
+  // Wire plan buttons to payment links
+  const basicBtn = $('btn-plan-basic');
+  const proBtn   = $('btn-plan-pro');
+  if (basicBtn) {
+    basicBtn.onclick = () => {
+      if (cfg && cfg.paymentLinkBasic && !cfg.paymentLinkBasic.includes('REPLACE')) {
+        window.open(cfg.paymentLinkBasic, '_blank', 'noopener');
+      } else {
+        alert(lang === 'es'
+          ? 'Configura el link de pago en stripe-config.js (paymentLinkBasic).'
+          : 'Set up the payment link in stripe-config.js (paymentLinkBasic).');
+      }
+    };
+  }
+  if (proBtn) {
+    proBtn.onclick = () => {
+      if (cfg && cfg.paymentLinkMonthly && !cfg.paymentLinkMonthly.includes('REPLACE')) {
+        window.open(cfg.paymentLinkMonthly, '_blank', 'noopener');
+      } else {
+        alert(lang === 'es'
+          ? 'Configura el link de pago en stripe-config.js (paymentLinkMonthly).'
+          : 'Set up the payment link in stripe-config.js (paymentLinkMonthly).');
+      }
+    };
+  }
+
+  // Also inject Stripe Pricing Table if fully configured
   const wrap = $('stripe-pricing-table-wrap');
   if (!wrap || !cfg || cfg.publishableKey.includes('REPLACE') || !cfg.pricingTableId || cfg.pricingTableId.includes('REPLACE')) return;
-
-  const emailAttr  = currentUser?.email  ? `customer-email="${currentUser.email}"` : '';
-  const clientAttr = currentUser?.uid    ? `client-reference-id="${currentUser.uid}"` : '';
-
+  const emailAttr  = currentUser?.email ? `customer-email="${currentUser.email}"` : '';
+  const clientAttr = currentUser?.uid   ? `client-reference-id="${currentUser.uid}"` : '';
   wrap.innerHTML = `
     <stripe-pricing-table
       pricing-table-id="${cfg.pricingTableId}"
       publishable-key="${cfg.publishableKey}"
       ${emailAttr}
       ${clientAttr}>
-    </stripe-pricing-table>
-    <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>`;
+    </stripe-pricing-table>`;
 }
 
 function openUpgradeModal() {
@@ -859,6 +884,37 @@ function selectPeriod(period) {
   selectedPeriod = period;
   $('mpo-month')?.classList.toggle('active', period === 'month');
   $('mpo-year')?.classList.toggle('active', period === 'year');
+}
+
+/* ══ Suggestions ══════════════════════════════════════════════ */
+function initSuggestions() {
+  const sendBtn  = $('btn-suggestion-send');
+  const resetBtn = $('btn-suggestion-reset');
+  if (!sendBtn) return;
+
+  sendBtn.addEventListener('click', () => {
+    const text  = $('suggestion-text').value.trim();
+    const email = $('suggestion-email')?.value.trim() || '';
+    if (!text) { $('suggestion-text').focus(); return; }
+
+    const subject = encodeURIComponent('Sugerencia FocusRead');
+    const body = encodeURIComponent(
+      `Sugerencia:\n${text}\n\n${email ? `Responder a: ${email}` : '(Sin email de contacto)'}`
+    );
+    window.open(`mailto:hola@focusread.app?subject=${subject}&body=${body}`, '_blank');
+
+    $('suggestions-form').hidden = true;
+    $('suggestions-thanks').hidden = false;
+  });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      $('suggestion-text').value = '';
+      if ($('suggestion-email')) $('suggestion-email').value = '';
+      $('suggestions-form').hidden = false;
+      $('suggestions-thanks').hidden = true;
+    });
+  }
 }
 
 /* ══ i18n application ══════════════════════════════════════════ */
@@ -972,6 +1028,7 @@ function init() {
   initBio();
   initStripe();
   initFirebase();
+  initSuggestions();
 
   /* Language toggle */
   $('btn-lang').addEventListener('click', () => {
@@ -1129,24 +1186,11 @@ function init() {
   }
 
   /* Pricing / upgrade */
-  $('btn-pro-cta').addEventListener('click', openUpgradeModal);
-  $('btn-modal-cta').addEventListener('click', () => {
-    const cfg = window.FOCUSREAD_STRIPE;
-    if (!cfg || cfg.publishableKey.includes('REPLACE')) {
-      alert('Stripe aún no está configurado. Consulta stripe-config.js');
-      return;
-    }
-    const url = selectedPeriod === 'year' ? cfg.paymentLinkYearly : cfg.paymentLinkMonthly;
-    window.open(url, '_blank', 'noopener');
-  });
+  if ($('btn-pro-cta')) $('btn-pro-cta').addEventListener('click', openUpgradeModal);
   $('modal-close').addEventListener('click', closeUpgradeModal);
   $('modal-upgrade').addEventListener('click', e => {
     if (e.target === $('modal-upgrade')) closeUpgradeModal();
   });
-
-  /* Period selection in modal */
-  $('mpo-month').addEventListener('click', () => selectPeriod('month'));
-  $('mpo-year').addEventListener('click', () => selectPeriod('year'));
 
   /* Service worker */
   if ('serviceWorker' in navigator) {

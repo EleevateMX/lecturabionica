@@ -34,7 +34,10 @@ window.FOCUSREAD_STRIPE = {
   // Dashboard → Products → Pricing tables → tu tabla → pricing-table-id
   pricingTableId: 'prctbl_1TYbloCO7kBd2xtlUXuQzpUS',
 
-  // Fallback: Payment Links directos (Dashboard → Payment Links)
-  paymentLinkMonthly: 'https://buy.stripe.com/REPLACE_MONTHLY',
-  paymentLinkYearly:  'https://buy.stripe.com/REPLACE_YEARLY',
+  // Payment Links (Dashboard → Payment Links)
+  // Básico $50 MXN/mes — sin RSVP, sin biblioteca
+  paymentLinkBasic:   'https://buy.stripe.com/REPLACE_BASIC',
+  // Pro $150 MXN/mes — RSVP + biblioteca + índice de PDFs
+  paymentLinkMonthly: 'https://buy.stripe.com/REPLACE_PRO',
+  paymentLinkYearly:  'https://buy.stripe.com/REPLACE_PRO_YEARLY',
 };
