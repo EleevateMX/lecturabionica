@@ -42,7 +42,7 @@ const LANG = {
     planPeriodFree: '/siempre',
     planPeriodPro:  '/mes',
     planCurrentLabel: 'Plan actual',
-    btnProCta:    'Probar Pro gratis 7 días →',
+    btnProCta:    'Probar Pro 3 días gratis →',
     pricingNote:  'Pagos seguros con Stripe · Cancela cuando quieras',
     // How it works
     howTitle:     '¿Por qué funciona?',
@@ -70,7 +70,7 @@ const LANG = {
     mpoYearLabel:  'Anual',
     mpoYearPer:    '/año',
     mpoSave:       'Ahorra 33%',
-    btnModalCta:   'Comenzar prueba gratis de 7 días →',
+    btnModalCta:   'Comenzar prueba gratis de 3 días →',
     modalLegal:    'Cancela cuando quieras · Stripe · Sin compromisos',
   },
   en: {
@@ -112,7 +112,7 @@ const LANG = {
     planPeriodFree: '/forever',
     planPeriodPro:  '/month',
     planCurrentLabel: 'Current plan',
-    btnProCta:    'Try Pro free for 7 days →',
+    btnProCta:    'Try Pro free for 3 days →',
     pricingNote:  'Secure payments with Stripe · Cancel anytime',
     howTitle:     'Why does it work?',
     how1Title:    'Your brain completes words',
@@ -1094,20 +1094,21 @@ function applyLang() {
   }
 
   // Auth strings
-  $('btn-signin-text').textContent  = t('signinBtn');
-  $('login-title').textContent      = t('loginTitle');
-  $('login-sub').textContent        = t('loginSub');
-  $('btn-google-text').textContent  = t('googleBtn');
-  $('btn-signout-text').textContent = t('signoutBtn');
+  if ($('btn-signin-text'))  $('btn-signin-text').textContent  = t('signinBtn');
+  if ($('login-title'))      $('login-title').textContent      = t('loginTitle');
+  if ($('login-sub'))        $('login-sub').textContent        = t('loginSub');
+  if ($('btn-google-text'))  $('btn-google-text').textContent  = t('googleBtn');
   if (firebaseReady) firebase.auth().languageCode = lang;
 
   // innerHTML updates
-  $('hero-title').innerHTML = t('heroTitle');
-  $('paste-input').placeholder = t('pastePlaceholder');
-  $('demo-text').innerHTML = bionicProcess(t('demoText'));
-  $('bio-message').innerHTML = t('bioMessage');
-  $('reader-bio-tip-text').innerHTML = t('readerBioTip');
-  $('plan-pro-name').textContent = 'Pro'; // always Pro
+  if ($('hero-title'))           $('hero-title').innerHTML = t('heroTitle');
+  if ($('paste-input'))          $('paste-input').placeholder = t('pastePlaceholder');
+  if ($('dash-paste-input'))     $('dash-paste-input').placeholder = t('pastePlaceholder');
+  if ($('demo-text'))            $('demo-text').innerHTML = bionicProcess(t('demoText'));
+  if ($('bio-message'))          $('bio-message').innerHTML = t('bioMessage');
+  if ($('reader-bio-tip-text'))  $('reader-bio-tip-text').innerHTML = t('readerBioTip');
+  if ($('plan-pro-name'))        $('plan-pro-name').textContent = 'Pro';
+  if ($('btn-signout-text'))     $('btn-signout-text').textContent = t('signoutBtn');
 }
 
 function applyTheme() {
