@@ -547,49 +547,56 @@ async function renderLibrary() {
   if (!el) return;
 
   if (!currentUser) {
-    el.innerHTML = `<p class="library-empty">${lang === 'es' ? 'Inicia sesión para ver tu biblioteca.' : 'Sign in to view your library.'}</p>`;
+    el.innerHTML = `<p class="profile-lib-empty">${lang === 'es' ? 'Inicia sesión para ver tu biblioteca.' : 'Sign in to view your library.'}</p>`;
     return;
   }
 
   if (!isPro()) {
     el.innerHTML = `
-      <div class="library-locked">
-        <div class="library-lock-icon">📚</div>
-        <p class="library-lock-txt">${lang === 'es'
+      <div class="profile-lib-locked">
+        <p class="profile-lib-hint">${lang === 'es'
           ? 'Guarda PDFs y vuélvelos a leer cuando quieras'
           : 'Save PDFs and re-read them anytime'}</p>
-        <button class="btn-primary lib-upgrade-btn">${lang === 'es' ? 'Desbloquear con Pro →' : 'Unlock with Pro →'}</button>
+        <button class="btn-upgrade-profile lib-upgrade-btn">${lang === 'es' ? 'Desbloquear con Pro →' : 'Unlock with Pro →'}</button>
       </div>`;
-    el.querySelector('.lib-upgrade-btn').addEventListener('click', openUpgradeModal);
+    el.querySelector('.lib-upgrade-btn').addEventListener('click', () => {
+      closeProfilePanel();
+      openUpgradeModal();
+    });
     return;
   }
 
   try {
     const books = await dbGetAll();
     if (!books.length) {
-      el.innerHTML = `<p class="library-empty">${lang === 'es' ? 'Sin libros guardados aún. Lee un PDF y guárdalo.' : 'No saved books yet. Read a PDF and save it.'}</p>`;
+      el.innerHTML = `<p class="profile-lib-empty">${lang === 'es' ? 'Sin libros guardados aún. Lee un PDF y guárdalo.' : 'No saved books yet. Read a PDF and save it.'}</p>`;
       return;
     }
     el.innerHTML = books.map(b => `
-      <div class="book-card" data-id="${b.id}">
-        <div class="book-icon">📖</div>
-        <div class="book-info">
-          <div class="book-title">${escHtml(b.title)}</div>
-          <div class="book-meta">${new Date(b.saved).toLocaleDateString()} · ${Math.round(b.chars / 1000)}k caracteres</div>
+      <button class="profile-book-card" data-id="${b.id}">
+        <div class="profile-book-icon">📖</div>
+        <div class="profile-book-info">
+          <div class="profile-book-title">${escHtml(b.title)}</div>
+          <div class="profile-book-meta">${new Date(b.saved).toLocaleDateString()} · ${Math.round(b.chars / 1000)}k chars</div>
         </div>
-        <button class="book-delete" data-id="${b.id}" aria-label="Eliminar">×</button>
-      </div>`).join('');
+        <button class="profile-book-del" data-id="${b.id}" aria-label="Eliminar">×</button>
+      </button>`).join('');
 
-    el.querySelectorAll('.book-card').forEach(card => {
+    el.querySelectorAll('.profile-book-card').forEach(card => {
       card.addEventListener('click', async e => {
-        if (e.target.classList.contains('book-delete')) return;
+        if (e.target.classList.contains('profile-book-del')) return;
         const d = await dbOpen();
         const req = d.transaction('books','readonly').objectStore('books').get(card.dataset.id);
-        req.onsuccess = () => { if (req.result) openReader(req.result.text, req.result.title); };
+        req.onsuccess = () => {
+          if (req.result) {
+            closeProfilePanel();
+            openReader(req.result.text, req.result.title);
+          }
+        };
       });
     });
 
-    el.querySelectorAll('.book-delete').forEach(btn => {
+    el.querySelectorAll('.profile-book-del').forEach(btn => {
       btn.addEventListener('click', async e => {
         e.stopPropagation();
         await dbDelete(btn.dataset.id);
@@ -706,23 +713,37 @@ function updateAuthUI(user) {
   profileEl.hidden = !signedIn;
 
   if (user) {
-    // Photo
     const photo = $('user-photo');
     const fallback = $('user-avatar-fallback');
     if (user.photoURL) {
       photo.src = user.photoURL;
       photo.hidden = false;
       fallback.hidden = true;
+      // sync large profile photo
+      const photoLg = $('profile-photo-lg');
+      if (photoLg) { photoLg.src = user.photoURL; photoLg.hidden = false; }
+      const fallbackLg = $('profile-fallback-lg');
+      if (fallbackLg) fallbackLg.hidden = true;
     } else {
       photo.hidden = true;
       fallback.hidden = false;
       fallback.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+      const fallbackLg = $('profile-fallback-lg');
+      if (fallbackLg) {
+        fallbackLg.hidden = false;
+        fallbackLg.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+      }
+      const photoLg = $('profile-photo-lg');
+      if (photoLg) photoLg.hidden = true;
     }
-    // Name + email
     $('user-display-name').textContent = user.displayName || '';
     $('user-email').textContent = user.email || '';
   }
-  renderLibrary();
+
+  if ($('panel-profile') && !$('panel-profile').hidden) {
+    renderPlanCard();
+    renderLibrary();
+  }
 }
 
 async function googleSignIn() {
@@ -762,7 +783,6 @@ async function signOut() {
   if (!firebaseReady) return;
   try {
     await firebase.auth().signOut();
-    closeUserDropdown();
   } catch (e) { console.error(e); }
 }
 
@@ -787,13 +807,6 @@ function closeLegalModal(id) {
   $(id).hidden = true;
   document.body.style.overflow = '';
   openLoginModal();
-}
-function toggleUserDropdown() {
-  const dd = $('user-dropdown');
-  dd.hidden = !dd.hidden;
-}
-function closeUserDropdown() {
-  $('user-dropdown').hidden = true;
 }
 
 /* ══ Stripe / Pricing ══════════════════════════════════════════ */
@@ -929,6 +942,8 @@ function applyTheme() {
   document.body.dataset.theme = theme;
   $('icon-sun').style.display  = theme === 'dark' ? 'block' : 'none';
   $('icon-moon').style.display = theme === 'light' ? 'block' : 'none';
+  if ($('profile-icon-sun'))  $('profile-icon-sun').style.display  = theme === 'dark' ? 'block' : 'none';
+  if ($('profile-icon-moon')) $('profile-icon-moon').style.display = theme === 'light' ? 'block' : 'none';
 }
 
 /* ══ Bio Card ══════════════════════════════════════════════════ */
@@ -1098,24 +1113,22 @@ function init() {
   $('modal-terms').addEventListener('click', e => { if (e.target === $('modal-terms')) closeLegalModal('modal-terms'); });
   $('modal-privacy').addEventListener('click', e => { if (e.target === $('modal-privacy')) closeLegalModal('modal-privacy'); });
 
-  $('user-avatar-btn').addEventListener('click', e => {
-    e.stopPropagation();
-    toggleUserDropdown();
-  });
-  $('btn-signout').addEventListener('click', signOut);
-  if ($('btn-upgrade-dropdown')) {
-    $('btn-upgrade-dropdown').addEventListener('click', () => {
-      closeUserDropdown();
-      openUpgradeModal();
+  // Profile panel
+  $('user-avatar-btn').addEventListener('click', openProfilePanel);
+  $('panel-profile-close').addEventListener('click', closeProfilePanel);
+  $('profile-backdrop').addEventListener('click', closeProfilePanel);
+  $('btn-signout').addEventListener('click', () => { closeProfilePanel(); signOut(); });
+
+  // Profile panel theme toggle (duplicates header theme but for inside panel)
+  if ($('profile-btn-theme')) {
+    $('profile-btn-theme').addEventListener('click', () => {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('fr-theme', theme);
+      applyTheme();
     });
   }
-  // Close dropdown clicking outside
-  document.addEventListener('click', e => {
-    if (!$('user-area').contains(e.target)) closeUserDropdown();
-  });
 
   /* Pricing / upgrade */
-  $('btn-upgrade-header').addEventListener('click', openUpgradeModal);
   $('btn-pro-cta').addEventListener('click', openUpgradeModal);
   $('btn-modal-cta').addEventListener('click', () => {
     const cfg = window.FOCUSREAD_STRIPE;
