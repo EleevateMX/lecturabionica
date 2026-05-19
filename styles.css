@@ -1,6 +1,8 @@
 /* ── RESET ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
+/* Ensure [hidden] always wins over any display:flex/grid/block rule */
+[hidden] { display: none !important; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -616,6 +618,59 @@ body {
   text-decoration: none;
 }
 .login-terms a:hover { text-decoration: underline; }
+
+/* Onboarding steps inside login modal */
+.login-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 20px;
+  text-align: left;
+}
+.login-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.login-step-n {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Welcome toast */
+.app-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  opacity: 0;
+  transition: opacity .3s, transform .3s;
+  pointer-events: none;
+  z-index: 9999;
+}
+.app-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 .login-divider {
   display: flex;

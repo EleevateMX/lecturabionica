@@ -705,6 +705,20 @@ function renderPlanCard() {
 /* ══ Firebase Auth ═════════════════════════════════════════════ */
 let currentUser = null;
 let firebaseReady = false;
+let _authResolved = false;
+
+function showToast(msg, duration = 3000) {
+  let t = $('app-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'app-toast';
+    t.className = 'app-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('app-toast-show');
+  setTimeout(() => t.classList.remove('app-toast-show'), duration);
+}
 
 function initFirebase() {
   const cfg = window.FOCUSREAD_FIREBASE;
@@ -723,8 +737,24 @@ function initFirebase() {
       auth.languageCode = lang;
 
       auth.onAuthStateChanged(user => {
+        const firstResolution = !_authResolved;
+        _authResolved = true;
         currentUser = user;
         updateAuthUI(user);
+
+        if (firstResolution && !user) {
+          // No session — require login
+          setTimeout(openLoginModal, 300);
+        }
+        if (user && !localStorage.getItem('fr-welcomed')) {
+          localStorage.setItem('fr-welcomed', '1');
+          showToast(
+            lang === 'es'
+              ? `Listo, ${user.displayName?.split(' ')[0] || 'bienvenido'} — ya puedes leer.`
+              : `Ready, ${user.displayName?.split(' ')[0] || 'welcome'} — start reading.`,
+            4000
+          );
+        }
       });
     } catch (e) {
       console.warn('Firebase init error:', e);
@@ -1209,7 +1239,6 @@ function init() {
 
   /* Auth */
   $('btn-signin-header').addEventListener('click', openLoginModal);
-  $('login-modal-close').addEventListener('click', closeLoginModal);
   $('modal-login').addEventListener('click', e => {
     if (e.target === $('modal-login')) closeLoginModal();
   });
