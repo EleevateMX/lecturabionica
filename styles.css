@@ -3,6 +3,7 @@
 html, body { height: 100%; }
 /* Ensure [hidden] always wins over any display:flex/grid/block rule */
 [hidden] { display: none !important; }
+button, input, textarea, select { touch-action: manipulation; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -646,6 +647,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Bio wave animation */
+@keyframes bio-wave {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(-18deg); }
+  60%       { transform: rotate(18deg); }
+}
+.bio-wave-arm {
+  animation: bio-wave 1.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: bottom right;
 }
 
 /* Welcome toast */
@@ -2286,3 +2299,242 @@ body {
   gap: 0;
 }
 .plan-features li { gap: 6px; }
+
+/* ── DASHBOARD SCREEN ───────────────────────────────────────── */
+.dash-main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.dash-greeting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+.dash-greeting-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.dash-user-first { color: var(--accent); margin-left: 6px; }
+.dash-plan-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: rgba(139,124,248,0.14);
+  color: var(--accent);
+  border: 1px solid rgba(139,124,248,0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+.dash-plan-pill.pill-pro {
+  background: rgba(255,209,102,0.12);
+  color: #FFD166;
+  border-color: rgba(255,209,102,0.3);
+}
+.dash-plan-pill.pill-basic {
+  background: rgba(88,214,141,0.12);
+  color: #58D68D;
+  border-color: rgba(88,214,141,0.3);
+}
+
+.dash-section { display: flex; flex-direction: column; gap: 12px; }
+.dash-section-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dash-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: .01em;
+}
+.dash-lib-badge {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 10px;
+}
+
+.dash-action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.dash-action-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s, background .15s;
+  text-align: center;
+}
+.dash-action-card:hover, .dash-action-card:focus-visible {
+  border-color: var(--accent);
+  background: rgba(139,124,248,0.06);
+}
+.dash-action-card:active { transform: scale(0.97); }
+.dash-action-card.active { border-color: var(--accent); background: rgba(139,124,248,0.1); }
+.dash-action-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(139,124,248,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-action-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.dash-action-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dash-paste-area {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.dash-paste-area.visible { display: flex; }
+.dash-paste-area textarea {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  padding: 14px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+}
+.dash-paste-area textarea:focus { border-color: var(--accent); }
+
+.dash-library-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 60px;
+}
+.dash-lib-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+.dash-book-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.dash-book-card:hover { border-color: var(--accent); }
+.dash-book-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(139,124,248,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dash-book-info { flex: 1; min-width: 0; }
+.dash-book-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-book-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.dash-book-del {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color .15s;
+}
+.dash-book-del:hover { color: #ff6b6b; }
+
+.dash-upgrade-nudge {
+  background: linear-gradient(135deg, rgba(139,124,248,0.12), rgba(107,92,231,0.06));
+  border: 1px solid rgba(139,124,248,0.25);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dash-nudge-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.dash-nudge-text strong { color: var(--text); }
+.dash-nudge-text span { color: var(--text-muted); }
+.dash-nudge-btn { white-space: nowrap; font-size: 13px; padding: 8px 16px; }
+
+/* ── LANDING PRICING GRID 3 COLS ────────────────────────────── */
+.pricing-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 680px) {
+  .pricing-grid-3 { grid-template-columns: 1fr; }
+  .dash-action-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+}
+.plan-basic-cta {
+  margin-top: 12px;
+  width: 100%;
+}
+.plan-card.plan-basic {
+  border-color: rgba(88,214,141,0.25);
+}
+.plan-card.plan-basic:hover { border-color: #58D68D; }
+
+/* ── DASHBOARD SCREEN LAYOUT ────────────────────────────────── */
+#screen-dashboard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

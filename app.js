@@ -204,16 +204,25 @@ function showLoading(title, sub) {
 function hideLoading() { $('loading').hidden = true; }
 
 function showScreen(id) {
-  const home   = $('screen-home');
-  const reader = $('screen-reader');
+  const home      = $('screen-home');
+  const reader    = $('screen-reader');
+  const dashboard = $('screen-dashboard');
+
+  // Remove all active/slide-out states
+  [home, reader, dashboard].forEach(s => {
+    if (s) { s.classList.remove('active', 'slide-out'); }
+  });
+
   if (id === 'screen-reader') {
-    home.classList.remove('active');
-    home.classList.add('slide-out');
-    reader.classList.remove('slide-out');
+    const prev = currentUser ? dashboard : home;
+    if (prev) prev.classList.add('slide-out');
     reader.classList.add('active');
-  } else {
+  } else if (id === 'screen-dashboard') {
     reader.classList.remove('active');
-    home.classList.remove('slide-out');
+    if (dashboard) dashboard.classList.add('active');
+  } else {
+    // screen-home
+    reader.classList.remove('active');
     home.classList.add('active');
   }
 }
@@ -548,10 +557,6 @@ async function dbDelete(id) {
   });
 }
 
-function isPro() {
-  return !!currentUser && localStorage.getItem('fr-pro') === '1';
-}
-
 /* ══ Free plan limits ══════════════════════════════════════════ */
 const FREE_LIMITS = { paste: 5, txt: 3, pdfPages: 20 };
 
@@ -707,6 +712,16 @@ let currentUser = null;
 let firebaseReady = false;
 let _authResolved = false;
 
+function getPlan() {
+  const p = localStorage.getItem('fr-plan');
+  if (p === 'pro' || localStorage.getItem('fr-pro') === '1') return 'pro';
+  if (p === 'basic') return 'basic';
+  return 'free';
+}
+function isPro() { return getPlan() === 'pro'; }
+function isBasicOrPro() { const p = getPlan(); return p === 'basic' || p === 'pro'; }
+function getLibraryLimit() { const p = getPlan(); return p === 'pro' ? 999 : p === 'basic' ? 10 : 3; }
+
 function showToast(msg, duration = 3000) {
   let t = $('app-toast');
   if (!t) {
@@ -743,8 +758,11 @@ function initFirebase() {
         updateAuthUI(user);
 
         if (firstResolution && !user) {
-          // No session — require login
           setTimeout(openLoginModal, 300);
+        }
+        if (firstResolution && user) {
+          showScreen('screen-dashboard');
+          initDashboard();
         }
         if (user && !localStorage.getItem('fr-welcomed')) {
           localStorage.setItem('fr-welcomed', '1');
@@ -799,6 +817,24 @@ function updateAuthUI(user) {
     $('user-email').textContent = user.email || '';
   }
 
+  // Sync dashboard avatar
+  const dashPhoto = $('dash-user-photo');
+  const dashFallback = $('dash-avatar-fallback');
+  if (user && dashPhoto) {
+    if (user.photoURL) {
+      dashPhoto.src = user.photoURL;
+      dashPhoto.hidden = false;
+      if (dashFallback) dashFallback.hidden = true;
+    } else {
+      dashPhoto.hidden = true;
+      if (dashFallback) { dashFallback.hidden = false; dashFallback.textContent = (user.displayName || user.email || '?')[0].toUpperCase(); }
+    }
+  }
+  // Sync dashboard greeting
+  if ($('dash-user-first') && user) {
+    $('dash-user-first').textContent = user.displayName?.split(' ')[0] || '';
+  }
+
   if ($('panel-profile') && !$('panel-profile').hidden) {
     renderPlanCard();
     renderLibrary();
@@ -842,6 +878,7 @@ async function signOut() {
   if (!firebaseReady) return;
   try {
     await firebase.auth().signOut();
+    showScreen('screen-home');
   } catch (e) { console.error(e); }
 }
 
@@ -1075,10 +1112,13 @@ function applyLang() {
 
 function applyTheme() {
   document.body.dataset.theme = theme;
-  $('icon-sun').style.display  = theme === 'dark' ? 'block' : 'none';
-  $('icon-moon').style.display = theme === 'light' ? 'block' : 'none';
-  if ($('profile-icon-sun'))  $('profile-icon-sun').style.display  = theme === 'dark' ? 'block' : 'none';
-  if ($('profile-icon-moon')) $('profile-icon-moon').style.display = theme === 'light' ? 'block' : 'none';
+  const dark = theme === 'dark';
+  $('icon-sun').style.display  = dark ? 'block' : 'none';
+  $('icon-moon').style.display = dark ? 'none' : 'block';
+  if ($('profile-icon-sun'))  $('profile-icon-sun').style.display  = dark ? 'block' : 'none';
+  if ($('profile-icon-moon')) $('profile-icon-moon').style.display = dark ? 'none' : 'block';
+  if ($('dash-icon-sun'))  $('dash-icon-sun').style.display  = dark ? 'none' : '';
+  if ($('dash-icon-moon')) $('dash-icon-moon').style.display = dark ? '' : 'none';
 }
 
 /* ══ Bio Card ══════════════════════════════════════════════════ */
@@ -1095,6 +1135,77 @@ function initBio() {
   });
 }
 
+/* ══ Dashboard ════════════════════════════════════════════════ */
+async function loadBooks() {
+  if (!currentUser) return [];
+  try { return await dbGetAll(); } catch { return []; }
+}
+
+async function deleteBook(id) {
+  try { await dbDelete(id); } catch (e) { console.error(e); }
+}
+
+function initDashboard() {
+  const plan = getPlan();
+  // Update plan pill
+  const pill = $('dash-plan-pill');
+  if (pill) {
+    pill.textContent = plan === 'pro' ? 'Pro ✦' : plan === 'basic' ? 'Básico' : 'Gratis';
+    pill.className = 'dash-plan-pill' + (plan === 'pro' ? ' pill-pro' : plan === 'basic' ? ' pill-basic' : '');
+  }
+  // Show upgrade nudge for free users
+  if ($('dash-upgrade-nudge')) $('dash-upgrade-nudge').hidden = plan !== 'free';
+  // Update PDF hint
+  if ($('dash-pdf-hint')) {
+    $('dash-pdf-hint').textContent = isBasicOrPro() ? 'Documento completo' : 'Hasta 20 pág · Gratis';
+  }
+  renderDashLibrary();
+}
+
+async function renderDashLibrary() {
+  const container = $('dash-library');
+  const empty = $('dash-lib-empty');
+  const badge = $('dash-lib-badge');
+  if (!container) return;
+
+  const books = await loadBooks();
+  const limit = getLibraryLimit();
+
+  if (badge) badge.textContent = `${books.length} / ${limit === 999 ? '∞' : limit}`;
+
+  // remove existing book cards
+  container.querySelectorAll('.dash-book-card').forEach(n => n.remove());
+
+  if (!books.length) {
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+  books.forEach(book => {
+    const card = document.createElement('div');
+    card.className = 'dash-book-card';
+    card.innerHTML = `
+      <div class="dash-book-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </div>
+      <div class="dash-book-info">
+        <div class="dash-book-title">${escHtml(book.title)}</div>
+        <div class="dash-book-meta">${new Date(book.saved || book.savedAt).toLocaleDateString()}</div>
+      </div>
+      <button class="dash-book-del" data-id="${book.id}" aria-label="Eliminar">×</button>
+    `;
+    card.querySelector('.dash-book-info').addEventListener('click', () => openReader(book.text, book.title));
+    card.querySelector('.dash-book-del').addEventListener('click', async e => {
+      e.stopPropagation();
+      await deleteBook(book.id);
+      renderDashLibrary();
+    });
+    container.appendChild(card);
+  });
+}
+
 /* ══ Init ══════════════════════════════════════════════════════ */
 function init() {
   if (typeof pdfjsLib !== 'undefined') {
@@ -1107,7 +1218,6 @@ function init() {
   initBio();
   initStripe();
   initFirebase();
-  initSuggestions();
 
   /* Language toggle */
   $('btn-lang').addEventListener('click', () => {
@@ -1193,7 +1303,7 @@ function init() {
   });
 
   /* Reader controls */
-  $('btn-back').addEventListener('click', () => showScreen('screen-home'));
+  $('btn-back').addEventListener('click', () => showScreen(currentUser ? 'screen-dashboard' : 'screen-home'));
   $('btn-font-down').addEventListener('click', () => adjustFont(-2));
   $('btn-font-up').addEventListener('click', () => adjustFont(2));
   $('btn-save-book').addEventListener('click', saveCurrentBook);
@@ -1275,6 +1385,55 @@ function init() {
   });
   if ($('bill-monthly')) $('bill-monthly').addEventListener('click', () => setBillingPeriod('month'));
   if ($('bill-annual'))  $('bill-annual').addEventListener('click', () => setBillingPeriod('annual'));
+
+  /* Dashboard */
+  if ($('dash-btn-paste')) {
+    $('dash-btn-paste').addEventListener('click', () => {
+      const area = $('dash-paste-area');
+      const open = area.classList.toggle('visible');
+      $('dash-btn-paste').classList.toggle('active', open);
+      if (open) $('dash-paste-input').focus();
+    });
+  }
+  if ($('dash-btn-process')) {
+    $('dash-btn-process').addEventListener('click', () => {
+      const text = $('dash-paste-input').value.trim();
+      if (!text) { alert(t('errorNoText')); return; }
+      if (!checkFreeLimit('paste')) return;
+      incFreeCount('paste');
+      openReader(text, text.split('\n')[0].slice(0, 70));
+    });
+  }
+  if ($('dash-paste-input')) {
+    $('dash-paste-input').addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('dash-btn-process').click();
+    });
+  }
+  if ($('dash-btn-pdf')) $('dash-btn-pdf').addEventListener('click', () => $('input-pdf').click());
+  if ($('dash-btn-txt')) $('dash-btn-txt').addEventListener('click', () => $('input-txt').click());
+  if ($('dash-avatar-btn')) $('dash-avatar-btn').addEventListener('click', openProfilePanel);
+  if ($('dash-btn-upgrade')) $('dash-btn-upgrade').addEventListener('click', openUpgradeModal);
+  if ($('dash-btn-theme')) {
+    $('dash-btn-theme').addEventListener('click', () => {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('fr-theme', theme);
+      applyTheme();
+    });
+  }
+  // Support form in profile panel
+  if ($('btn-support-send')) {
+    $('btn-support-send').addEventListener('click', () => {
+      const txt = $('support-text').value.trim();
+      if (!txt) return;
+      $('support-form-wrap').hidden = true;
+      $('support-thanks').hidden = false;
+      setTimeout(() => {
+        $('support-form-wrap').hidden = false;
+        $('support-thanks').hidden = true;
+        $('support-text').value = '';
+      }, 4000);
+    });
+  }
 
   /* Service worker */
   if ('serviceWorker' in navigator) {
