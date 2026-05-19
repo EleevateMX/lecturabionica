@@ -203,6 +203,20 @@ function showLoading(title, sub) {
 }
 function hideLoading() { $('loading').hidden = true; }
 
+function showToast(msg, duration) {
+  let toast = $('app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = 'app-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('app-toast-show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('app-toast-show'), duration || 3000);
+}
+
 function showScreen(id) {
   const home   = $('screen-home');
   const reader = $('screen-reader');
@@ -285,12 +299,16 @@ async function readPdf(file) {
 /* ══ Firebase Auth ═════════════════════════════════════════════ */
 let currentUser = null;
 let firebaseReady = false;
+let _authResolved = false;
 
 function initFirebase() {
   const cfg = window.FOCUSREAD_FIREBASE;
-  if (!cfg || cfg.apiKey.includes('REPLACE')) return; // not configured yet
+  if (!cfg || cfg.apiKey.includes('REPLACE')) {
+    // No Firebase config — auto-open login so user sees the gate
+    setTimeout(openLoginModal, 300);
+    return;
+  }
 
-  // Wait for Firebase SDKs to load (they're deferred)
   const waitForFirebase = () => {
     if (typeof firebase === 'undefined') {
       setTimeout(waitForFirebase, 200);
@@ -305,9 +323,15 @@ function initFirebase() {
       auth.onAuthStateChanged(user => {
         currentUser = user;
         updateAuthUI(user);
+        // First resolution: if not logged in, show login gate
+        if (!_authResolved) {
+          _authResolved = true;
+          if (!user) openLoginModal();
+        }
       });
     } catch (e) {
       console.warn('Firebase init error:', e);
+      setTimeout(openLoginModal, 300);
     }
   };
   waitForFirebase();
@@ -337,6 +361,22 @@ function updateAuthUI(user) {
     // Name + email
     $('user-display-name').textContent = user.displayName || '';
     $('user-email').textContent = user.email || '';
+  }
+
+  if ($('panel-profile') && !$('panel-profile').hidden) {
+    renderPlanCard();
+    renderLibrary();
+  }
+
+  // Show welcome toast on first login
+  if (user && !localStorage.getItem('fr-welcomed')) {
+    localStorage.setItem('fr-welcomed', '1');
+    showToast(
+      lang === 'es'
+        ? `Listo, ${user.displayName?.split(' ')[0] || 'bienvenido'} — ya puedes leer. Toca tu avatar para ver tu plan.`
+        : `Ready, ${user.displayName?.split(' ')[0] || 'welcome'} — start reading. Tap your avatar to see your plan.`,
+      4000
+    );
   }
 }
 
@@ -648,10 +688,7 @@ function init() {
 
   /* Auth */
   $('btn-signin-header').addEventListener('click', openLoginModal);
-  $('login-modal-close').addEventListener('click', closeLoginModal);
-  $('modal-login').addEventListener('click', e => {
-    if (e.target === $('modal-login')) closeLoginModal();
-  });
+  // Login modal is mandatory — no close button, no backdrop dismiss
   $('btn-google-signin').addEventListener('click', googleSignIn);
   $('btn-guest').addEventListener('click', closeLoginModal);
   $('user-avatar-btn').addEventListener('click', e => {
