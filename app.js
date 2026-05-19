@@ -1208,6 +1208,23 @@ async function renderDashLibrary() {
 }
 
 /* ══ Init ══════════════════════════════════════════════════════ */
+function checkStripeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plan');
+  const success = params.get('success');
+  if (plan && (plan === 'basic' || plan === 'pro') && success === '1') {
+    localStorage.setItem('fr-plan', plan);
+    // Clean URL so refreshing doesn't re-trigger
+    history.replaceState({}, '', window.location.pathname);
+    showToast(
+      lang === 'es'
+        ? `✓ Plan ${plan === 'pro' ? 'Pro' : 'Básico'} activado. ¡Bienvenido!`
+        : `✓ ${plan === 'pro' ? 'Pro' : 'Basic'} plan activated. Welcome!`,
+      5000
+    );
+  }
+}
+
 function init() {
   if (typeof pdfjsLib !== 'undefined') {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -1216,6 +1233,7 @@ function init() {
 
   applyTheme();
   applyLang();
+  checkStripeReturn();
   initBio();
   initStripe();
   initFirebase();
