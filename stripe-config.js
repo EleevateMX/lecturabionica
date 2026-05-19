@@ -29,7 +29,7 @@
  */
 window.FOCUSREAD_STRIPE = {
   // Dashboard → Developers → API keys
-  publishableKey: 'pk_live_REPLACE_WITH_YOUR_PUBLISHABLE_KEY',
+  publishableKey: 'pk_test_51TYbPgCO7kBd2xtlkpaRZvxocX39ZGGzvqXxtLoyrYyCi1eLN5Oakirv2prtY67XJqaV6wkjxG7YNnzMZqOXeUQa00nYbsFq1K',
 
   // Dashboard → Products → Pricing tables → tu tabla → pricing-table-id
   pricingTableId: 'prctbl_REPLACE_WITH_YOUR_PRICING_TABLE_ID',
