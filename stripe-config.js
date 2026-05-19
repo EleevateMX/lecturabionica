@@ -32,7 +32,7 @@ window.FOCUSREAD_STRIPE = {
   publishableKey: 'pk_test_51TYbPgCO7kBd2xtlkpaRZvxocX39ZGGzvqXxtLoyrYyCi1eLN5Oakirv2prtY67XJqaV6wkjxG7YNnzMZqOXeUQa00nYbsFq1K',
 
   // Dashboard → Products → Pricing tables → tu tabla → pricing-table-id
-  pricingTableId: 'prctbl_REPLACE_WITH_YOUR_PRICING_TABLE_ID',
+  pricingTableId: 'prctbl_1TYbloCO7kBd2xtlUXuQzpUS',
 
   // Fallback: Payment Links directos (Dashboard → Payment Links)
   paymentLinkMonthly: 'https://buy.stripe.com/REPLACE_MONTHLY',
