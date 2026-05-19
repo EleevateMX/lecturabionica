@@ -333,6 +333,7 @@
         <div class="font-controls">
           <button class="btn-font" id="btn-font-down" aria-label="Reducir fuente">A−</button>
           <button class="btn-font" id="btn-font-up" aria-label="Aumentar fuente">A+</button>
+          <button class="btn-font btn-rsvp-open" id="btn-rsvp-open" aria-label="Modo rápido" hidden title="Modo rápido (Pro)">▶</button>
           <button class="btn-font btn-save-book" id="btn-save-book" aria-label="Guardar en biblioteca" hidden>★</button>
         </div>
       </header>
@@ -552,6 +553,48 @@
             <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ══ RSVP OVERLAY ═════════════════════════════════════════ -->
+    <div id="rsvp-overlay" class="rsvp-overlay" hidden>
+      <button id="rsvp-close" class="rsvp-close">×</button>
+      <div class="rsvp-meta">
+        <span class="rsvp-label-txt">Modo rápido</span>
+        <span class="rsvp-wpm-badge">·&nbsp;<span id="rsvp-wpm-val">300</span>&nbsp;ppm</span>
+      </div>
+      <div class="rsvp-stage">
+        <div class="rsvp-guide"></div>
+        <div id="rsvp-word" class="rsvp-word">···</div>
+      </div>
+      <div class="rsvp-prog-track"><div id="rsvp-prog-fill" class="rsvp-prog-fill"></div></div>
+      <div class="rsvp-btns">
+        <button id="rsvp-back" class="rsvp-btn-sm">← atrás</button>
+        <button id="rsvp-play" class="rsvp-btn-play">▶ iniciar</button>
+        <button id="rsvp-fwd"  class="rsvp-btn-sm">adelante →</button>
+      </div>
+      <div class="rsvp-speed-row">
+        <span class="rsvp-spd-lbl">100</span>
+        <input id="rsvp-slider" type="range" min="100" max="700" step="25" value="300" class="rsvp-slider">
+        <span class="rsvp-spd-lbl">700</span>
+      </div>
+      <div id="rsvp-count" class="rsvp-count">1 / 0</div>
+    </div>
+
+    <!-- ══ TOC MODAL ════════════════════════════════════════════ -->
+    <div id="modal-toc" class="modal-overlay" hidden>
+      <div class="modal-card toc-card">
+        <button class="modal-close" id="toc-close">×</button>
+        <div class="toc-header">
+          <span class="toc-icon">📑</span>
+          <div>
+            <h2 class="toc-title">Índice del documento</h2>
+            <p class="toc-doc-name" id="toc-doc-name"></p>
+          </div>
+        </div>
+        <p class="toc-hint">Selecciona una sección para leerla, o lee todo el documento.</p>
+        <div id="toc-list" class="toc-list"></div>
+        <button class="btn-primary toc-all-btn" id="toc-read-all">Leer todo el documento →</button>
       </div>
     </div>
 
