@@ -620,6 +620,52 @@ async function saveCurrentBook() {
   }
 }
 
+/* ══ Profile Panel ════════════════════════════════════════════ */
+function openProfilePanel() {
+  renderLibrary();
+  renderPlanCard();
+  $('panel-profile').hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('profile-sheet').classList.add('open'), 10);
+}
+
+function closeProfilePanel() {
+  $('profile-sheet').classList.remove('open');
+  setTimeout(() => {
+    if ($('panel-profile')) $('panel-profile').hidden = true;
+    document.body.style.overflow = '';
+  }, 320);
+}
+
+function renderPlanCard() {
+  const card = $('profile-plan-card');
+  if (!card) return;
+  if (!currentUser) { card.innerHTML = ''; return; }
+  if (isPro()) {
+    card.innerHTML = `
+      <div class="plan-badge-row pro-row">
+        <span class="plan-badge-icon">✦</span>
+        <div>
+          <div class="plan-badge-name">Plan Pro activo</div>
+          <div class="plan-badge-sub">Acceso completo desbloqueado</div>
+        </div>
+      </div>`;
+  } else {
+    card.innerHTML = `
+      <div class="plan-badge-row free-row">
+        <div>
+          <div class="plan-badge-name">${lang === 'es' ? 'Plan gratuito' : 'Free plan'}</div>
+          <div class="plan-badge-sub">${lang === 'es' ? 'Lectura básica habilitada' : 'Basic reading enabled'}</div>
+        </div>
+        <button class="btn-upgrade-profile" id="profile-upgrade-btn">${lang === 'es' ? 'Ir a Pro ✦' : 'Go Pro ✦'}</button>
+      </div>`;
+    $('profile-upgrade-btn').addEventListener('click', () => {
+      closeProfilePanel();
+      openUpgradeModal();
+    });
+  }
+}
+
 /* ══ Firebase Auth ═════════════════════════════════════════════ */
 let currentUser = null;
 let firebaseReady = false;
