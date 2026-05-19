@@ -219,13 +219,28 @@ function showScreen(id) {
 }
 
 /* ══ Reader ════════════════════════════════════════════════════ */
+let _currentText  = '';
+let _currentTitle = '';
+
 function openReader(rawText, title) {
-  $('reader-title').textContent = title || 'FocusRead';
+  if (!rawText || !rawText.trim()) {
+    alert(lang === 'es'
+      ? 'El documento no contiene texto seleccionable. Puede ser un PDF escaneado (imagen).'
+      : 'The document has no selectable text. It may be a scanned (image) PDF.');
+    return;
+  }
+  _currentText  = rawText;
+  _currentTitle = title || 'FocusRead';
+  $('reader-title').textContent = _currentTitle;
   $('reader-content').innerHTML = bionicProcess(rawText);
   $('reader-content').style.fontSize = fontSize + 'px';
   $('reader-scroll').scrollTop = 0;
   $('reader-bio-tip').classList.remove('hidden');
   updateProgress();
+  const saveBtn = $('btn-save-book');
+  saveBtn.hidden   = !currentUser;
+  saveBtn.textContent = '★';
+  saveBtn.disabled = false;
   showScreen('screen-reader');
 }
 
@@ -280,6 +295,144 @@ async function readPdf(file) {
     fullText += '\n';
   }
   return fullText.trim();
+}
+
+/* ══ Library (IndexedDB) ══════════════════════════════════════ */
+let _db = null;
+
+function dbOpen() {
+  if (_db) return Promise.resolve(_db);
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('focusread', 1);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('books')) {
+        d.createObjectStore('books', { keyPath: 'id' }).createIndex('uid', 'uid');
+      }
+    };
+    req.onsuccess = e => { _db = e.target.result; res(_db); };
+    req.onerror   = ()  => rej(req.error);
+  });
+}
+
+async function dbSave(title, text) {
+  const d = await dbOpen();
+  const book = {
+    id:    Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    uid:   currentUser.uid,
+    title,
+    text,
+    chars: text.length,
+    saved: Date.now(),
+  };
+  return new Promise((res, rej) => {
+    const tx = d.transaction('books', 'readwrite');
+    tx.objectStore('books').add(book);
+    tx.oncomplete = () => res(book);
+    tx.onerror    = () => rej(tx.error);
+  });
+}
+
+async function dbGetAll() {
+  const d = await dbOpen();
+  return new Promise((res, rej) => {
+    const req = d.transaction('books', 'readonly')
+                  .objectStore('books').index('uid').getAll(currentUser.uid);
+    req.onsuccess = () => res(req.result.sort((a, b) => b.saved - a.saved));
+    req.onerror   = () => rej(req.error);
+  });
+}
+
+async function dbDelete(id) {
+  const d = await dbOpen();
+  return new Promise((res, rej) => {
+    const tx = d.transaction('books', 'readwrite');
+    tx.objectStore('books').delete(id);
+    tx.oncomplete = res;
+    tx.onerror    = () => rej(tx.error);
+  });
+}
+
+function isPro() {
+  return !!currentUser && localStorage.getItem('fr-pro') === '1';
+}
+
+async function renderLibrary() {
+  const el = $('library-list');
+  if (!el) return;
+
+  if (!currentUser) {
+    el.innerHTML = `<p class="library-empty">${lang === 'es' ? 'Inicia sesión para ver tu biblioteca.' : 'Sign in to view your library.'}</p>`;
+    return;
+  }
+
+  if (!isPro()) {
+    el.innerHTML = `
+      <div class="library-locked">
+        <div class="library-lock-icon">📚</div>
+        <p class="library-lock-txt">${lang === 'es'
+          ? 'Guarda PDFs y vuélvelos a leer cuando quieras'
+          : 'Save PDFs and re-read them anytime'}</p>
+        <button class="btn-primary lib-upgrade-btn">${lang === 'es' ? 'Desbloquear con Pro →' : 'Unlock with Pro →'}</button>
+      </div>`;
+    el.querySelector('.lib-upgrade-btn').addEventListener('click', openUpgradeModal);
+    return;
+  }
+
+  try {
+    const books = await dbGetAll();
+    if (!books.length) {
+      el.innerHTML = `<p class="library-empty">${lang === 'es' ? 'Sin libros guardados aún. Lee un PDF y guárdalo.' : 'No saved books yet. Read a PDF and save it.'}</p>`;
+      return;
+    }
+    el.innerHTML = books.map(b => `
+      <div class="book-card" data-id="${b.id}">
+        <div class="book-icon">📖</div>
+        <div class="book-info">
+          <div class="book-title">${escHtml(b.title)}</div>
+          <div class="book-meta">${new Date(b.saved).toLocaleDateString()} · ${Math.round(b.chars / 1000)}k caracteres</div>
+        </div>
+        <button class="book-delete" data-id="${b.id}" aria-label="Eliminar">×</button>
+      </div>`).join('');
+
+    el.querySelectorAll('.book-card').forEach(card => {
+      card.addEventListener('click', async e => {
+        if (e.target.classList.contains('book-delete')) return;
+        const d = await dbOpen();
+        const req = d.transaction('books','readonly').objectStore('books').get(card.dataset.id);
+        req.onsuccess = () => { if (req.result) openReader(req.result.text, req.result.title); };
+      });
+    });
+
+    el.querySelectorAll('.book-delete').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        await dbDelete(btn.dataset.id);
+        renderLibrary();
+      });
+    });
+  } catch (err) {
+    console.error('Library error:', err);
+    el.innerHTML = '';
+  }
+}
+
+async function saveCurrentBook() {
+  if (!currentUser) { openLoginModal(); return; }
+  if (!isPro())     { openUpgradeModal(); return; }
+  if (!_currentText) return;
+
+  const btn = $('btn-save-book');
+  btn.disabled = true;
+  try {
+    await dbSave(_currentTitle, _currentText);
+    btn.textContent = lang === 'es' ? '✓' : '✓';
+    setTimeout(() => { btn.textContent = '★'; btn.disabled = false; }, 2000);
+    renderLibrary();
+  } catch (e) {
+    btn.disabled = false;
+    console.error('Save error:', e);
+  }
 }
 
 /* ══ Firebase Auth ═════════════════════════════════════════════ */
@@ -338,6 +491,7 @@ function updateAuthUI(user) {
     $('user-display-name').textContent = user.displayName || '';
     $('user-email').textContent = user.email || '';
   }
+  renderLibrary();
 }
 
 async function googleSignIn() {
@@ -661,6 +815,7 @@ function init() {
   $('btn-back').addEventListener('click', () => showScreen('screen-home'));
   $('btn-font-down').addEventListener('click', () => adjustFont(-2));
   $('btn-font-up').addEventListener('click', () => adjustFont(2));
+  $('btn-save-book').addEventListener('click', saveCurrentBook);
   $('reader-scroll').addEventListener('scroll', updateProgress, { passive: true });
   $('reader-bio-close').addEventListener('click', () => {
     $('reader-bio-tip').classList.add('hidden');
