@@ -1482,3 +1482,234 @@ body {
     padding-bottom: calc(10px + env(safe-area-inset-bottom));
   }
 }
+
+/* ── RSVP OVERLAY ───────────────────────────────────────────── */
+.rsvp-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+.rsvp-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: color .15s;
+}
+.rsvp-close:hover { color: var(--text); }
+
+.rsvp-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.rsvp-wpm-badge { color: var(--accent); font-weight: 600; }
+
+.rsvp-stage {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 110px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.rsvp-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background: var(--accent);
+  opacity: .35;
+  pointer-events: none;
+}
+
+.rsvp-word {
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: .02em;
+  user-select: none;
+}
+.rsvp-word .rsvp-pivot {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.rsvp-prog-track {
+  width: 100%;
+  max-width: 480px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.rsvp-prog-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width .1s linear;
+}
+
+.rsvp-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rsvp-btn-sm {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.rsvp-btn-sm:hover { background: var(--card-hover); }
+
+.rsvp-btn-play {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: opacity .15s;
+  min-width: 130px;
+}
+.rsvp-btn-play:hover { opacity: .85; }
+
+.rsvp-speed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+}
+.rsvp-spd-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: center;
+}
+.rsvp-slider {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.rsvp-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: .05em;
+}
+
+/* ── TOC MODAL ──────────────────────────────────────────────── */
+.toc-card {
+  max-width: 520px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 28px 28px 20px;
+}
+
+.toc-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.toc-icon { font-size: 28px; flex-shrink: 0; }
+.toc-title { font-size: 18px; font-weight: 700; color: var(--text-bold); }
+.toc-doc-name {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toc-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.toc-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.toc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s, border-color .15s;
+}
+.toc-item:hover {
+  background: var(--card-hover);
+  border-color: var(--accent);
+}
+.toc-item-title { flex: 1; font-weight: 500; }
+.toc-item-page {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.toc-all-btn {
+  width: 100%;
+  text-align: center;
+  flex-shrink: 0;
+}
+.toc-loading {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}

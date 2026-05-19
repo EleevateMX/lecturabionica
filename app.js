@@ -241,6 +241,8 @@ function openReader(rawText, title) {
   saveBtn.hidden   = !currentUser;
   saveBtn.textContent = '★';
   saveBtn.disabled = false;
+  const rsvpBtn = $('btn-rsvp-open');
+  if (rsvpBtn) rsvpBtn.hidden = !currentUser;
   showScreen('screen-reader');
 }
 
@@ -268,33 +270,216 @@ function readTxt(file) {
   });
 }
 
+async function extractPageText(pdf, pageNum) {
+  const page    = await pdf.getPage(pageNum);
+  const content = await page.getTextContent();
+  let text = '';
+  let lastY = null;
+  for (const item of content.items) {
+    const y = item.transform ? item.transform[5] : null;
+    if (lastY !== null && Math.abs(y - lastY) > 5) text += '\n';
+    text += item.str;
+    lastY = y;
+  }
+  return text.trim();
+}
+
+async function extractPages(pdf, fromPage, toPage) {
+  const total = pdf.numPages;
+  const start = Math.max(1, fromPage || 1);
+  const end   = Math.min(total, toPage   || total);
+  let fullText = '';
+  for (let i = start; i <= end; i++) {
+    showLoading(t('loadingPdf'), t('loadingPage').replace('{n}', i).replace('{total}', total));
+    fullText += await extractPageText(pdf, i) + '\n\n';
+  }
+  return fullText.trim();
+}
+
 async function readPdf(file) {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  const total = pdf.numPages;
-  let fullText = '';
-  for (let i = 1; i <= total; i++) {
-    showLoading(
-      t('loadingPdf'),
-      t('loadingPage').replace('{n}', i).replace('{total}', total)
-    );
-    const page    = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    let lastY  = null;
-    let lineText = '';
-    for (const item of content.items) {
-      const y = item.transform ? item.transform[5] : null;
-      if (lastY !== null && Math.abs(y - lastY) > 5) {
-        fullText += lineText.trim() + '\n';
-        lineText = '';
-      }
-      lineText += item.str;
-      lastY = y;
+
+  if (isPro()) {
+    const outline = await pdf.getOutline();
+    if (outline && outline.length > 0) {
+      hideLoading();
+      await showTocModal(pdf, outline, file.name.replace(/\.pdf$/i, ''));
+      return null;
     }
-    if (lineText.trim()) fullText += lineText.trim() + '\n';
-    fullText += '\n';
   }
-  return fullText.trim();
+
+  return await extractPages(pdf, 1, pdf.numPages);
+}
+
+/* ══ PDF Table of Contents ═════════════════════════════════════ */
+async function getOutlinePageNum(pdf, dest) {
+  if (!dest) return null;
+  try {
+    let ref;
+    if (typeof dest === 'string') {
+      const d = await pdf.getDestination(dest);
+      if (!d) return null;
+      ref = d[0];
+    } else {
+      ref = dest[0];
+    }
+    return await pdf.getPageIndex(ref) + 1;
+  } catch { return null; }
+}
+
+async function buildTocItems(pdf, outline) {
+  const items = [];
+  for (const entry of outline) {
+    const page = await getOutlinePageNum(pdf, entry.dest);
+    items.push({ title: entry.title || '—', page });
+  }
+  return items;
+}
+
+async function showTocModal(pdf, outline, docTitle) {
+  $('toc-doc-name').textContent = docTitle;
+  const tocList = $('toc-list');
+  tocList.innerHTML = '<p class="toc-loading">Cargando índice…</p>';
+  $('modal-toc').hidden = false;
+  document.body.style.overflow = 'hidden';
+
+  const items = await buildTocItems(pdf, outline);
+
+  for (let i = 0; i < items.length; i++) {
+    items[i].endPage = items[i + 1] ? (items[i + 1].page || pdf.numPages) - 1 : pdf.numPages;
+  }
+
+  if (!items.length) {
+    tocList.innerHTML = '<p class="toc-loading">No se encontraron secciones.</p>';
+    return;
+  }
+
+  tocList.innerHTML = items.map((item, i) => `
+    <button class="toc-item" data-idx="${i}">
+      <span class="toc-item-title">${escHtml(item.title)}</span>
+      ${item.page ? `<span class="toc-item-page">p.&nbsp;${item.page}</span>` : ''}
+    </button>`).join('');
+
+  tocList.querySelectorAll('.toc-item').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const item = items[parseInt(btn.dataset.idx)];
+      closeTocModal();
+      showLoading(t('loadingPdf'));
+      const text = await extractPages(pdf, item.page || 1, item.endPage || pdf.numPages);
+      hideLoading();
+      openReader(text, item.title);
+    });
+  });
+
+  $('toc-read-all').onclick = async () => {
+    closeTocModal();
+    showLoading(t('loadingPdf'));
+    const text = await extractPages(pdf, 1, pdf.numPages);
+    hideLoading();
+    openReader(text, docTitle);
+  };
+}
+
+function closeTocModal() {
+  $('modal-toc').hidden = true;
+  document.body.style.overflow = '';
+}
+
+/* ══ RSVP Mode ════════════════════════════════════════════════ */
+let rsvpWords   = [];
+let rsvpIdx     = 0;
+let rsvpWpm     = 300;
+let rsvpPlaying = false;
+let rsvpTimer   = null;
+
+function rsvpTokenize(text) {
+  return text.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(w => w.length > 0);
+}
+
+function rsvpPivotHtml(word) {
+  const clean = word.replace(/[<>]/g, '');
+  if (!clean) return '';
+  const letters = clean.match(/[a-zA-ZáéíóúÁÉÍÓÚàâäèêëîïôœùûüÿçæñÑüÜ]/g);
+  if (!letters) return escHtml(clean);
+  const pivotLetterIdx = Math.max(0, Math.ceil(letters.length * 0.35) - 1);
+  let letterCount = 0;
+  let pivotPos = 0;
+  for (let i = 0; i < clean.length; i++) {
+    if (/[a-zA-ZáéíóúÁÉÍÓÚàâäèêëîïôœùûüÿçæñÑüÜ]/.test(clean[i])) {
+      if (letterCount === pivotLetterIdx) { pivotPos = i; break; }
+      letterCount++;
+    }
+  }
+  return escHtml(clean.slice(0, pivotPos))
+    + '<span class="rsvp-pivot">' + escHtml(clean[pivotPos]) + '</span>'
+    + escHtml(clean.slice(pivotPos + 1));
+}
+
+function openRsvp() {
+  if (!currentUser) { openLoginModal(); return; }
+  if (!isPro())     { openUpgradeModal(); return; }
+  if (!_currentText) return;
+  rsvpWords   = rsvpTokenize(_currentText);
+  rsvpIdx     = 0;
+  rsvpPlaying = false;
+  rsvpWpm     = parseInt($('rsvp-slider').value) || 300;
+  $('rsvp-wpm-val').textContent = rsvpWpm;
+  renderRsvpWord();
+  updateRsvpProgress();
+  updateRsvpPlayBtn();
+  $('rsvp-overlay').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRsvp() {
+  rsvpStop();
+  $('rsvp-overlay').hidden = true;
+  document.body.style.overflow = '';
+}
+
+function rsvpStop() {
+  rsvpPlaying = false;
+  if (rsvpTimer) { clearInterval(rsvpTimer); rsvpTimer = null; }
+  updateRsvpPlayBtn();
+}
+
+function rsvpPlay() {
+  if (rsvpIdx >= rsvpWords.length - 1) rsvpIdx = 0;
+  rsvpPlaying = true;
+  const delay = Math.round(60000 / rsvpWpm);
+  renderRsvpWord();
+  updateRsvpProgress();
+  rsvpTimer = setInterval(() => {
+    rsvpIdx++;
+    if (rsvpIdx >= rsvpWords.length) {
+      rsvpStop();
+      rsvpIdx = rsvpWords.length - 1;
+      return;
+    }
+    renderRsvpWord();
+    updateRsvpProgress();
+  }, delay);
+  updateRsvpPlayBtn();
+}
+
+function rsvpToggle() {
+  if (rsvpPlaying) { rsvpStop(); } else { rsvpPlay(); }
+}
+
+function renderRsvpWord() {
+  const word = rsvpWords[rsvpIdx] || '';
+  $('rsvp-word').innerHTML = rsvpPivotHtml(word);
+  $('rsvp-count').textContent = (rsvpIdx + 1) + ' / ' + rsvpWords.length;
+}
+
+function updateRsvpProgress() {
+  const pct = rsvpWords.length > 1 ? (rsvpIdx / (rsvpWords.length - 1)) * 100 : 0;
+  $('rsvp-prog-fill').style.width = pct + '%';
+}
+
+function updateRsvpPlayBtn() {
+  $('rsvp-play').textContent = rsvpPlaying ? '⏸ pausar' : '▶ iniciar';
 }
 
 /* ══ Library (IndexedDB) ══════════════════════════════════════ */
@@ -797,7 +982,7 @@ function init() {
     try {
       const text = await readPdf(file);
       hideLoading();
-      openReader(text, file.name.replace(/\.pdf$/i, ''));
+      if (text !== null) openReader(text, file.name.replace(/\.pdf$/i, ''));
     } catch (err) {
       hideLoading();
       console.error(err);
@@ -811,9 +996,44 @@ function init() {
   $('btn-font-down').addEventListener('click', () => adjustFont(-2));
   $('btn-font-up').addEventListener('click', () => adjustFont(2));
   $('btn-save-book').addEventListener('click', saveCurrentBook);
+  if ($('btn-rsvp-open')) $('btn-rsvp-open').addEventListener('click', openRsvp);
   $('reader-scroll').addEventListener('scroll', updateProgress, { passive: true });
   $('reader-bio-close').addEventListener('click', () => {
     $('reader-bio-tip').classList.add('hidden');
+  });
+
+  /* RSVP controls */
+  $('rsvp-close').addEventListener('click', closeRsvp);
+  $('rsvp-play').addEventListener('click', rsvpToggle);
+  $('rsvp-back').addEventListener('click', () => {
+    rsvpStop();
+    rsvpIdx = Math.max(0, rsvpIdx - 10);
+    renderRsvpWord();
+    updateRsvpProgress();
+  });
+  $('rsvp-fwd').addEventListener('click', () => {
+    rsvpStop();
+    rsvpIdx = Math.min(rsvpWords.length - 1, rsvpIdx + 10);
+    renderRsvpWord();
+    updateRsvpProgress();
+  });
+  $('rsvp-slider').addEventListener('input', e => {
+    rsvpWpm = parseInt(e.target.value);
+    $('rsvp-wpm-val').textContent = rsvpWpm;
+    if (rsvpPlaying) { rsvpStop(); rsvpPlay(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (!$('rsvp-overlay') || $('rsvp-overlay').hidden) return;
+    if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); rsvpToggle(); }
+    else if (e.key === 'Escape')      closeRsvp();
+    else if (e.key === 'ArrowLeft')   $('rsvp-back').click();
+    else if (e.key === 'ArrowRight')  $('rsvp-fwd').click();
+  });
+
+  /* TOC modal */
+  $('toc-close').addEventListener('click', closeTocModal);
+  $('modal-toc').addEventListener('click', e => {
+    if (e.target === $('modal-toc')) closeTocModal();
   });
 
   /* Auth */
