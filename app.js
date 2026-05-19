@@ -928,8 +928,9 @@ function initStripe() {
   const cfg = window.FOCUSREAD_STRIPE;
   if (!cfg || cfg.publishableKey.includes('REPLACE')) return;
 
-  // Wire fallback payment link buttons
-  setupPaymentLinkButton('btn-pro-cta', cfg.paymentLinkMonthly);
+  // Wire payment link buttons
+  setupPaymentLinkButton('btn-basic-cta', cfg.paymentLinkBasic);
+  setupPaymentLinkButton('btn-pro-cta',   cfg.paymentLinkMonthly);
   setupPaymentLinkButton('btn-modal-cta', cfg.paymentLinkMonthly);
 }
 

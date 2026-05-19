@@ -42,7 +42,7 @@ window.FOCUSREAD_STRIPE = {
   pricingTableId: 'prctbl_1TYbloCO7kBd2xtlUXuQzpUS',
 
   // Payment Links — pega aquí las URLs generadas en el paso 3
-  paymentLinkBasic:        'https://buy.stripe.com/REPLACE_BASIC_MONTHLY',
+  paymentLinkBasic:        'https://buy.stripe.com/test_dRm3cu3872Ce4035Zm4c800',
   paymentLinkBasicAnnual:  'https://buy.stripe.com/REPLACE_BASIC_ANNUAL',
   paymentLinkMonthly:      'https://buy.stripe.com/REPLACE_PRO_MONTHLY',
   paymentLinkYearly:       'https://buy.stripe.com/REPLACE_PRO_ANNUAL',

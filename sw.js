@@ -1,4 +1,4 @@
-const CACHE = 'focusread-v6';
+const CACHE = 'focusread-v7';
 const SHELL = [
   './',
   './index.html',
