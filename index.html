@@ -380,9 +380,60 @@
 
         <!-- Greeting -->
         <div class="dash-greeting">
-          <div class="dash-greeting-text">
-            <span class="dash-hello" id="dash-hello">Hola</span>
-            <span class="dash-user-first" id="dash-user-first"></span>
+          <div class="dash-greeting-left">
+            <div class="dash-bio-mini" aria-hidden="true">
+              <svg viewBox="0 0 80 90" width="64" height="72" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="db-g" cx="38%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#A394FF"/>
+                    <stop offset="100%" stop-color="#7065E0"/>
+                  </radialGradient>
+                </defs>
+                <!-- Shadow -->
+                <ellipse cx="40" cy="87" rx="18" ry="4" fill="#3D2E8A" opacity="0.18"/>
+                <!-- Body -->
+                <ellipse cx="40" cy="70" rx="14" ry="11" fill="#7C6CF0"/>
+                <!-- Neck -->
+                <ellipse cx="40" cy="59" rx="7" ry="6" fill="url(#db-g)"/>
+                <!-- Brain lobes -->
+                <circle cx="28" cy="29" r="9" fill="#9B8CFF"/>
+                <circle cx="40" cy="25" r="11" fill="#9B8CFF"/>
+                <circle cx="52" cy="29" r="9" fill="#9B8CFF"/>
+                <!-- Head -->
+                <circle cx="40" cy="43" r="21" fill="url(#db-g)"/>
+                <!-- Eyes white -->
+                <ellipse cx="33" cy="42" rx="5.5" ry="6" fill="white"/>
+                <ellipse cx="47" cy="42" rx="5.5" ry="6" fill="white"/>
+                <!-- Pupils -->
+                <circle cx="34" cy="43" r="3" fill="#1E1148"/>
+                <circle cx="48" cy="43" r="3" fill="#1E1148"/>
+                <!-- Eye shine -->
+                <circle cx="35.5" cy="41" r="1.2" fill="white"/>
+                <circle cx="49.5" cy="41" r="1.2" fill="white"/>
+                <!-- Blush -->
+                <ellipse cx="25" cy="48" rx="4" ry="2.5" fill="#F857A6" opacity="0.3"/>
+                <ellipse cx="55" cy="48" rx="4" ry="2.5" fill="#F857A6" opacity="0.3"/>
+                <!-- Big smile -->
+                <path d="M33 53 Q40 61 47 53" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Left arm waving -->
+                <g class="bio-wave-arm" style="transform-origin:27px 63px">
+                  <path d="M27 63 Q12 52 9 42" stroke="#8B7CF8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                  <circle cx="8" cy="39" r="5.5" fill="#9B8CFF"/>
+                  <line x1="5" y1="34" x2="4" y2="29" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="8" y1="33" x2="8" y2="28" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="11" y1="34" x2="12" y2="29" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                </g>
+                <!-- Right arm -->
+                <path d="M53 63 Q65 55 68 46" stroke="#8B7CF8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <circle cx="69" cy="43" r="5" fill="#9B8CFF"/>
+                <!-- Sparkle -->
+                <path d="M62 14 L63.5 9 L65 14 L70 15.5 L65 17 L63.5 22 L62 17 L57 15.5 Z" fill="#FFD166" opacity="0.9" transform="scale(0.7) translate(22,-8)"/>
+              </svg>
+            </div>
+            <div class="dash-greeting-text">
+              <div class="dash-greeting-question" id="dash-greeting-q">¿Qué leeremos hoy?</div>
+              <div class="dash-user-name" id="dash-user-first"></div>
+            </div>
           </div>
           <span class="dash-plan-pill" id="dash-plan-pill">Gratis</span>
         </div>

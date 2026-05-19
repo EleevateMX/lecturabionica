@@ -251,7 +251,7 @@ function openReader(rawText, title) {
   saveBtn.textContent = '★';
   saveBtn.disabled = false;
   const rsvpBtn = $('btn-rsvp-open');
-  if (rsvpBtn) rsvpBtn.hidden = !isPro();
+  if (rsvpBtn) rsvpBtn.hidden = false; // available to all (free gets 5 trials, basic/pro unlimited)
   showScreen('screen-reader');
 }
 
@@ -437,7 +437,13 @@ function rsvpPivotHtml(word) {
 
 function openRsvp() {
   if (!currentUser) { openLoginModal(); return; }
-  if (!isPro())     { openUpgradeModal(); return; }
+  // Free users get 5 trial RSVP sessions
+  if (!isBasicOrPro()) {
+    const trials = parseInt(localStorage.getItem('fr-rsvp-trial') || '0');
+    if (trials >= 5) { openUpgradeModal(); return; }
+    localStorage.setItem('fr-rsvp-trial', trials + 1);
+    if (trials === 4) showToast(lang === 'es' ? 'Última sesión de prueba RSVP — actualiza para continuar' : 'Last RSVP trial session — upgrade to continue', 4000);
+  }
   if (!_currentText) return;
   rsvpWords   = rsvpTokenize(_currentText);
   rsvpIdx     = 0;
@@ -567,7 +573,7 @@ function incFreeCount(type) {
   localStorage.setItem('fr-free-' + type, getFreeCount(type) + 1);
 }
 function checkFreeLimit(type) {
-  if (isPro()) return true;
+  if (isBasicOrPro()) return true;
   const limit = FREE_LIMITS[type];
   if (getFreeCount(type) >= limit) {
     openUpgradeModal();
@@ -585,13 +591,13 @@ async function renderLibrary() {
     return;
   }
 
-  if (!isPro()) {
+  if (!isBasicOrPro()) {
     el.innerHTML = `
       <div class="profile-lib-locked">
         <p class="profile-lib-hint">${lang === 'es'
           ? 'Guarda PDFs y vuélvelos a leer cuando quieras'
           : 'Save PDFs and re-read them anytime'}</p>
-        <button class="btn-upgrade-profile lib-upgrade-btn">${lang === 'es' ? 'Desbloquear con Pro →' : 'Unlock with Pro →'}</button>
+        <button class="btn-upgrade-profile lib-upgrade-btn">${lang === 'es' ? 'Desbloquear desde Básico →' : 'Unlock from Basic plan →'}</button>
       </div>`;
     el.querySelector('.lib-upgrade-btn').addEventListener('click', () => {
       closeProfilePanel();
@@ -645,7 +651,14 @@ async function renderLibrary() {
 
 async function saveCurrentBook() {
   if (!currentUser) { openLoginModal(); return; }
-  if (!isPro())     { openUpgradeModal(); return; }
+  if (!isBasicOrPro()) { openUpgradeModal(); return; }
+  // Enforce library limit per plan
+  const books = await loadBooks();
+  const limit = getLibraryLimit();
+  if (books.length >= limit) {
+    showToast(lang === 'es' ? `Límite de ${limit} libros alcanzado. Actualiza a Pro para 100+` : `${limit} book limit reached. Upgrade to Pro for 100+`, 4000);
+    return;
+  }
   if (!_currentText) return;
 
   const btn = $('btn-save-book');
@@ -761,10 +774,11 @@ function initFirebase() {
           setTimeout(openLoginModal, 300);
         }
         if (firstResolution && user) {
+          applyPendingPlan(user);
           showScreen('screen-dashboard');
           initDashboard();
         }
-        if (user && !localStorage.getItem('fr-welcomed')) {
+        if (user && !localStorage.getItem('fr-welcomed') && !sessionStorage.getItem('fr-pending-plan')) {
           localStorage.setItem('fr-welcomed', '1');
           showToast(
             lang === 'es'
@@ -937,7 +951,10 @@ function initStripe() {
 function setupPaymentLinkButton(btnId, url) {
   const btn = $(btnId);
   if (!btn || !url || url.includes('REPLACE')) return;
-  btn.addEventListener('click', () => { window.open(url, '_blank', 'noopener'); });
+  btn.addEventListener('click', () => {
+    if (!currentUser) { openLoginModal(); return; }
+    window.open(url, '_blank', 'noopener');
+  });
 }
 
 function renderStripePricingTable() {
@@ -946,31 +963,16 @@ function renderStripePricingTable() {
   // Wire plan buttons to payment links (respects annual toggle)
   const basicBtn = $('btn-plan-basic');
   const proBtn   = $('btn-plan-pro');
+  const requireLoginAndOpen = (url) => {
+    if (!currentUser) { closeUpgradeModal(); openLoginModal(); return; }
+    if (url && !url.includes('REPLACE')) window.open(url, '_blank', 'noopener');
+    else alert(lang === 'es' ? 'Próximamente — configura el link en stripe-config.js.' : 'Coming soon — set up the link in stripe-config.js.');
+  };
   if (basicBtn) {
-    basicBtn.onclick = () => {
-      const isAnnual = selectedPeriod === 'annual';
-      const url = isAnnual ? cfg?.paymentLinkBasicAnnual : cfg?.paymentLinkBasic;
-      if (url && !url.includes('REPLACE')) {
-        window.open(url, '_blank', 'noopener');
-      } else {
-        alert(lang === 'es'
-          ? 'Próximamente: configura el link de pago en stripe-config.js.'
-          : 'Coming soon: set up the payment link in stripe-config.js.');
-      }
-    };
+    basicBtn.onclick = () => requireLoginAndOpen(selectedPeriod === 'annual' ? cfg?.paymentLinkBasicAnnual : cfg?.paymentLinkBasic);
   }
   if (proBtn) {
-    proBtn.onclick = () => {
-      const isAnnual = selectedPeriod === 'annual';
-      const url = isAnnual ? cfg?.paymentLinkYearly : cfg?.paymentLinkMonthly;
-      if (url && !url.includes('REPLACE')) {
-        window.open(url, '_blank', 'noopener');
-      } else {
-        alert(lang === 'es'
-          ? 'Próximamente: configura el link de pago en stripe-config.js.'
-          : 'Coming soon: set up the payment link in stripe-config.js.');
-      }
-    };
+    proBtn.onclick = () => requireLoginAndOpen(selectedPeriod === 'annual' ? cfg?.paymentLinkYearly : cfg?.paymentLinkMonthly);
   }
 
   // Also inject Stripe Pricing Table if fully configured
@@ -1149,18 +1151,38 @@ async function deleteBook(id) {
 
 function initDashboard() {
   const plan = getPlan();
-  // Update plan pill
+
+  // Greeting
+  const greetQ = $('dash-greeting-q');
+  const greetings = lang === 'es'
+    ? ['¿Qué leeremos hoy?', '¡Lista para leer!', '¿Listo para enfocarte?', '¿Empezamos a leer?']
+    : ['What are we reading today?', 'Ready to read!', 'Time to focus!', 'Let\'s dive in!'];
+  if (greetQ) greetQ.textContent = greetings[new Date().getHours() % greetings.length];
+
+  // User first name
+  if ($('dash-user-first') && currentUser) {
+    $('dash-user-first').textContent = currentUser.displayName?.split(' ')[0] || currentUser.email?.split('@')[0] || '';
+  }
+
+  // Plan pill
   const pill = $('dash-plan-pill');
   if (pill) {
     pill.textContent = plan === 'pro' ? 'Pro ✦' : plan === 'basic' ? 'Básico' : 'Gratis';
     pill.className = 'dash-plan-pill' + (plan === 'pro' ? ' pill-pro' : plan === 'basic' ? ' pill-basic' : '');
   }
+
   // Show upgrade nudge for free users
   if ($('dash-upgrade-nudge')) $('dash-upgrade-nudge').hidden = plan !== 'free';
-  // Update PDF hint
+
+  // PDF hint
   if ($('dash-pdf-hint')) {
     $('dash-pdf-hint').textContent = isBasicOrPro() ? 'Documento completo' : 'Hasta 20 pág · Gratis';
   }
+
+  // Show support section only for paid users
+  const supportSection = $('support-form-wrap')?.closest('.profile-section');
+  if (supportSection) supportSection.hidden = !isBasicOrPro();
+
   renderDashLibrary();
 }
 
@@ -1214,16 +1236,24 @@ function checkStripeReturn() {
   const plan = params.get('plan');
   const success = params.get('success');
   if (plan && (plan === 'basic' || plan === 'pro') && success === '1') {
-    localStorage.setItem('fr-plan', plan);
-    // Clean URL so refreshing doesn't re-trigger
     history.replaceState({}, '', window.location.pathname);
-    showToast(
-      lang === 'es'
-        ? `✓ Plan ${plan === 'pro' ? 'Pro' : 'Básico'} activado. ¡Bienvenido!`
-        : `✓ ${plan === 'pro' ? 'Pro' : 'Basic'} plan activated. Welcome!`,
-      5000
-    );
+    // Store pending plan — will be applied once user is authenticated
+    sessionStorage.setItem('fr-pending-plan', plan);
   }
+}
+
+function applyPendingPlan(user) {
+  const plan = sessionStorage.getItem('fr-pending-plan');
+  if (!plan || !user) return;
+  sessionStorage.removeItem('fr-pending-plan');
+  localStorage.setItem('fr-plan', plan);
+  const name = user.displayName?.split(' ')[0] || '';
+  showToast(
+    lang === 'es'
+      ? `✓ Plan ${plan === 'pro' ? 'Pro' : 'Básico'} activado${name ? ', ' + name : ''}. ¡Bienvenido!`
+      : `✓ ${plan === 'pro' ? 'Pro' : 'Basic'} plan activated${name ? ', ' + name : ''}. Welcome!`,
+    5000
+  );
 }
 
 function init() {
@@ -1442,18 +1472,23 @@ function init() {
       applyTheme();
     });
   }
-  // Support form in profile panel
+  // Support form in profile panel — sends via mailto
   if ($('btn-support-send')) {
     $('btn-support-send').addEventListener('click', () => {
       const txt = $('support-text').value.trim();
       if (!txt) return;
+      const user = currentUser;
+      const plan = getPlan();
+      const subject = encodeURIComponent(`[FocusRead Soporte] ${plan.toUpperCase()} — ${user?.email || 'sin cuenta'}`);
+      const body = encodeURIComponent(`Usuario: ${user?.displayName || 'Anónimo'}\nEmail: ${user?.email || '—'}\nPlan: ${plan}\n\nMensaje:\n${txt}`);
+      window.open(`mailto:soporte@focusread.app?subject=${subject}&body=${body}`, '_blank');
       $('support-form-wrap').hidden = true;
       $('support-thanks').hidden = false;
       setTimeout(() => {
         $('support-form-wrap').hidden = false;
         $('support-thanks').hidden = true;
         $('support-text').value = '';
-      }, 4000);
+      }, 5000);
     });
   }
 

@@ -2316,14 +2316,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 0;
+  padding: 4px 0 8px;
 }
-.dash-greeting-text {
-  font-size: 22px;
+.dash-greeting-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.dash-bio-mini { flex-shrink: 0; }
+.dash-greeting-text { display: flex; flex-direction: column; gap: 2px; }
+.dash-greeting-question {
+  font-size: 20px;
   font-weight: 700;
   color: var(--text);
+  line-height: 1.2;
 }
-.dash-user-first { color: var(--accent); margin-left: 6px; }
+.dash-user-name {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+}
 .dash-plan-pill {
   font-size: 11px;
   font-weight: 700;
