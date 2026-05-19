@@ -570,23 +570,11 @@ let selectedPeriod = 'month';
 
 function initStripe() {
   const cfg = window.FOCUSREAD_STRIPE;
-  if (!cfg || cfg.publishableKey.includes('REPLACE')) return; // not yet configured
+  if (!cfg || cfg.publishableKey.includes('REPLACE')) return;
 
-  // Use Stripe Buy Button web component if the script loaded
-  if (customElements.get('stripe-buy-button')) {
-    renderStripeBuyButton('stripe-buy-btn-container', cfg.buyButtonIdMonthly, cfg.publishableKey);
-    renderStripeBuyButton('stripe-modal-btn-container', cfg.buyButtonIdMonthly, cfg.publishableKey);
-  } else {
-    // Fallback: link to Payment Link
-    setupPaymentLinkButton('btn-pro-cta', cfg.paymentLinkMonthly);
-    setupPaymentLinkButton('btn-modal-cta', cfg.paymentLinkMonthly);
-  }
-}
-
-function renderStripeBuyButton(containerId, buyButtonId, publishableKey) {
-  const container = $(containerId);
-  if (!container || !buyButtonId || buyButtonId.includes('REPLACE')) return;
-  container.innerHTML = `<stripe-buy-button buy-button-id="${buyButtonId}" publishable-key="${publishableKey}"></stripe-buy-button>`;
+  // Wire fallback payment link buttons
+  setupPaymentLinkButton('btn-pro-cta', cfg.paymentLinkMonthly);
+  setupPaymentLinkButton('btn-modal-cta', cfg.paymentLinkMonthly);
 }
 
 function setupPaymentLinkButton(btnId, url) {
@@ -595,9 +583,28 @@ function setupPaymentLinkButton(btnId, url) {
   btn.addEventListener('click', () => { window.open(url, '_blank', 'noopener'); });
 }
 
+function renderStripePricingTable() {
+  const cfg = window.FOCUSREAD_STRIPE;
+  const wrap = $('stripe-pricing-table-wrap');
+  if (!wrap || !cfg || cfg.publishableKey.includes('REPLACE') || !cfg.pricingTableId || cfg.pricingTableId.includes('REPLACE')) return;
+
+  const emailAttr  = currentUser?.email  ? `customer-email="${currentUser.email}"` : '';
+  const clientAttr = currentUser?.uid    ? `client-reference-id="${currentUser.uid}"` : '';
+
+  wrap.innerHTML = `
+    <stripe-pricing-table
+      pricing-table-id="${cfg.pricingTableId}"
+      publishable-key="${cfg.publishableKey}"
+      ${emailAttr}
+      ${clientAttr}>
+    </stripe-pricing-table>
+    <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>`;
+}
+
 function openUpgradeModal() {
   $('modal-upgrade').hidden = false;
   document.body.style.overflow = 'hidden';
+  renderStripePricingTable();
 }
 function closeUpgradeModal() {
   $('modal-upgrade').hidden = true;
@@ -606,20 +613,8 @@ function closeUpgradeModal() {
 
 function selectPeriod(period) {
   selectedPeriod = period;
-  const cfg = window.FOCUSREAD_STRIPE;
-
-  $('mpo-month').classList.toggle('active', period === 'month');
-  $('mpo-year').classList.toggle('active', period === 'year');
-
-  if (cfg && !cfg.publishableKey.includes('REPLACE')) {
-    const id = period === 'month' ? cfg.buyButtonIdMonthly : cfg.buyButtonIdYearly;
-    const url = period === 'month' ? cfg.paymentLinkMonthly : cfg.paymentLinkYearly;
-    if (customElements.get('stripe-buy-button')) {
-      renderStripeBuyButton('stripe-modal-btn-container', id, cfg.publishableKey);
-    } else {
-      setupPaymentLinkButton('btn-modal-cta', url);
-    }
-  }
+  $('mpo-month')?.classList.toggle('active', period === 'month');
+  $('mpo-year')?.classList.toggle('active', period === 'year');
 }
 
 /* ══ i18n application ══════════════════════════════════════════ */

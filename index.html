@@ -473,68 +473,85 @@
 
     <!-- ══ STRIPE UPGRADE MODAL ══════════════════════════════ -->
     <div id="modal-upgrade" class="modal-overlay" hidden>
-      <div class="modal-card">
+      <div class="modal-card upgrade-modal-card">
         <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
 
-        <div class="modal-bio-mini" aria-hidden="true">
-          <svg viewBox="0 0 80 80" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="mb-g" cx="38%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#A394FF"/>
-                <stop offset="100%" stop-color="#7065E0"/>
-              </radialGradient>
-            </defs>
-            <circle cx="40" cy="48" r="28" fill="url(#mb-g)"/>
-            <circle cx="28" cy="23" r="12" fill="#9B8CFF"/>
-            <circle cx="40" cy="19" r="14" fill="#9B8CFF"/>
-            <circle cx="52" cy="23" r="12" fill="#9B8CFF"/>
-            <rect x="16" y="28" width="48" height="15" fill="url(#mb-g)"/>
-            <ellipse cx="32" cy="47" rx="7" ry="8" fill="white"/>
-            <ellipse cx="48" cy="47" rx="7" ry="8" fill="white"/>
-            <circle cx="33" cy="48" r="4" fill="#1E1148"/>
-            <circle cx="49" cy="48" r="4" fill="#1E1148"/>
-            <circle cx="34.5" cy="46" r="1.5" fill="white"/>
-            <circle cx="50.5" cy="46" r="1.5" fill="white"/>
-            <ellipse cx="23" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
-            <ellipse cx="57" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
-            <path d="M34 58 Q40 63 46 58" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M60 35 L62 30 L64 35 L69 37 L64 39 L62 44 L60 39 L55 37 Z" fill="#FFD166" transform="scale(0.6) translate(38,-18)"/>
-          </svg>
+        <!-- Bio + header -->
+        <div class="upgrade-header">
+          <div class="upgrade-bio" aria-hidden="true">
+            <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" width="72" height="84">
+              <defs>
+                <radialGradient id="ug-hg" cx="38%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#A394FF"/>
+                  <stop offset="100%" stop-color="#7065E0"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="60" cy="136" rx="28" ry="6" fill="#3D2E8A" opacity="0.18"/>
+              <ellipse cx="60" cy="108" rx="22" ry="18" fill="#7C6CF0"/>
+              <ellipse cx="60" cy="92" rx="10" ry="9" fill="url(#ug-hg)"/>
+              <circle cx="44" cy="46" r="14" fill="#9B8CFF"/>
+              <circle cx="60" cy="40" r="16" fill="#9B8CFF"/>
+              <circle cx="76" cy="46" r="14" fill="#9B8CFF"/>
+              <circle cx="60" cy="68" r="32" fill="url(#ug-hg)"/>
+              <path d="M44 52 Q52 46 60 52" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <path d="M60 49 Q68 43 76 49" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <ellipse cx="50" cy="66" rx="8" ry="9" fill="white"/>
+              <ellipse cx="70" cy="66" rx="8" ry="9" fill="white"/>
+              <circle cx="51.5" cy="67" r="4.5" fill="#1E1148"/>
+              <circle cx="71.5" cy="67" r="4.5" fill="#1E1148"/>
+              <circle cx="53.5" cy="64.5" r="1.8" fill="white"/>
+              <circle cx="73.5" cy="64.5" r="1.8" fill="white"/>
+              <ellipse cx="39" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+              <ellipse cx="81" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+              <path d="M52 79 Q60 87 68 79" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- Left arm with coin -->
+              <path d="M38 100 Q22 90 18 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="16" cy="74" r="10" fill="#FFD166"/>
+              <text x="16" y="78" font-family="Inter,sans-serif" font-size="9" font-weight="800" fill="#B8860B" text-anchor="middle">$</text>
+              <!-- Right arm -->
+              <path d="M82 100 Q98 90 102 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="104" cy="74" r="7" fill="#9B8CFF"/>
+              <!-- Sparkle -->
+              <path d="M88 30 L90 24 L92 30 L98 32 L92 34 L90 40 L88 34 L82 32 Z" fill="#FFD166" transform="scale(0.75) translate(28,-8)"/>
+            </svg>
+          </div>
+          <div class="upgrade-header-text">
+            <h2 class="upgrade-title" id="modal-title">¡Bio dice que vale la pena! ✦</h2>
+            <p class="upgrade-sub" id="modal-sub">Desbloquea todo el poder de la lectura biónica</p>
+          </div>
         </div>
 
-        <h2 class="modal-title" id="modal-title">¡Bio dice que vale la pena! ✦</h2>
-        <p class="modal-sub" id="modal-sub">Desbloquea todo el poder de la lectura biónica</p>
-
-        <ul class="modal-features">
-          <li id="mf-1">📚 PDFs de cualquier tamaño (libros completos)</li>
-          <li id="mf-2">📖 Soporte para EPUB y DOCX</li>
-          <li id="mf-3">⚡ Intensidad biónica personalizable</li>
-          <li id="mf-4">🗂️ Biblioteca personal de libros</li>
-          <li id="mf-5">🎨 Temas y tipografías adicionales</li>
-          <li id="mf-6">💬 Soporte prioritario con el equipo</li>
+        <!-- Features 2-col grid -->
+        <ul class="modal-features-grid">
+          <li id="mf-1"><span class="mf-icon">📚</span><span>PDFs ilimitados</span></li>
+          <li id="mf-2"><span class="mf-icon">📖</span><span>EPUB y DOCX</span></li>
+          <li id="mf-3"><span class="mf-icon">⚡</span><span>Intensidad ajustable</span></li>
+          <li id="mf-4"><span class="mf-icon">🗂️</span><span>Biblioteca personal</span></li>
+          <li id="mf-5"><span class="mf-icon">🎨</span><span>Temas extra</span></li>
+          <li id="mf-6"><span class="mf-icon">💬</span><span>Soporte prioritario</span></li>
         </ul>
 
-        <div class="modal-pricing">
-          <div class="modal-price-option active" id="mpo-month" data-period="month">
-            <span class="mpo-label" id="mpo-month-label">Mensual</span>
-            <span class="mpo-price">$4.99<small id="mpo-month-per">/mes</small></span>
-          </div>
-          <div class="modal-price-option" id="mpo-year" data-period="year">
-            <span class="mpo-label" id="mpo-year-label">Anual</span>
-            <span class="mpo-price">$39.99<small id="mpo-year-per">/año</small></span>
-            <span class="mpo-save" id="mpo-save">Ahorra 33%</span>
+        <!-- Stripe Pricing Table (rendered by app.js) -->
+        <div id="stripe-pricing-table-wrap">
+          <!-- Fallback mientras stripe-config.js no está configurado -->
+          <div class="stripe-fallback">
+            <div class="stripe-fallback-prices">
+              <div class="sfp-option active" id="mpo-month">
+                <span class="sfp-label" id="mpo-month-label">Mensual</span>
+                <span class="sfp-price">$4.99<small id="mpo-month-per">/mes</small></span>
+              </div>
+              <div class="sfp-option" id="mpo-year">
+                <span class="sfp-label" id="mpo-year-label">Anual</span>
+                <span class="sfp-price">$39.99<small id="mpo-year-per">/año</small></span>
+                <span class="sfp-save" id="mpo-save">Ahorra 33%</span>
+              </div>
+            </div>
+            <button class="btn-primary" id="btn-modal-cta">
+              <span id="btn-modal-cta-text">Comenzar prueba gratis de 7 días →</span>
+            </button>
+            <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
           </div>
         </div>
-
-        <!-- Stripe Buy Button — configure in stripe-config.js -->
-        <div id="stripe-modal-btn-container">
-          <!-- Rendered by app.js once Stripe config is present -->
-          <button class="btn-primary btn-modal-cta" id="btn-modal-cta">
-            <span id="btn-modal-cta-text">Comenzar prueba gratis de 7 días →</span>
-          </button>
-        </div>
-
-        <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
       </div>
     </div>
 
