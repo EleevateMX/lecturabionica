@@ -663,9 +663,12 @@ async function saveCurrentBook() {
 
   const btn = $('btn-save-book');
   btn.disabled = true;
+  btn.classList.add('saving');
+  setTimeout(() => btn.classList.remove('saving'), 600);
   try {
     await dbSave(_currentTitle, _currentText);
     btn.textContent = lang === 'es' ? '✓' : '✓';
+    btn.classList.add('saved');
     setTimeout(() => { btn.textContent = '★'; btn.disabled = false; }, 2000);
     renderLibrary();
   } catch (e) {
@@ -989,6 +992,37 @@ function renderStripePricingTable() {
     </stripe-pricing-table>`;
 }
 
+function showPlanWelcome(plan) {
+  const modal = $('modal-plan-welcome');
+  if (!modal) return;
+  const badge = $('pw-badge');
+  const title = $('pw-title');
+  const sub   = $('pw-sub');
+  const feats = $('pw-feats');
+  if (plan === 'pro') {
+    if (badge) { badge.textContent = '✦ Plan Pro'; badge.classList.add('badge-pro'); }
+    if (title) title.textContent = '¡Plan Pro activado!';
+    if (sub)   sub.textContent   = 'Tienes acceso completo ilimitado';
+    if (feats) feats.innerHTML   = [
+      '⚡ Modo rápido RSVP incluido',
+      '📚 Biblioteca ilimitada (100+ libros)',
+      '📑 Índice automático de PDFs',
+      '💬 Soporte prioritario directo',
+    ].map(f => `<li>${f}</li>`).join('');
+  } else {
+    if (badge) { badge.textContent = '✦ Plan Básico'; badge.classList.remove('badge-pro'); }
+    if (title) title.textContent = '¡Plan Básico activado!';
+    if (sub)   sub.textContent   = 'Ya tienes acceso a las funciones principales';
+    if (feats) feats.innerHTML   = [
+      '⚡ Modo rápido RSVP desbloqueado',
+      '📚 Biblioteca personal (hasta 10 libros)',
+      '📄 PDFs y TXT sin límite de páginas',
+    ].map(f => `<li>${f}</li>`).join('');
+  }
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
 function openUpgradeModal() {
   $('modal-upgrade').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -1123,6 +1157,8 @@ function applyTheme() {
   if ($('profile-icon-moon')) $('profile-icon-moon').style.display = dark ? 'none' : 'block';
   if ($('dash-icon-sun'))  $('dash-icon-sun').style.display  = dark ? 'none' : '';
   if ($('dash-icon-moon')) $('dash-icon-moon').style.display = dark ? '' : 'none';
+  if ($('reader-icon-sun'))  $('reader-icon-sun').style.display  = dark ? 'none' : '';
+  if ($('reader-icon-moon')) $('reader-icon-moon').style.display = dark ? '' : 'none';
 }
 
 /* ══ Bio Card ══════════════════════════════════════════════════ */
@@ -1204,6 +1240,69 @@ function initDashboard() {
   const supportSection = $('support-form-wrap')?.closest('.profile-section');
   if (supportSection) supportSection.hidden = !isBasicOrPro();
 
+  // Novedades: RSVP trial card for free users
+  const trialCard = $('dash-rsvp-trial');
+  if (trialCard) {
+    const trials = parseInt(localStorage.getItem('fr-rsvp-trial') || '0');
+    if (plan === 'free' && trials > 0) {
+      trialCard.hidden = false;
+      trialCard.classList.remove('skel');
+      if ($('dash-trial-count')) $('dash-trial-count').textContent = `${trials} / 5 usadas`;
+      if ($('dash-trial-fill'))  $('dash-trial-fill').style.width  = (trials / 5 * 100) + '%';
+    } else {
+      trialCard.hidden = true;
+    }
+  }
+
+  // Novedades: plan feature chips for paid users
+  const chipsEl = $('dash-plan-chips');
+  if (chipsEl) {
+    if (plan === 'basic') {
+      chipsEl.hidden = false;
+      chipsEl.innerHTML = [
+        ['⚡', 'RSVP activo'],
+        ['📄', 'PDFs sin límite'],
+        ['📚', 'Biblioteca 10'],
+      ].map(([e,l]) => `<span class="dash-plan-chip">${e} ${l}</span>`).join('');
+    } else if (plan === 'pro') {
+      chipsEl.hidden = false;
+      chipsEl.innerHTML = [
+        ['✦', 'Pro activo'],
+        ['⚡', 'RSVP'],
+        ['📚', 'Biblioteca ∞'],
+        ['📑', 'Índice PDF'],
+      ].map(([e,l]) => `<span class="dash-plan-chip">${e} ${l}</span>`).join('');
+    } else {
+      chipsEl.hidden = true;
+    }
+  }
+
+  // Novedades: rotating tip del día
+  const tips = [
+    'Lee en voz alta mentalmente mientras usas lectura biónica para reforzar la comprensión.',
+    'Empieza con textos cortos de 2-3 párrafos para entrenar tu cerebro biónico.',
+    'El modo RSVP a 200 palabras/min es ideal para empezar. Sube 50 WPM cada semana.',
+    'Guarda tus artículos favoritos en la biblioteca para releerlos con biónico cuando quieras.',
+    'Los primeros 5 minutos leyendo con biónico son de adaptación. Después el cerebro vuela.',
+    'Combinado con buena iluminación, la lectura biónica reduce la fatiga visual hasta un 30%.',
+    'Haz pausas de 2 minutos cada 25 minutos de lectura (técnica Pomodoro + biónico = 🧠💥).',
+  ];
+  const tipEl = $('dash-tip-text');
+  if (tipEl) tipEl.textContent = tips[new Date().getDate() % tips.length];
+
+  // Stagger entry animation
+  const toAnimate = [
+    $('dash-greeting'),
+    $('dash-upgrade-nudge'),
+    $('dash-upgrade-to-pro'),
+    $('dash-novedades'),
+    document.querySelector('#screen-dashboard .dash-section:last-of-type'),
+  ].filter(Boolean);
+  toAnimate.forEach((el, i) => {
+    if (el.hidden) return;
+    setTimeout(() => el.classList.add('dash-visible'), 60 + i * 80);
+  });
+
   renderDashLibrary();
 }
 
@@ -1213,7 +1312,18 @@ async function renderDashLibrary() {
   const badge = $('dash-lib-badge');
   if (!container) return;
 
+  // Show skeleton while loading
+  container.querySelectorAll('.dash-book-card, .dash-book-skel').forEach(n => n.remove());
+  if (empty) empty.hidden = true;
+  ['', '-2', '-3'].forEach((sfx, i) => {
+    const sk = document.createElement('div');
+    sk.className = `skel dash-book-skel dash-book-skel${sfx}`;
+    container.appendChild(sk);
+  });
+
   const books = await loadBooks();
+
+  container.querySelectorAll('.dash-book-skel').forEach(n => n.remove());
   const limit = getLibraryLimit();
 
   if (badge) badge.textContent = `${books.length} / ${limit === 999 ? '∞' : limit}`;
@@ -1275,6 +1385,7 @@ function applyPendingPlan(user) {
       : `✓ ${plan === 'pro' ? 'Pro' : 'Basic'} plan activated${name ? ', ' + name : ''}. Welcome!`,
     5000
   );
+  setTimeout(() => showPlanWelcome(plan), 800);
 }
 
 function init() {
@@ -1515,6 +1626,28 @@ function init() {
       localStorage.setItem('fr-theme', theme);
       applyTheme();
     });
+  }
+
+  // Reader theme toggle
+  if ($('btn-reader-theme')) {
+    $('btn-reader-theme').addEventListener('click', () => {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('fr-theme', theme);
+      applyTheme();
+    });
+  }
+
+  // Plan welcome modal close
+  if ($('btn-plan-welcome-close')) {
+    $('btn-plan-welcome-close').addEventListener('click', () => {
+      $('modal-plan-welcome').hidden = true;
+      document.body.style.overflow = '';
+    });
+  }
+
+  // RSVP trial unlock button
+  if ($('dash-trial-unlock')) {
+    $('dash-trial-unlock').addEventListener('click', openUpgradeModal);
   }
   // Support form in profile panel — sends via mailto
   if ($('btn-support-send')) {
