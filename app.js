@@ -321,12 +321,31 @@ function initFirebase() {
       auth.languageCode = lang;
 
       auth.onAuthStateChanged(user => {
+        const firstResolution = !_authResolved;
+        _authResolved = true;
         currentUser = user;
         updateAuthUI(user);
-        // First resolution: if not logged in, show login gate
-        if (!_authResolved) {
-          _authResolved = true;
-          if (!user) openLoginModal();
+
+        if (user) {
+          applyPendingPlan(user);
+          const onDash = $('screen-dashboard').classList.contains('active');
+          if (!onDash) {
+            showScreen('screen-dashboard');
+            initDashboard();
+          } else if (firstResolution) {
+            initDashboard();
+          }
+        }
+        // No forced login — users can browse the landing freely
+
+        if (user && !localStorage.getItem('fr-welcomed') && !sessionStorage.getItem('fr-pending-plan')) {
+          localStorage.setItem('fr-welcomed', '1');
+          showToast(
+            lang === 'es'
+              ? `Listo, ${user.displayName?.split(' ')[0] || 'bienvenido'} — ya puedes leer.`
+              : `Ready, ${user.displayName?.split(' ')[0] || 'welcome'} — start reading.`,
+            4000
+          );
         }
       });
     } catch (e) {
@@ -620,13 +639,25 @@ function init() {
     applyTheme();
   });
 
-  /* Paste toggle */
-  $('btn-paste').addEventListener('click', () => {
-    const area = $('paste-area');
-    const open = area.classList.toggle('visible');
-    $('btn-paste').classList.toggle('active', open);
-    if (open) $('paste-input').focus();
-  });
+  /* "Probar gratis" CTA on free plan card */
+  if ($('btn-free-try')) {
+    $('btn-free-try').addEventListener('click', () => {
+      const demo = t('demoText');
+      openReader(demo, 'Demo — Lectura Biónica');
+    });
+  }
+
+  /* Paste toggle — landing page (only present when user is not logged in) */
+  if ($('btn-paste')) {
+    $('btn-paste').addEventListener('click', () => {
+      requireAuth(() => {
+        const area = $('paste-area');
+        const open = area.classList.toggle('visible');
+        $('btn-paste').classList.toggle('active', open);
+        if (open) $('paste-input').focus();
+      });
+    });
+  }
 
   /* Process pasted text */
   $('btn-process').addEventListener('click', () => {

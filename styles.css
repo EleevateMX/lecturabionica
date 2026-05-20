@@ -886,6 +886,12 @@ body {
   border: 1px dashed var(--border);
   border-radius: 8px;
 }
+.plan-free-cta {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
 .btn-pro-cta {
   width: 100%;
   padding: 12px 10px;
