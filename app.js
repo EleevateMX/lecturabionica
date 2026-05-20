@@ -1139,6 +1139,27 @@ function initBio() {
   });
 }
 
+/* ══ Bio Action Sheet ═════════════════════════════════════════ */
+function openBioActionSheet() {
+  const sheet = $('bio-action-sheet');
+  if (!sheet) return;
+  sheet.hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('bio-action-panel').classList.add('open'), 10);
+}
+
+function closeBioActionSheet() {
+  const panel = $('bio-action-panel');
+  if (!panel) return;
+  panel.classList.remove('open');
+  if ($('bio-sheet-paste')) $('bio-sheet-paste').hidden = true;
+  setTimeout(() => {
+    const sheet = $('bio-action-sheet');
+    if (sheet) sheet.hidden = true;
+    document.body.style.overflow = '';
+  }, 340);
+}
+
 /* ══ Dashboard ════════════════════════════════════════════════ */
 async function loadBooks() {
   if (!currentUser) return [];
@@ -1171,13 +1192,13 @@ function initDashboard() {
     pill.className = 'dash-plan-pill' + (plan === 'pro' ? ' pill-pro' : plan === 'basic' ? ' pill-basic' : '');
   }
 
-  // Show upgrade nudge for free users
+  // Upgrade banners — shown per plan
   if ($('dash-upgrade-nudge')) $('dash-upgrade-nudge').hidden = plan !== 'free';
+  if ($('dash-upgrade-to-pro')) $('dash-upgrade-to-pro').hidden = plan !== 'basic';
 
-  // PDF hint
-  if ($('dash-pdf-hint')) {
-    $('dash-pdf-hint').textContent = isBasicOrPro() ? 'Documento completo' : 'Hasta 20 pág · Gratis';
-  }
+  // PDF hint in action sheet
+  const pdfHintText = isBasicOrPro() ? 'Documento completo' : 'Hasta 20 pág · Gratis';
+  if ($('bio-pdf-hint')) $('bio-pdf-hint').textContent = pdfHintText;
 
   // Show support section only for paid users
   const supportSection = $('support-form-wrap')?.closest('.profile-section');
@@ -1438,33 +1459,56 @@ function init() {
   if ($('bill-monthly')) $('bill-monthly').addEventListener('click', () => setBillingPeriod('month'));
   if ($('bill-annual'))  $('bill-annual').addEventListener('click', () => setBillingPeriod('annual'));
 
-  /* Dashboard */
-  if ($('dash-btn-paste')) {
-    $('dash-btn-paste').addEventListener('click', () => {
-      const area = $('dash-paste-area');
-      const open = area.classList.toggle('visible');
-      $('dash-btn-paste').classList.toggle('active', open);
-      if (open) $('dash-paste-input').focus();
+  /* Dashboard — bottom nav & Bio FAB */
+  if ($('dash-avatar-btn')) $('dash-avatar-btn').addEventListener('click', openProfilePanel);
+  if ($('dash-nav-account')) $('dash-nav-account').addEventListener('click', openProfilePanel);
+  if ($('dash-nav-home')) {
+    $('dash-nav-home').addEventListener('click', () => {
+      $('dash-nav-home').classList.add('active');
+      $('dash-nav-account').classList.remove('active');
     });
   }
-  if ($('dash-btn-process')) {
-    $('dash-btn-process').addEventListener('click', () => {
-      const text = $('dash-paste-input').value.trim();
-      if (!text) { alert(t('errorNoText')); return; }
+  if ($('dash-btn-upgrade')) $('dash-btn-upgrade').addEventListener('click', openUpgradeModal);
+  if ($('dash-btn-upgrade-pro')) $('dash-btn-upgrade-pro').addEventListener('click', openUpgradeModal);
+  if ($('dash-fab-bio')) $('dash-fab-bio').addEventListener('click', openBioActionSheet);
+
+  /* Bio action sheet */
+  if ($('bio-action-backdrop')) $('bio-action-backdrop').addEventListener('click', closeBioActionSheet);
+  if ($('bio-act-paste')) {
+    $('bio-act-paste').addEventListener('click', () => {
+      const paste = $('bio-sheet-paste');
+      paste.hidden = !paste.hidden;
+      if (!paste.hidden) $('bio-paste-input').focus();
+    });
+  }
+  if ($('bio-paste-process')) {
+    $('bio-paste-process').addEventListener('click', () => {
+      const text = $('bio-paste-input').value.trim();
+      if (!text) { $('bio-paste-input').focus(); return; }
       if (!checkFreeLimit('paste')) return;
       incFreeCount('paste');
+      closeBioActionSheet();
       openReader(text, text.split('\n')[0].slice(0, 70));
     });
   }
-  if ($('dash-paste-input')) {
-    $('dash-paste-input').addEventListener('keydown', e => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('dash-btn-process').click();
+  if ($('bio-paste-input')) {
+    $('bio-paste-input').addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') $('bio-paste-process')?.click();
     });
   }
-  if ($('dash-btn-pdf')) $('dash-btn-pdf').addEventListener('click', () => $('input-pdf').click());
-  if ($('dash-btn-txt')) $('dash-btn-txt').addEventListener('click', () => $('input-txt').click());
-  if ($('dash-avatar-btn')) $('dash-avatar-btn').addEventListener('click', openProfilePanel);
-  if ($('dash-btn-upgrade')) $('dash-btn-upgrade').addEventListener('click', openUpgradeModal);
+  if ($('bio-act-pdf')) {
+    $('bio-act-pdf').addEventListener('click', () => {
+      if (typeof pdfjsLib === 'undefined') { alert(t('errorPdfJs')); return; }
+      closeBioActionSheet();
+      $('input-pdf').click();
+    });
+  }
+  if ($('bio-act-txt')) {
+    $('bio-act-txt').addEventListener('click', () => {
+      closeBioActionSheet();
+      $('input-txt').click();
+    });
+  }
   if ($('dash-btn-theme')) {
     $('dash-btn-theme').addEventListener('click', () => {
       theme = theme === 'dark' ? 'light' : 'dark';
