@@ -307,8 +307,23 @@
           <button class="btn-font" id="btn-font-up" aria-label="Aumentar fuente">A+</button>
           <button class="btn-font btn-rsvp-open" id="btn-rsvp-open" aria-label="Modo rápido" hidden title="Modo rápido (Pro)">▶</button>
           <button class="btn-font btn-save-book" id="btn-save-book" aria-label="Guardar en biblioteca" hidden>★</button>
+          <button class="btn-font" id="btn-share" aria-label="Compartir" title="Compartir" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
+          <button class="btn-font" id="btn-focus-line" aria-label="Guía de lectura" title="Guía de lectura" style="font-size:11px;letter-spacing:-1px">≡</button>
+          <div class="reader-intensity" id="reader-intensity" aria-label="Intensidad biónica">
+            <button class="intensity-dot" data-v="1" title="Ligero">·</button>
+            <button class="intensity-dot active" data-v="2" title="Normal">··</button>
+            <button class="intensity-dot" data-v="3" title="Fuerte">···</button>
+            <button class="intensity-dot pro-only" data-v="4" title="Máximo (Pro)">✦</button>
+          </div>
         </div>
       </header>
+
+      <div class="reader-focus-bar" id="reader-focus-bar" hidden></div>
 
       <div class="reader-scroll" id="reader-scroll">
         <!-- Bio tip inside reader -->
@@ -404,6 +419,7 @@
             <div class="dash-greeting-text">
               <div class="dash-greeting-question" id="dash-greeting-q">¿Qué leeremos hoy?</div>
               <div class="dash-user-name" id="dash-user-first"></div>
+              <span class="dash-streak" id="dash-streak" hidden></span>
             </div>
           </div>
           <span class="dash-plan-pill" id="dash-plan-pill">Gratis</span>
@@ -444,6 +460,9 @@
 
           <!-- Plan feature chips (paid users, rendered by JS) -->
           <div id="dash-plan-chips" hidden></div>
+
+          <!-- Reading stats (shown when >0 words read) -->
+          <div id="dash-stats" class="dash-stats-row" hidden></div>
 
           <!-- Tip del día -->
           <div class="dash-tip-card">

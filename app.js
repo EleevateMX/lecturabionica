@@ -143,16 +143,24 @@ const LANG = {
 };
 
 let lang  = localStorage.getItem('fr-lang')  || 'es';
-let theme = localStorage.getItem('fr-theme') || 'dark';
+let theme = localStorage.getItem('fr-theme') ||
+  (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 let fontSize = Number(localStorage.getItem('fr-size')) || 18;
+let bionicIntensity = parseInt(localStorage.getItem('fr-bionic-intensity') || '2');
 
 const t = key => LANG[lang][key] ?? key;
 
 /* ══ Bionic algorithm ══════════════════════════════════════════ */
 function boldLen(len) {
-  if (len <= 3) return 1;
-  if (len <= 5) return 2;
-  return Math.ceil(len / 2);
+  switch (bionicIntensity) {
+    case 1: return 1;
+    case 3: return Math.ceil(len * 0.5);
+    case 4: return Math.min(len, Math.ceil(len * 0.65));
+    default: // 2
+      if (len <= 3) return 1;
+      if (len <= 5) return 2;
+      return Math.ceil(len / 2);
+  }
 }
 
 function escHtml(s) {
@@ -227,6 +235,63 @@ function showScreen(id) {
   }
 }
 
+/* ══ Streak ════════════════════════════════════════════════════ */
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const last  = localStorage.getItem('fr-streak-last') || '';
+  const count = parseInt(localStorage.getItem('fr-streak-count') || '0');
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  let newCount = 1;
+  if (last === yesterday) newCount = count + 1;
+  else if (last === today)  newCount = count;
+  localStorage.setItem('fr-streak-last', today);
+  localStorage.setItem('fr-streak-count', newCount);
+}
+
+/* ══ Stats ═════════════════════════════════════════════════════ */
+function updateStats(text) {
+  const wordCount = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const total = parseInt(localStorage.getItem('fr-stats-words') || '0') + wordCount;
+  localStorage.setItem('fr-stats-words', total);
+
+  const now = new Date();
+  const weekKey = now.getFullYear() + '-W' + String(Math.ceil((now - new Date(now.getFullYear(), 0, 1)) / 604800000)).padStart(2,'0');
+  const savedKey = localStorage.getItem('fr-stats-week-key');
+  const weekWords = savedKey === weekKey
+    ? parseInt(localStorage.getItem('fr-stats-week-words') || '0') + wordCount
+    : wordCount;
+  localStorage.setItem('fr-stats-week-key', weekKey);
+  localStorage.setItem('fr-stats-week-words', weekWords);
+}
+
+/* ══ Return notification ═══════════════════════════════════════ */
+function initReturnNotification() {
+  const last = parseInt(localStorage.getItem('fr-last-visit') || '0');
+  const now  = Date.now();
+  localStorage.setItem('fr-last-visit', now);
+
+  if (!last) return; // first visit
+  const hoursSince = (now - last) / 3600000;
+
+  // Ask permission after 3rd reading session
+  const sessions = parseInt(localStorage.getItem('fr-sessions') || '0');
+  if (sessions >= 3 && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+
+  // Show welcome-back notification if >48h away and permission granted
+  if (hoursSince > 48 && Notification.permission === 'granted') {
+    navigator.serviceWorker.ready.then(sw => {
+      sw.showNotification('FocusRead 👋', {
+        body: 'Bio te extraña. ¿Seguimos leyendo hoy?',
+        icon: './icon.svg',
+        badge: './icon.svg',
+        tag: 'welcome-back',
+      });
+    }).catch(() => {});
+  }
+}
+
 /* ══ Reader ════════════════════════════════════════════════════ */
 let _currentText  = '';
 let _currentTitle = '';
@@ -252,6 +317,13 @@ function openReader(rawText, title) {
   saveBtn.disabled = false;
   const rsvpBtn = $('btn-rsvp-open');
   if (rsvpBtn) rsvpBtn.hidden = false; // available to all (free gets 5 trials, basic/pro unlimited)
+  const shareBtn = $('btn-share');
+  if (shareBtn) shareBtn.hidden = false;
+  if ($('reader-focus-bar')) $('reader-focus-bar').hidden = false;
+  document.querySelectorAll('.intensity-dot').forEach(b => b.classList.toggle('active', parseInt(b.dataset.v) === bionicIntensity));
+  updateStreak();
+  updateStats(rawText);
+  localStorage.setItem('fr-sessions', parseInt(localStorage.getItem('fr-sessions') || '0') + 1);
   showScreen('screen-reader');
 }
 
@@ -791,6 +863,7 @@ function initFirebase() {
           );
         }
       });
+      initReturnNotification();
     } catch (e) {
       console.warn('Firebase init error:', e);
     }
@@ -1182,6 +1255,13 @@ function openBioActionSheet() {
   sheet.hidden = false;
   document.body.style.overflow = 'hidden';
   setTimeout(() => $('bio-action-panel').classList.add('open'), 10);
+
+  if (!isBasicOrPro()) {
+    const used = parseInt(localStorage.getItem('fr-free-paste') || '0');
+    const remaining = Math.max(0, 5 - used);
+    const hint = document.querySelector('#bio-act-paste .bio-act-hint');
+    if (hint) hint.textContent = remaining > 0 ? `${remaining} usos gratuitos restantes` : 'Límite alcanzado — mejora tu plan';
+  }
 }
 
 function closeBioActionSheet() {
@@ -1290,6 +1370,28 @@ function initDashboard() {
   const tipEl = $('dash-tip-text');
   if (tipEl) tipEl.textContent = tips[new Date().getDate() % tips.length];
 
+  // Streak
+  const streak = parseInt(localStorage.getItem('fr-streak-count') || '0');
+  const streakEl = $('dash-streak');
+  if (streakEl) {
+    if (streak >= 2) {
+      streakEl.textContent = `🔥 ${streak} días seguidos`;
+      streakEl.hidden = false;
+    } else {
+      streakEl.hidden = true;
+    }
+  }
+
+  // Stats
+  const totalWords = parseInt(localStorage.getItem('fr-stats-words') || '0');
+  const weekWords  = parseInt(localStorage.getItem('fr-stats-week-words') || '0');
+  const statsEl = $('dash-stats');
+  if (statsEl && totalWords > 0) {
+    const fmt = n => n >= 1000 ? (n/1000).toFixed(1) + 'k' : n;
+    statsEl.innerHTML = `<span class="dash-stat"><span class="dash-stat-n">${fmt(weekWords)}</span><span class="dash-stat-l">palabras esta semana</span></span><span class="dash-stat"><span class="dash-stat-n">${fmt(totalWords)}</span><span class="dash-stat-l">palabras en total</span></span>`;
+    statsEl.hidden = false;
+  }
+
   // Stagger entry animation
   const toAnimate = [
     $('dash-greeting'),
@@ -1359,6 +1461,14 @@ async function renderDashLibrary() {
     });
     container.appendChild(card);
   });
+
+  if (books.length >= limit && limit < 999) {
+    const lockDiv = document.createElement('div');
+    lockDiv.className = 'dash-lib-lock-row';
+    lockDiv.innerHTML = `<span>🔒 Límite de ${limit} libros alcanzado</span><button class="dash-lib-lock-btn">Ampliar biblioteca →</button>`;
+    lockDiv.querySelector('.dash-lib-lock-btn').addEventListener('click', openUpgradeModal);
+    container.appendChild(lockDiv);
+  }
 }
 
 /* ══ Init ══════════════════════════════════════════════════════ */
@@ -1487,7 +1597,10 @@ function init() {
   });
 
   /* Reader controls */
-  $('btn-back').addEventListener('click', () => showScreen(currentUser ? 'screen-dashboard' : 'screen-home'));
+  $('btn-back').addEventListener('click', () => {
+    if ($('reader-focus-bar')) $('reader-focus-bar').hidden = true;
+    showScreen(currentUser ? 'screen-dashboard' : 'screen-home');
+  });
   $('btn-font-down').addEventListener('click', () => adjustFont(-2));
   $('btn-font-up').addEventListener('click', () => adjustFont(2));
   $('btn-save-book').addEventListener('click', saveCurrentBook);
@@ -1668,6 +1781,48 @@ function init() {
       }, 5000);
     });
   }
+
+  /* Share button */
+  if ($('btn-share')) {
+    $('btn-share').addEventListener('click', async () => {
+      const text = `Estoy leyendo "${_currentTitle}" con FocusRead — lee 2× más rápido con lectura biónica`;
+      const url  = 'https://eleevatemx.github.io/lecturabionica/';
+      if (navigator.share) {
+        try { await navigator.share({ title: 'FocusRead', text, url }); } catch {}
+      } else {
+        await navigator.clipboard.writeText(text + '\n' + url).catch(() => {});
+        showToast('¡Link copiado al portapapeles!', 2500);
+      }
+    });
+  }
+
+  /* Focus line toggle */
+  if ($('btn-focus-line')) {
+    $('btn-focus-line').addEventListener('click', () => {
+      const bar = $('reader-focus-bar');
+      if (!bar) return;
+      bar.hidden = !bar.hidden;
+      $('btn-focus-line').style.color = bar.hidden ? '' : 'var(--accent)';
+    });
+  }
+
+  /* Bionic intensity controls */
+  document.querySelectorAll('.intensity-dot').forEach(btn => {
+    const v = parseInt(btn.dataset.v);
+    if (v === bionicIntensity) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      if (v >= 3 && !isPro()) { openUpgradeModal(); return; }
+      bionicIntensity = v;
+      localStorage.setItem('fr-bionic-intensity', v);
+      document.querySelectorAll('.intensity-dot').forEach(b => b.classList.toggle('active', parseInt(b.dataset.v) === v));
+      // Re-render current text
+      if (_currentText) {
+        const scrollTop = $('reader-scroll').scrollTop;
+        $('reader-content').innerHTML = bionicProcess(_currentText);
+        $('reader-scroll').scrollTop = scrollTop;
+      }
+    });
+  });
 
   /* Service worker */
   if ('serviceWorker' in navigator) {
