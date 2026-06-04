@@ -424,41 +424,25 @@ async function readPdf(file) {
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
   const total = pdf.numPages;
 
-  if (isBasicOrPro()) {
-    // Step 3: detect outline/index
-    showLoading(
-      lang === 'es' ? 'Detectando índice…' : 'Detecting index…',
-      lang === 'es' ? `${total} página${total === 1 ? '' : 's'} encontrada${total === 1 ? '' : 's'}` : `${total} page${total === 1 ? '' : 's'} found`
-    );
-    const outline = await pdf.getOutline();
-    hideLoading();
-
-    if (outline && outline.length > 0) {
-      showTocModal(pdf, outline, docName);
-      return null;
-    }
-    if (total > 20) {
-      showPageNavModal(pdf, docName);
-      return null;
-    }
-    // Short PDF — read directly
-    showLoading(t('loadingPdf'), `${total} páginas`);
-    const text = await extractPages(pdf, 1, total);
-    hideLoading();
-    return text;
-  }
-
-  // Free plan: max 20 pages
+  // Step 3: detect outline/index (all plans get full document)
+  showLoading(
+    lang === 'es' ? 'Detectando índice…' : 'Detecting index…',
+    lang === 'es' ? `${total} página${total === 1 ? '' : 's'} encontrada${total === 1 ? '' : 's'}` : `${total} page${total === 1 ? '' : 's'} found`
+  );
+  const outline = await pdf.getOutline();
   hideLoading();
-  const maxPages = FREE_LIMITS.pdfPages;
-  if (total > maxPages) {
-    const ok = confirm(lang === 'es'
-      ? `Este PDF tiene ${total} páginas. El plan gratuito lee las primeras ${maxPages}. ¿Continuar? Mejora a Básico o Pro para leerlo completo.`
-      : `This PDF has ${total} pages. The free plan reads the first ${maxPages}. Continue? Upgrade to Basic or Pro for the full document.`);
-    if (!ok) return null;
+
+  if (outline && outline.length > 0) {
+    showTocModal(pdf, outline, docName);
+    return null;
   }
-  showLoading(t('loadingPdf'));
-  const text = await extractPages(pdf, 1, Math.min(total, maxPages));
+  if (total > 20) {
+    showPageNavModal(pdf, docName);
+    return null;
+  }
+  // Short PDF — read directly
+  showLoading(t('loadingPdf'), lang === 'es' ? `${total} páginas` : `${total} pages`);
+  const text = await extractPages(pdf, 1, total);
   hideLoading();
   return text;
 }
@@ -660,13 +644,7 @@ function rsvpPivotHtml(word) {
 
 function openRsvp() {
   if (!currentUser) { openLoginModal(); return; }
-  // Free users get 5 trial RSVP sessions
-  if (!isBasicOrPro()) {
-    const trials = parseInt(localStorage.getItem('fr-rsvp-trial') || '0');
-    if (trials >= 5) { openUpgradeModal(); return; }
-    localStorage.setItem('fr-rsvp-trial', trials + 1);
-    if (trials === 4) showToast(lang === 'es' ? 'Última sesión de prueba RSVP — actualiza para continuar' : 'Last RSVP trial session — upgrade to continue', 4000);
-  }
+  // RSVP available to all plans during test phase
   if (!_currentText) return;
   rsvpWords   = rsvpTokenize(_currentText);
   rsvpIdx     = 0;
@@ -1472,7 +1450,7 @@ function initDashboard() {
   if ($('dash-upgrade-to-pro')) $('dash-upgrade-to-pro').hidden = plan !== 'basic';
 
   // PDF hint in action sheet
-  const pdfHintText = isBasicOrPro() ? 'Documento completo' : 'Hasta 20 pág · Gratis';
+  const pdfHintText = 'Documento completo';
   if ($('bio-pdf-hint')) $('bio-pdf-hint').textContent = pdfHintText;
 
   // Show support section only for paid users
