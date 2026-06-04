@@ -59,11 +59,17 @@ body {
   inset: 0;
   background: var(--bg);
   transform: translateX(100%);
+  /* visibility:hidden guarantees a screen that is neither active nor
+     sliding-out is NEVER painted — even while its transform animates
+     back to the off-screen 100% position. This kills the Safari bug
+     where the home screen slid all the way across the viewport.
+     visibility is deliberately OUT of the transition so it flips
+     instantly instead of lingering visible for the whole 0.34s. */
+  visibility: hidden;
   transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
-  /* No global will-change — applied per transition below */
 }
-.screen.active    { transform: translateX(0);    z-index: 2; }
-.screen.slide-out { transform: translateX(-22%); z-index: 1; }
+.screen.active    { transform: translateX(0);    visibility: visible; z-index: 2; }
+.screen.slide-out { transform: translateX(-22%); visibility: visible; z-index: 1; }
 /* Active screen always wins the stacking fight */
 
 /* Home screen scrolls itself */

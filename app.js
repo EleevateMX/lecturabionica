@@ -225,28 +225,34 @@ function showToast(msg, duration) {
   toast._timer = setTimeout(() => toast.classList.remove('app-toast-show'), duration || 3000);
 }
 
-function showScreen(id) {
-  const home      = $('screen-home');
-  const reader    = $('screen-reader');
-  const dashboard = $('screen-dashboard');
+let _currentScreen = 'screen-home';
 
-  // Remove all active/slide-out states
-  [home, reader, dashboard].forEach(s => {
-    if (s) { s.classList.remove('active', 'slide-out'); }
+function showScreen(id) {
+  const target = $(id);
+  if (!target) return;
+
+  const outgoing = _currentScreen && _currentScreen !== id ? $(_currentScreen) : null;
+
+  // Park every screen that isn't the target or the outgoing one off-screen.
+  // With visibility:hidden in CSS these never paint, so they cannot overlap.
+  ['screen-home', 'screen-reader', 'screen-dashboard'].forEach(sid => {
+    if (sid === id || (outgoing && sid === _currentScreen)) return;
+    const el = $(sid);
+    if (el) el.classList.remove('active', 'slide-out');
   });
 
-  if (id === 'screen-reader') {
-    const prev = currentUser ? dashboard : home;
-    if (prev) prev.classList.add('slide-out');
-    reader.classList.add('active');
-  } else if (id === 'screen-dashboard') {
-    // Home slides left so dashboard slides in from the right naturally
-    if (home) home.classList.add('slide-out');
-    if (dashboard) dashboard.classList.add('active');
-  } else {
-    // screen-home: comes in from left (was slide-out at -22%)
-    home.classList.add('active');
+  // The screen we are leaving does the parallax slide-out (stays visible,
+  // z-index 1, parked at -22% behind the incoming active screen).
+  if (outgoing) {
+    outgoing.classList.remove('active');
+    outgoing.classList.add('slide-out');
   }
+
+  // The incoming screen becomes active (slides in from the right, z-index 2).
+  target.classList.remove('slide-out');
+  target.classList.add('active');
+
+  _currentScreen = id;
 }
 
 /* ══ Streak ════════════════════════════════════════════════════ */
