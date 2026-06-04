@@ -897,13 +897,19 @@
       <div class="modal-card toc-card">
         <button class="modal-close" id="toc-close">×</button>
         <div class="toc-header">
-          <span class="toc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
-          <div>
+          <span class="toc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          <div class="toc-header-info">
             <h2 class="toc-title" id="toc-title">Índice del documento</h2>
             <p class="toc-doc-name" id="toc-doc-name"></p>
           </div>
         </div>
-        <p class="toc-hint" id="toc-hint">Elige una sección o rango de páginas para leer.</p>
+        <div class="toc-meta">
+          <span class="toc-meta-chip" id="toc-meta-pages"></span>
+          <span class="toc-meta-chip" id="toc-meta-chapters"></span>
+        </div>
+        <p class="toc-hint" id="toc-hint">Elige una sección para leer.</p>
         <div id="toc-list" class="toc-list"></div>
         <button class="btn-primary toc-all-btn" id="toc-read-all">Leer todo el documento →</button>
       </div>
@@ -912,7 +918,17 @@
     <!-- ══ LOADING OVERLAY ══════════════════════════════════ -->
     <div id="loading" class="loading-overlay" hidden>
       <div class="loading-card">
-        <div class="spinner"></div>
+        <div class="loading-bio-row">
+          <svg class="loading-bio-face" viewBox="0 0 60 60" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="30" r="24" fill="#8b7cf8"/>
+            <circle cx="22" cy="30" rx="5" ry="6" fill="white"/>
+            <circle cx="38" cy="30" rx="5" ry="6" fill="white"/>
+            <circle cx="23" cy="31" r="2.5" fill="#3a2ea0"/>
+            <circle cx="39" cy="31" r="2.5" fill="#3a2ea0"/>
+            <path d="M24 40 Q30 45 36 40" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="spinner"></div>
+        </div>
         <p class="loading-title" id="loading-text">Procesando...</p>
         <p class="loading-sub" id="loading-detail"></p>
       </div>

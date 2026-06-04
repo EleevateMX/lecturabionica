@@ -240,11 +240,11 @@ function showScreen(id) {
     if (prev) prev.classList.add('slide-out');
     reader.classList.add('active');
   } else if (id === 'screen-dashboard') {
-    reader.classList.remove('active');
+    // Home slides left so dashboard slides in from the right naturally
+    if (home) home.classList.add('slide-out');
     if (dashboard) dashboard.classList.add('active');
   } else {
-    // screen-home
-    reader.classList.remove('active');
+    // screen-home: comes in from left (was slide-out at -22%)
     home.classList.add('active');
   }
 }
@@ -392,35 +392,60 @@ async function extractPages(pdf, fromPage, toPage) {
 }
 
 async function readPdf(file) {
+  const docName = file.name.replace(/\.pdf$/i, '');
+
+  // Step 1: read file bytes
+  showLoading(
+    lang === 'es' ? 'Leyendo archivo…' : 'Reading file…',
+    docName.slice(0, 40)
+  );
   const arrayBuffer = await file.arrayBuffer();
+
+  // Step 2: parse with PDF.js
+  showLoading(
+    lang === 'es' ? 'Analizando PDF…' : 'Analyzing PDF…',
+    lang === 'es' ? 'Extrayendo estructura del documento…' : 'Extracting document structure…'
+  );
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const total = pdf.numPages;
 
   if (isBasicOrPro()) {
+    // Step 3: detect outline/index
+    showLoading(
+      lang === 'es' ? 'Detectando índice…' : 'Detecting index…',
+      lang === 'es' ? `${total} página${total === 1 ? '' : 's'} encontrada${total === 1 ? '' : 's'}` : `${total} page${total === 1 ? '' : 's'} found`
+    );
     const outline = await pdf.getOutline();
+    hideLoading();
+
     if (outline && outline.length > 0) {
-      hideLoading();
-      showTocModal(pdf, outline, file.name.replace(/\.pdf$/i, ''));
+      showTocModal(pdf, outline, docName);
       return null;
     }
-    // Large PDF without an embedded outline → page navigator
-    if (pdf.numPages > 20) {
-      hideLoading();
-      showPageNavModal(pdf, file.name.replace(/\.pdf$/i, ''));
+    if (total > 20) {
+      showPageNavModal(pdf, docName);
       return null;
     }
-    return await extractPages(pdf, 1, pdf.numPages);
+    // Short PDF — read directly
+    showLoading(t('loadingPdf'), `${total} páginas`);
+    const text = await extractPages(pdf, 1, total);
+    hideLoading();
+    return text;
   }
 
   // Free plan: max 20 pages
+  hideLoading();
   const maxPages = FREE_LIMITS.pdfPages;
-  const total = pdf.numPages;
   if (total > maxPages) {
     const ok = confirm(lang === 'es'
       ? `Este PDF tiene ${total} páginas. El plan gratuito lee las primeras ${maxPages}. ¿Continuar? Mejora a Básico o Pro para leerlo completo.`
       : `This PDF has ${total} pages. The free plan reads the first ${maxPages}. Continue? Upgrade to Basic or Pro for the full document.`);
     if (!ok) return null;
   }
-  return await extractPages(pdf, 1, Math.min(total, maxPages));
+  showLoading(t('loadingPdf'));
+  const text = await extractPages(pdf, 1, Math.min(total, maxPages));
+  hideLoading();
+  return text;
 }
 
 /* ══ PDF Table of Contents ═════════════════════════════════════ */
@@ -448,38 +473,63 @@ async function buildTocItems(pdf, outline) {
   return items;
 }
 
-function showTocModal(pdf, outline, docTitle) {
+function _openTocModal(title, hint, docTitle, metaPages, metaChapters) {
+  if ($('toc-title'))    $('toc-title').textContent    = title;
+  if ($('toc-hint'))     $('toc-hint').textContent     = hint;
   $('toc-doc-name').textContent = docTitle;
-  if ($('toc-title')) $('toc-title').textContent = lang === 'es' ? 'Índice del documento' : 'Table of contents';
-  if ($('toc-hint'))  $('toc-hint').textContent  = lang === 'es' ? 'Elige una sección para leerla, o lee todo.' : 'Pick a section to read, or read all.';
-  const tocList = $('toc-list');
-  tocList.innerHTML = '<p class="toc-loading">Cargando índice…</p>';
+  if ($('toc-meta-pages'))    $('toc-meta-pages').textContent    = metaPages;
+  if ($('toc-meta-chapters')) $('toc-meta-chapters').textContent = metaChapters;
   $('modal-toc').hidden = false;
   document.body.style.overflow = 'hidden';
+}
+
+function showTocModal(pdf, outline, docTitle) {
+  const total = pdf.numPages;
+  _openTocModal(
+    lang === 'es' ? 'Índice del documento' : 'Table of contents',
+    lang === 'es' ? 'Elige una sección para leerla, o lee todo el documento.' : 'Pick a section to read, or read the full document.',
+    docTitle,
+    lang === 'es' ? `${total} páginas` : `${total} pages`,
+    lang === 'es' ? 'Cargando…' : 'Loading…'
+  );
+
+  const tocList = $('toc-list');
+  tocList.innerHTML = '<p class="toc-loading"><span class="toc-loading-spinner"></span>Cargando índice…</p>';
 
   buildTocItems(pdf, outline).then(items => {
     for (let i = 0; i < items.length; i++) {
-      items[i].endPage = items[i + 1] ? (items[i + 1].page || pdf.numPages) - 1 : pdf.numPages;
+      items[i].endPage = items[i + 1] ? (items[i + 1].page || total) - 1 : total;
     }
 
     if (!items.length) {
+      if ($('toc-title')) $('toc-title').textContent = lang === 'es' ? 'Leer por secciones' : 'Read by sections';
+      if ($('toc-meta-chapters')) $('toc-meta-chapters').textContent = '';
       tocList.innerHTML = '';
       _renderPageChunks(tocList, pdf, docTitle);
       return;
     }
 
+    if ($('toc-meta-chapters')) $('toc-meta-chapters').textContent = lang === 'es' ? `${items.length} capítulos` : `${items.length} chapters`;
+
     tocList.innerHTML = items.map((item, i) => `
       <button class="toc-item" data-idx="${i}">
-        <span class="toc-item-title">${escHtml(item.title)}</span>
-        ${item.page ? `<span class="toc-item-page">p.&nbsp;${item.page}</span>` : ''}
+        <span class="toc-item-num">${i + 1}</span>
+        <span class="toc-item-body">
+          <span class="toc-item-title">${escHtml(item.title)}</span>
+          ${item.page ? `<span class="toc-item-range">p.&nbsp;${item.page}${item.endPage && item.endPage !== item.page ? '–' + item.endPage : ''}</span>` : ''}
+        </span>
+        <svg class="toc-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>`).join('');
 
     tocList.querySelectorAll('.toc-item').forEach(btn => {
       btn.addEventListener('click', async () => {
         const item = items[parseInt(btn.dataset.idx)];
         closeTocModal();
-        showLoading(t('loadingPdf'));
-        const text = await extractPages(pdf, item.page || 1, item.endPage || pdf.numPages);
+        showLoading(
+          lang === 'es' ? `Cargando "${item.title.slice(0, 30)}…"` : `Loading "${item.title.slice(0, 30)}…"`,
+          lang === 'es' ? `Páginas ${item.page || 1}–${item.endPage || total}` : `Pages ${item.page || 1}–${item.endPage || total}`
+        );
+        const text = await extractPages(pdf, item.page || 1, item.endPage || total);
         hideLoading();
         openReader(text, item.title);
       });
@@ -488,17 +538,25 @@ function showTocModal(pdf, outline, docTitle) {
 
   $('toc-read-all').onclick = async () => {
     closeTocModal();
-    showLoading(t('loadingPdf'));
-    const text = await extractPages(pdf, 1, pdf.numPages);
+    showLoading(t('loadingPdf'), lang === 'es' ? `Todo el documento · ${total} páginas` : `Full document · ${total} pages`);
+    const text = await extractPages(pdf, 1, total);
     hideLoading();
     openReader(text, docTitle);
   };
 }
 
 function showPageNavModal(pdf, docTitle) {
-  $('toc-doc-name').textContent = docTitle;
-  if ($('toc-title')) $('toc-title').textContent = lang === 'es' ? 'Leer por secciones' : 'Read by sections';
-  if ($('toc-hint'))  $('toc-hint').textContent  = lang === 'es' ? `${pdf.numPages} páginas — elige un rango para empezar.` : `${pdf.numPages} pages — pick a range to start.`;
+  const total = pdf.numPages;
+  const chunkSize = total <= 60 ? 10 : total <= 200 ? 20 : 30;
+  const numChunks = Math.ceil(total / chunkSize);
+  _openTocModal(
+    lang === 'es' ? 'Leer por secciones' : 'Read by sections',
+    lang === 'es' ? 'Este PDF no tiene índice. Elige un rango de páginas para empezar.' : 'This PDF has no index. Pick a page range to start reading.',
+    docTitle,
+    lang === 'es' ? `${total} páginas` : `${total} pages`,
+    lang === 'es' ? `${numChunks} secciones` : `${numChunks} sections`
+  );
+
   const tocList = $('toc-list');
   tocList.innerHTML = '';
   $('modal-toc').hidden = false;
@@ -506,9 +564,10 @@ function showPageNavModal(pdf, docTitle) {
   _renderPageChunks(tocList, pdf, docTitle);
 
   $('toc-read-all').onclick = async () => {
+    const t2 = pdf.numPages;
     closeTocModal();
-    showLoading(t('loadingPdf'));
-    const text = await extractPages(pdf, 1, pdf.numPages);
+    showLoading(t('loadingPdf'), lang === 'es' ? `Todo el documento · ${t2} páginas` : `Full document · ${t2} pages`);
+    const text = await extractPages(pdf, 1, t2);
     hideLoading();
     openReader(text, docTitle);
   };
@@ -523,10 +582,14 @@ function _renderPageChunks(container, pdf, docTitle) {
     chunks.push({ start: s, end: e });
   }
 
-  container.innerHTML = chunks.map(c => `
+  container.innerHTML = chunks.map((c, i) => `
     <button class="toc-item" data-start="${c.start}" data-end="${c.end}">
-      <span class="toc-item-title">${lang === 'es' ? `Páginas ${c.start}–${c.end}` : `Pages ${c.start}–${c.end}`}</span>
-      <span class="toc-item-page">${c.end - c.start + 1}&nbsp;pág.</span>
+      <span class="toc-item-num">${i + 1}</span>
+      <span class="toc-item-body">
+        <span class="toc-item-title">${lang === 'es' ? `Páginas ${c.start}–${c.end}` : `Pages ${c.start}–${c.end}`}</span>
+        <span class="toc-item-range">${c.end - c.start + 1}&nbsp;${lang === 'es' ? 'páginas' : 'pages'}</span>
+      </span>
+      <svg class="toc-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>`).join('');
 
   container.querySelectorAll('.toc-item').forEach(btn => {
@@ -534,10 +597,13 @@ function _renderPageChunks(container, pdf, docTitle) {
       const start = parseInt(btn.dataset.start);
       const end   = parseInt(btn.dataset.end);
       closeTocModal();
-      showLoading(t('loadingPdf'));
+      showLoading(
+        lang === 'es' ? `Cargando páginas ${start}–${end}…` : `Loading pages ${start}–${end}…`,
+        lang === 'es' ? `${end - start + 1} páginas` : `${end - start + 1} pages`
+      );
       const text = await extractPages(pdf, start, end);
       hideLoading();
-      openReader(text, `${docTitle} (pág. ${start}–${end})`);
+      openReader(text, `${docTitle} · pág. ${start}–${end}`);
     });
   });
 }
