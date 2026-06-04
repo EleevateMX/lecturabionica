@@ -394,12 +394,21 @@ async function extractPages(pdf, fromPage, toPage) {
 async function readPdf(file) {
   const docName = file.name.replace(/\.pdf$/i, '');
 
-  // Step 1: read file bytes
+  // Step 1: read file bytes (Safari < 14.5 lacks file.arrayBuffer)
   showLoading(
     lang === 'es' ? 'Leyendo archivo…' : 'Reading file…',
     docName.slice(0, 40)
   );
-  const arrayBuffer = await file.arrayBuffer();
+  const arrayBuffer = await (
+    typeof file.arrayBuffer === 'function'
+      ? file.arrayBuffer()
+      : new Promise((res, rej) => {
+          const fr = new FileReader();
+          fr.onload  = e => res(e.target.result);
+          fr.onerror = rej;
+          fr.readAsArrayBuffer(file);
+        })
+  );
 
   // Step 2: parse with PDF.js
   showLoading(
