@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>FocusRead — Lectura Biónica</title>
   <meta name="description" content="Lectura biónica para mentes con TDAH. Importa PDFs y textos, lee con enfoque total.">
   <meta name="theme-color" content="#8b7cf8">
@@ -34,43 +34,44 @@
               </linearGradient>
             </defs>
             <rect width="30" height="30" rx="9" fill="url(#hdr-grad)"/>
-            <text x="8" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="800" fill="white">F</text>
-            <text x="17" y="21" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="300" fill="rgba(255,255,255,0.7)">R</text>
+            <!-- Brain lobes -->
+            <circle cx="9.5" cy="11.5" r="5" fill="rgba(255,255,255,0.92)"/>
+            <circle cx="15" cy="9.5" r="6" fill="rgba(255,255,255,0.92)"/>
+            <circle cx="20.5" cy="11.5" r="5" fill="rgba(255,255,255,0.92)"/>
+            <!-- Face -->
+            <ellipse cx="15" cy="21" rx="8.5" ry="7" fill="rgba(255,255,255,0.92)"/>
+            <!-- Center fold -->
+            <line x1="15" y1="8" x2="15" y2="14" stroke="#9B8CFF" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+            <!-- Eyes -->
+            <circle cx="11.5" cy="20.5" r="2.4" fill="#6B5CE7"/>
+            <circle cx="18.5" cy="20.5" r="2.4" fill="#6B5CE7"/>
+            <!-- Pupils -->
+            <circle cx="11.5" cy="20.5" r="1.1" fill="#1E1148"/>
+            <circle cx="18.5" cy="20.5" r="1.1" fill="#1E1148"/>
+            <!-- Eye shine -->
+            <circle cx="12.3" cy="19.7" r="0.85" fill="rgba(255,255,255,0.9)"/>
+            <circle cx="19.3" cy="19.7" r="0.85" fill="rgba(255,255,255,0.9)"/>
           </svg>
           <span class="logo-text">FocusRead</span>
         </div>
         <div class="header-actions">
-          <!-- Auth area -->
           <div class="user-area" id="user-area">
             <button class="btn-signin-header" id="btn-signin-header" aria-label="Iniciar sesión">
-              <!-- Google G -->
               <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              <span id="btn-signin-text">Iniciar sesión</span>
+              <span id="btn-signin-text">Entrar</span>
             </button>
-            <!-- Logged-in state -->
             <div class="user-profile" id="user-profile" hidden>
-              <button class="user-avatar-btn" id="user-avatar-btn" aria-label="Tu cuenta">
+              <button class="user-avatar-btn" id="user-avatar-btn" aria-label="Mi perfil">
                 <img id="user-photo" src="" alt="" width="32" height="32" referrerpolicy="no-referrer">
                 <span class="user-avatar-fallback" id="user-avatar-fallback" hidden>?</span>
               </button>
-              <div class="user-dropdown" id="user-dropdown" hidden>
-                <div class="user-dropdown-name" id="user-display-name"></div>
-                <div class="user-dropdown-email" id="user-email"></div>
-                <hr class="user-dropdown-divider">
-                <button class="btn-pro-badge" id="btn-upgrade-dropdown">Pro ✦</button>
-                <button class="btn-signout" id="btn-signout" aria-label="Cerrar sesión">
-                  <span id="btn-signout-text">Cerrar sesión</span>
-                </button>
-              </div>
             </div>
           </div>
-          <button id="btn-upgrade-header" class="btn-pro-badge" aria-label="Ir a Pro">Pro ✦</button>
-          <button id="btn-lang" class="btn-chip" aria-label="Cambiar idioma">ES</button>
           <button id="btn-theme" class="btn-icon" aria-label="Cambiar tema">
             <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"/>
@@ -93,6 +94,30 @@
           <div class="hero-badge" id="hero-badge">Para mentes con TDAH</div>
           <h1 class="hero-title" id="hero-title">Lee más rápido.<br>Con más enfoque.</h1>
           <p class="hero-sub" id="hero-sub">La técnica de lectura biónica resalta las primeras letras de cada palabra para guiar tu cerebro naturalmente.</p>
+        </section>
+
+        <!-- ── READER PREVIEW ────────────────────────────── -->
+        <section class="reader-preview-section">
+          <div class="preview-label">Vista previa del lector</div>
+          <div class="reader-preview-card">
+            <div class="preview-topbar">
+              <div class="preview-topbar-left">
+                <span class="preview-back-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </span>
+                <span class="preview-doc-title">El cerebro y la lectura</span>
+              </div>
+              <div class="preview-font-chips">A− &nbsp; A+</div>
+            </div>
+            <div class="preview-body bionic-text">
+              <p><b>L</b>a <b>lect</b>ura <b>bión</b>ica <b>ay</b>uda a <b>t</b>u <b>cere</b>bro a <b>proc</b>esar <b>m</b>ás <b>ráp</b>ido. <b>L</b>as <b>prim</b>eras <b>let</b>ras <b>anc</b>lan <b>t</b>u <b>vis</b>ta <b>nat</b>uralmente.</p>
+              <p><b>C</b>ada <b>pal</b>abra <b>tien</b>e <b>un</b> <b>pun</b>to de <b>enf</b>oque <b>vis</b>ual <b>qu</b>e <b>guí</b>a <b>t</b>u <b>mir</b>ada <b>sin</b> <b>esfu</b>erzo.</p>
+            </div>
+            <div class="preview-bottombar">
+              <div class="preview-prog-track"><div class="preview-prog-fill"></div></div>
+              <span class="preview-prog-pct">38%</span>
+            </div>
+          </div>
         </section>
 
         <!-- ── BIO INTRO ──────────────────────────────────── -->
@@ -162,35 +187,6 @@
           </div>
         </section>
 
-        <!-- ── IMPORT ─────────────────────────────────────── -->
-        <section class="import-section">
-          <h2 class="section-title" id="import-title">Importar texto</h2>
-
-          <div class="import-grid">
-            <button class="import-card" id="btn-paste">
-              <div class="import-card-icon">✏️</div>
-              <div class="import-card-label" id="paste-label">Pegar texto</div>
-              <div class="import-card-hint" id="paste-hint">Escribe o pega</div>
-            </button>
-            <button class="import-card" id="btn-txt">
-              <div class="import-card-icon">📄</div>
-              <div class="import-card-label" id="txt-label">Archivo TXT</div>
-              <div class="import-card-hint">.txt</div>
-            </button>
-            <button class="import-card" id="btn-pdf">
-              <div class="import-card-icon">📕</div>
-              <div class="import-card-label" id="pdf-label">Libro PDF</div>
-              <div class="import-card-hint" id="pdf-hint">.pdf · Gratis</div>
-            </button>
-          </div>
-
-          <div class="paste-area" id="paste-area">
-            <textarea id="paste-input" rows="7" spellcheck="false"></textarea>
-            <button class="btn-primary" id="btn-process">
-              <span id="btn-process-text">Leer ahora →</span>
-            </button>
-          </div>
-        </section>
 
         <!-- ── PRICING ────────────────────────────────────── -->
         <section class="pricing-section" id="pricing-section">
@@ -200,38 +196,55 @@
             <p class="pricing-sub" id="pricing-sub">Empieza gratis, sube cuando quieras</p>
           </div>
 
-          <div class="pricing-grid">
+          <div class="pricing-grid pricing-grid-3">
             <!-- Free plan -->
             <div class="plan-card plan-free" id="plan-free-card">
               <div class="plan-name" id="plan-free-name">Gratis</div>
               <div class="plan-price">$0<span class="plan-period" id="plan-period-free">/siempre</span></div>
-              <ul class="plan-features" id="plan-features-free">
-                <li>✓ Pegar cualquier texto</li>
-                <li>✓ Archivos TXT ilimitados</li>
-                <li>✓ PDFs hasta 30 páginas</li>
-                <li>✓ Tema oscuro y claro</li>
-                <li>✓ ES + EN</li>
+              <ul class="plan-features">
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Lectura biónica</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Pegar texto (máx. 5)</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> TXT (máx. 3) · PDF 20 pág</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Tema oscuro y claro</li>
+                <li><svg class="pf-x" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.1)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Sin biblioteca</li>
+                <li><svg class="pf-x" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.1)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Sin RSVP</li>
               </ul>
               <button class="btn-primary plan-free-cta" id="btn-free-try">Probar gratis →</button>
             </div>
 
+            <!-- Basic plan -->
+            <div class="plan-card plan-basic" id="plan-basic-card">
+              <div class="plan-name">Básico</div>
+              <div class="plan-price">$100<span class="plan-period"> MXN/mes</span></div>
+              <ul class="plan-features">
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Todo del plan Gratis</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> PDFs y TXT sin límite</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Modo rápido RSVP</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Biblioteca (máx. 10)</li>
+                <li><svg class="pf-x" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.1)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Sin índice PDF</li>
+                <li><svg class="pf-x" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.1)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Sin soporte prioritario</li>
+              </ul>
+              <button class="btn-primary plan-basic-cta" id="btn-basic-cta">Elegir Básico →</button>
+            </div>
+
             <!-- Pro plan -->
             <div class="plan-card plan-pro" id="plan-pro-card">
-              <div class="plan-badge-pro">✦ PRO</div>
+              <div class="plan-badge-pro">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Recomendado
+              </div>
               <div class="plan-name" id="plan-pro-name">Pro</div>
-              <div class="plan-price">$4.99<span class="plan-period" id="plan-period-pro">/mes</span></div>
-              <ul class="plan-features" id="plan-features-pro">
-                <li>✓ Todo lo del plan gratis</li>
-                <li>✓ PDFs ilimitados</li>
-                <li>✓ Soporte EPUB y DOCX</li>
-                <li>✓ Intensidad biónica ajustable</li>
-                <li>✓ Colecciones de libros</li>
-                <li>✓ Soporte prioritario</li>
+              <div class="plan-price">$150<span class="plan-period" id="plan-period-pro"> MXN/mes</span></div>
+              <ul class="plan-features">
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Todo del plan Básico</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Biblioteca 100+ libros</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Índice de PDFs (TOC)</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Soporte prioritario</li>
+                <li><svg class="pf-check" width="13" height="13" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.15)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Nuevas funciones primero</li>
               </ul>
-              <!-- Stripe Buy Button placeholder — replace buy-button-id and publishable-key -->
               <div id="stripe-buy-btn-container">
                 <button class="btn-pro-cta" id="btn-pro-cta">
-                  <span id="btn-pro-cta-text">Probar Pro gratis 7 días →</span>
+                  <span id="btn-pro-cta-text">Probar Pro 3 días gratis →</span>
                 </button>
               </div>
             </div>
@@ -245,22 +258,23 @@
           <h2 class="section-title" id="how-title">¿Por qué funciona?</h2>
           <div class="how-grid">
             <div class="how-card">
-              <div class="how-icon">🧠</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.6 6.5a3 3 0 0 0 .4-1.4"/><path d="M6 5.1A3 3 0 0 0 6.4 6.5"/><path d="M3.5 10.9a4 4 0 0 1 .6-.4"/><path d="M19.9 10.5a4 4 0 0 1 .6.4"/><path d="M6 18a4 4 0 0 1-2-.5"/><path d="M20 17.5A4 4 0 0 1 18 18"/></svg></div>
               <h3 class="how-card-title" id="how-1-title">Tu cerebro completa las palabras</h3>
               <p class="how-card-desc" id="how-1-desc">Al ver las primeras letras en negrita, tu cerebro predice y completa el resto automáticamente, acelerando la comprensión.</p>
             </div>
             <div class="how-card">
-              <div class="how-icon">⚡</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
               <h3 class="how-card-title" id="how-2-title">Menos saltos visuales</h3>
               <p class="how-card-desc" id="how-2-desc">Los puntos de anclaje biónico reducen los movimientos sacádicos del ojo, manteniendo el foco por más tiempo.</p>
             </div>
             <div class="how-card">
-              <div class="how-icon">🎯</div>
+              <div class="how-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg></div>
               <h3 class="how-card-title" id="how-3-title">Diseñado para el TDAH</h3>
               <p class="how-card-desc" id="how-3-desc">Las personas con TDAH se benefician especialmente al tener anclas visuales claras que guían la atención línea por línea.</p>
             </div>
           </div>
         </section>
+
 
         <footer class="home-footer">
           <p id="footer-text">Procesamiento 100% local · Sin servidores · Sin costos</p>
@@ -268,9 +282,11 @@
 
       </main>
 
-      <input type="file" id="input-txt" accept=".txt,text/plain" hidden>
-      <input type="file" id="input-pdf" accept=".pdf,application/pdf" hidden>
     </div>
+
+    <!-- Hidden file inputs (shared across screens) -->
+    <input type="file" id="input-txt" accept=".txt,text/plain" hidden>
+    <input type="file" id="input-pdf" accept=".pdf,application/pdf" hidden>
 
     <!-- ══ READER SCREEN ═════════════════════════════════════ -->
     <div id="screen-reader" class="screen">
@@ -283,10 +299,31 @@
         </button>
         <h1 class="reader-title" id="reader-title">FocusRead</h1>
         <div class="font-controls">
+          <button class="btn-font" id="btn-reader-theme" aria-label="Cambiar tema" title="Cambiar tema">
+            <svg id="reader-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg id="reader-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
           <button class="btn-font" id="btn-font-down" aria-label="Reducir fuente">A−</button>
           <button class="btn-font" id="btn-font-up" aria-label="Aumentar fuente">A+</button>
+          <button class="btn-font btn-rsvp-open" id="btn-rsvp-open" aria-label="Modo rápido" hidden title="Modo rápido (Pro)">▶</button>
+          <button class="btn-font btn-save-book" id="btn-save-book" aria-label="Guardar en biblioteca" hidden>★</button>
+          <button class="btn-font" id="btn-share" aria-label="Compartir" title="Compartir" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
+          <button class="btn-font" id="btn-focus-line" aria-label="Guía de lectura" title="Guía de lectura" style="font-size:11px;letter-spacing:-1px">≡</button>
+          <div class="reader-intensity" id="reader-intensity" aria-label="Intensidad biónica">
+            <button class="intensity-dot" data-v="1" title="Ligero">·</button>
+            <button class="intensity-dot active" data-v="2" title="Normal">··</button>
+            <button class="intensity-dot" data-v="3" title="Fuerte">···</button>
+            <button class="intensity-dot pro-only" data-v="4" title="Máximo (Pro)">✦</button>
+          </div>
         </div>
       </header>
+
+      <div class="reader-focus-bar" id="reader-focus-bar" hidden></div>
 
       <div class="reader-scroll" id="reader-scroll">
         <!-- Bio tip inside reader -->
@@ -305,6 +342,297 @@
         <span class="progress-label" id="progress-label">0%</span>
       </div>
 
+    </div>
+
+    <!-- ══ DASHBOARD SCREEN ════════════════════════════════════ -->
+    <div id="screen-dashboard" class="screen">
+
+      <div class="dash-topbar">
+        <span class="dash-appname">FocusRead</span>
+        <button id="dash-btn-theme" class="dash-topbar-btn" aria-label="Cambiar tema">
+          <svg id="dash-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="dash-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+
+      <main class="dash-main">
+
+        <!-- Greeting -->
+        <div class="dash-greeting">
+          <div class="dash-greeting-left">
+            <div class="dash-bio-mini" aria-hidden="true">
+              <svg viewBox="0 0 80 90" width="64" height="72" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="db-g" cx="38%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#A394FF"/>
+                    <stop offset="100%" stop-color="#7065E0"/>
+                  </radialGradient>
+                </defs>
+                <!-- Shadow -->
+                <ellipse cx="40" cy="87" rx="18" ry="4" fill="#3D2E8A" opacity="0.18"/>
+                <!-- Body -->
+                <ellipse cx="40" cy="70" rx="14" ry="11" fill="#7C6CF0"/>
+                <!-- Neck -->
+                <ellipse cx="40" cy="59" rx="7" ry="6" fill="url(#db-g)"/>
+                <!-- Brain lobes -->
+                <circle cx="28" cy="29" r="9" fill="#9B8CFF"/>
+                <circle cx="40" cy="25" r="11" fill="#9B8CFF"/>
+                <circle cx="52" cy="29" r="9" fill="#9B8CFF"/>
+                <!-- Head -->
+                <circle cx="40" cy="43" r="21" fill="url(#db-g)"/>
+                <!-- Eyes white -->
+                <ellipse cx="33" cy="42" rx="5.5" ry="6" fill="white"/>
+                <ellipse cx="47" cy="42" rx="5.5" ry="6" fill="white"/>
+                <!-- Pupils -->
+                <circle cx="34" cy="43" r="3" fill="#1E1148"/>
+                <circle cx="48" cy="43" r="3" fill="#1E1148"/>
+                <!-- Eye shine -->
+                <circle cx="35.5" cy="41" r="1.2" fill="white"/>
+                <circle cx="49.5" cy="41" r="1.2" fill="white"/>
+                <!-- Blush -->
+                <ellipse cx="25" cy="48" rx="4" ry="2.5" fill="#F857A6" opacity="0.3"/>
+                <ellipse cx="55" cy="48" rx="4" ry="2.5" fill="#F857A6" opacity="0.3"/>
+                <!-- Big smile -->
+                <path d="M33 53 Q40 61 47 53" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Left arm waving -->
+                <g class="bio-wave-arm" style="transform-origin:27px 63px">
+                  <path d="M27 63 Q18 54 15 43" stroke="#8B7CF8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                  <circle cx="14" cy="41" r="5" fill="#9B8CFF"/>
+                  <line x1="11" y1="36" x2="10" y2="31" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="14" y1="35" x2="14" y2="30" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="17" y1="36" x2="18" y2="31" stroke="#9B8CFF" stroke-width="3" stroke-linecap="round"/>
+                </g>
+                <!-- Right arm -->
+                <path d="M53 63 Q65 55 68 46" stroke="#8B7CF8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <circle cx="69" cy="43" r="5" fill="#9B8CFF"/>
+                <!-- Sparkle -->
+                <path d="M62 14 L63.5 9 L65 14 L70 15.5 L65 17 L63.5 22 L62 17 L57 15.5 Z" fill="#FFD166" opacity="0.9" transform="scale(0.7) translate(22,-8)"/>
+              </svg>
+            </div>
+            <div class="dash-greeting-text">
+              <div class="dash-greeting-question" id="dash-greeting-q">¿Qué leeremos hoy?</div>
+              <div class="dash-user-name" id="dash-user-first"></div>
+              <span class="dash-streak" id="dash-streak" hidden></span>
+            </div>
+          </div>
+          <span class="dash-plan-pill" id="dash-plan-pill">Gratis</span>
+        </div>
+
+        <!-- Upgrade banners — context-aware per plan -->
+        <div class="dash-upgrade-banner dash-upgrade-to-basic" id="dash-upgrade-nudge" hidden>
+          <div class="dash-upgrade-icon">🌟</div>
+          <div class="dash-upgrade-info">
+            <strong>Mejora al Básico</strong>
+            <span>RSVP · Biblioteca · PDFs sin límite · <b>$100 MXN/mes</b></span>
+          </div>
+          <button class="dash-upgrade-cta" id="dash-btn-upgrade">Mejorar →</button>
+        </div>
+        <div class="dash-upgrade-banner dash-upgrade-to-pro" id="dash-upgrade-to-pro" hidden>
+          <div class="dash-upgrade-icon">✦</div>
+          <div class="dash-upgrade-info">
+            <strong>Mejora a PRO</strong>
+            <span>Biblioteca ilimitada · Soporte prioritario · <b>$150 MXN/mes</b></span>
+          </div>
+          <button class="dash-upgrade-cta dash-upgrade-cta-pro" id="dash-btn-upgrade-pro">Mejorar →</button>
+        </div>
+
+        <!-- Novedades -->
+        <section class="dash-section dash-novedades-section" id="dash-novedades">
+          <!-- RSVP trial progress (rendered by JS for free users with >0 trials) -->
+          <div id="dash-rsvp-trial" hidden>
+            <div class="dash-trial-header">
+              <span class="dash-trial-icon">⚡</span>
+              <div class="dash-trial-info">
+                <span class="dash-trial-label">Sesiones RSVP de prueba</span>
+                <span class="dash-trial-count" id="dash-trial-count">0 / 5 usadas</span>
+              </div>
+              <button class="dash-trial-cta" id="dash-trial-unlock">Desbloquear →</button>
+            </div>
+            <div class="dash-trial-bar"><div class="dash-trial-fill" id="dash-trial-fill"></div></div>
+          </div>
+
+          <!-- Plan feature chips (paid users, rendered by JS) -->
+          <div id="dash-plan-chips" hidden></div>
+
+          <!-- Reading stats (shown when >0 words read) -->
+          <div id="dash-stats" class="dash-stats-row" hidden></div>
+
+          <!-- Tip del día -->
+          <div class="dash-tip-card">
+            <span class="dash-tip-emoji">💡</span>
+            <div class="dash-tip-body">
+              <div class="dash-tip-label">Tip del día</div>
+              <div class="dash-tip-text" id="dash-tip-text">Lee en voz alta mentalmente mientras usas lectura biónica para reforzar la comprensión.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Library -->
+        <section class="dash-section">
+          <div class="dash-section-hdr">
+            <h2 class="dash-section-title">Mi biblioteca</h2>
+            <span class="dash-lib-badge" id="dash-lib-badge">0 / 3</span>
+          </div>
+          <div id="dash-library" class="dash-library-grid">
+            <div class="dash-lib-empty" id="dash-lib-empty">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <p>Aún no tienes libros guardados.<br>Toca <strong>Bio</strong> abajo para empezar a leer</p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom navigation -->
+      <nav class="dash-bottom-nav">
+        <button class="dash-nav-tab active" id="dash-nav-home" aria-label="Novedades">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Novedades</span>
+        </button>
+
+        <div class="dash-nav-center-slot">
+          <button class="dash-bio-fab" id="dash-fab-bio" aria-label="Nueva lectura">
+            <svg viewBox="0 0 40 40" width="34" height="34" xmlns="http://www.w3.org/2000/svg" overflow="hidden">
+              <circle cx="12" cy="10" r="5" fill="rgba(255,255,255,0.22)"/>
+              <circle cx="20" cy="8" r="6.5" fill="rgba(255,255,255,0.22)"/>
+              <circle cx="28" cy="10" r="5" fill="rgba(255,255,255,0.22)"/>
+              <circle cx="20" cy="25" r="14" fill="rgba(255,255,255,0.15)"/>
+              <ellipse cx="16" cy="24" rx="3.2" ry="3.8" fill="white"/>
+              <ellipse cx="24" cy="24" rx="3.2" ry="3.8" fill="white"/>
+              <circle cx="17" cy="25" r="1.9" fill="#1E1148"/>
+              <circle cx="25" cy="25" r="1.9" fill="#1E1148"/>
+              <circle cx="17.9" cy="23.2" r="0.85" fill="white"/>
+              <circle cx="25.9" cy="23.2" r="0.85" fill="white"/>
+              <ellipse cx="13" cy="28" rx="3" ry="2" fill="#F857A6" opacity="0.35"/>
+              <ellipse cx="27" cy="28" rx="3" ry="2" fill="#F857A6" opacity="0.35"/>
+              <path d="M16.5 30 Q20 34 23.5 30" stroke="white" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <button class="dash-nav-tab" id="dash-nav-account" aria-label="Mi cuenta">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Mi cuenta</span>
+        </button>
+      </nav>
+
+    </div>
+
+    <!-- ══ BIO ACTION SHEET ═════════════════════════════════════ -->
+    <div class="bio-action-sheet" id="bio-action-sheet" hidden>
+      <div class="bio-action-backdrop" id="bio-action-backdrop"></div>
+      <div class="bio-action-panel" id="bio-action-panel">
+        <div class="bio-action-handle"></div>
+        <div class="bio-action-header">
+          <div class="bio-action-face">
+            <svg viewBox="0 0 40 40" width="28" height="28" xmlns="http://www.w3.org/2000/svg" overflow="hidden">
+              <circle cx="12" cy="10" r="5" fill="rgba(255,255,255,0.3)"/>
+              <circle cx="20" cy="8" r="6" fill="rgba(255,255,255,0.3)"/>
+              <circle cx="28" cy="10" r="5" fill="rgba(255,255,255,0.3)"/>
+              <circle cx="20" cy="24" r="14" fill="rgba(255,255,255,0.2)"/>
+              <ellipse cx="16" cy="23" rx="3" ry="3.5" fill="white"/>
+              <ellipse cx="24" cy="23" rx="3" ry="3.5" fill="white"/>
+              <circle cx="17" cy="24" r="1.8" fill="#1E1148"/>
+              <circle cx="25" cy="24" r="1.8" fill="#1E1148"/>
+              <circle cx="17.8" cy="22.5" r="0.8" fill="white"/>
+              <circle cx="25.8" cy="22.5" r="0.8" fill="white"/>
+              <path d="M16.5 28.5 Q20 32 23.5 28.5" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="bio-action-title">Nueva lectura</span>
+        </div>
+        <!-- Inline paste area (toggles open) -->
+        <div class="bio-sheet-paste" id="bio-sheet-paste" hidden>
+          <textarea id="bio-paste-input" rows="5" spellcheck="false" placeholder="Pega aquí tu texto, cita, artículo o capítulo..."></textarea>
+          <button class="btn-primary" id="bio-paste-process">Leer ahora →</button>
+        </div>
+        <div class="bio-action-options">
+          <button class="bio-action-opt" id="bio-act-paste">
+            <div class="bio-act-icon">📝</div>
+            <div class="bio-act-info">
+              <span class="bio-act-label">Pegar texto</span>
+              <span class="bio-act-hint">Escribe o pega directamente</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="bio-action-opt" id="bio-act-pdf">
+            <div class="bio-act-icon">📄</div>
+            <div class="bio-act-info">
+              <span class="bio-act-label">Abrir PDF</span>
+              <span class="bio-act-hint" id="bio-pdf-hint">Hasta 20 pág · Gratis</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="bio-action-opt" id="bio-act-txt">
+            <div class="bio-act-icon">📋</div>
+            <div class="bio-act-info">
+              <span class="bio-act-label">Archivo TXT</span>
+              <span class="bio-act-hint">.txt</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PLAN WELCOME MODAL ═══════════════════════════════════ -->
+    <div id="modal-plan-welcome" class="modal-overlay" hidden>
+      <div class="modal-card plan-welcome-card">
+        <div class="plan-welcome-confetti" aria-hidden="true">🎉</div>
+        <div class="plan-welcome-bio" aria-hidden="true">
+          <svg viewBox="0 0 120 140" width="90" height="105" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="pw-g" cx="38%" cy="35%" r="65%"><stop offset="0%" stop-color="#A394FF"/><stop offset="100%" stop-color="#7065E0"/></radialGradient></defs>
+            <ellipse cx="60" cy="136" rx="28" ry="6" fill="#3D2E8A" opacity="0.18"/>
+            <ellipse cx="60" cy="108" rx="22" ry="18" fill="#7C6CF0"/>
+            <ellipse cx="60" cy="92" rx="10" ry="9" fill="url(#pw-g)"/>
+            <circle cx="44" cy="46" r="14" fill="#9B8CFF"/>
+            <circle cx="60" cy="40" r="16" fill="#9B8CFF"/>
+            <circle cx="76" cy="46" r="14" fill="#9B8CFF"/>
+            <circle cx="60" cy="68" r="32" fill="url(#pw-g)"/>
+            <ellipse cx="50" cy="66" rx="8" ry="9" fill="white"/>
+            <ellipse cx="70" cy="66" rx="8" ry="9" fill="white"/>
+            <circle cx="51.5" cy="67" r="4.5" fill="#1E1148"/>
+            <circle cx="71.5" cy="67" r="4.5" fill="#1E1148"/>
+            <circle cx="53.5" cy="64.5" r="1.8" fill="white"/>
+            <circle cx="73.5" cy="64.5" r="1.8" fill="white"/>
+            <ellipse cx="39" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+            <ellipse cx="81" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+            <path d="M50 80 Q60 90 70 80" stroke="#1E1148" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- Both arms raised up celebrating -->
+            <path d="M42 100 Q28 80 26 66" stroke="#8B7CF8" stroke-width="11" stroke-linecap="round" fill="none"/>
+            <circle cx="25" cy="63" r="8" fill="#9B8CFF"/>
+            <path d="M78 100 Q92 80 94 66" stroke="#8B7CF8" stroke-width="11" stroke-linecap="round" fill="none"/>
+            <circle cx="95" cy="63" r="8" fill="#9B8CFF"/>
+            <path d="M82 32 L84 24 L86 32 L94 34 L86 36 L84 44 L82 36 L74 34 Z" fill="#FFD166" opacity="0.9"/>
+            <circle cx="108" cy="52" r="4" fill="#FFD166" opacity="0.8"/>
+            <circle cx="102" cy="40" r="2.5" fill="#FFD166" opacity="0.6"/>
+            <circle cx="14" cy="50" r="3.5" fill="#FFD166" opacity="0.7"/>
+            <circle cx="20" cy="38" r="2" fill="#FFD166" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="plan-welcome-badge" id="pw-badge">✦ Plan Básico</div>
+        <h2 class="plan-welcome-title" id="pw-title">¡Todo listo!</h2>
+        <p class="plan-welcome-sub" id="pw-sub">Ya tienes acceso completo al plan Básico</p>
+        <ul class="plan-welcome-feats" id="pw-feats">
+          <li>⚡ Modo rápido RSVP desbloqueado</li>
+          <li>📚 Biblioteca personal (hasta 10 libros)</li>
+          <li>📄 PDFs y TXT sin límite de páginas</li>
+        </ul>
+        <button class="btn-primary plan-welcome-cta" id="btn-plan-welcome-close">¡Empezar a leer! →</button>
+      </div>
     </div>
 
     <!-- ══ GOOGLE LOGIN MODAL ═══════════════════════════════════ -->
@@ -339,13 +667,14 @@
             <ellipse cx="66" cy="128" rx="10" ry="7" fill="#F857A6" opacity="0.28"/>
             <ellipse cx="134" cy="128" rx="10" ry="7" fill="#F857A6" opacity="0.28"/>
             <path d="M85 140 Q100 152 115 140" stroke="#1E1148" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-            <!-- Left arm raised high waving -->
-            <path d="M62 192 Q30 160 22 130" stroke="#8B7CF8" stroke-width="15" stroke-linecap="round" fill="none"/>
-            <circle cx="20" cy="126" r="11" fill="#9B8CFF"/>
-            <!-- Fingers -->
-            <line x1="14" y1="118" x2="12" y2="110" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
-            <line x1="20" y1="116" x2="20" y2="107" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
-            <line x1="26" y1="117" x2="28" y2="109" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
+            <!-- Left arm raised high waving — animated via CSS -->
+            <g class="bio-wave-arm" style="transform-origin:62px 192px">
+              <path d="M62 192 Q44 164 40 132" stroke="#8B7CF8" stroke-width="15" stroke-linecap="round" fill="none"/>
+              <circle cx="40" cy="128" r="11" fill="#9B8CFF"/>
+              <line x1="32" y1="120" x2="30" y2="112" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
+              <line x1="40" y1="118" x2="40" y2="108" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
+              <line x1="48" y1="120" x2="50" y2="112" stroke="#9B8CFF" stroke-width="5" stroke-linecap="round"/>
+            </g>
             <!-- Right arm down -->
             <path d="M138 192 Q158 185 162 172" stroke="#8B7CF8" stroke-width="15" stroke-linecap="round" fill="none"/>
             <!-- Sparkles -->
@@ -360,11 +689,12 @@
         </div>
 
         <h2 class="login-title" id="login-title">Bienvenido a FocusRead</h2>
-        <p class="login-sub" id="login-sub">Crea tu cuenta gratuita para empezar a leer. Puedes actualizar a Pro cuando quieras.</p>
+        <p class="login-sub" id="login-sub">Crea tu cuenta gratis para comenzar</p>
+
         <div class="login-steps">
           <div class="login-step"><span class="login-step-n">1</span><span>Crea tu cuenta con Google</span></div>
           <div class="login-step"><span class="login-step-n">2</span><span>Lee PDFs y textos con lectura biónica</span></div>
-          <div class="login-step"><span class="login-step-n">3</span><span>Actualiza a Pro para desbloquear RSVP y biblioteca</span></div>
+          <div class="login-step"><span class="login-step-n">3</span><span>Actualiza a Pro para RSVP y biblioteca ilimitada</span></div>
         </div>
 
         <button class="btn-google" id="btn-google-signin">
@@ -378,78 +708,204 @@
         </button>
 
         <p class="login-terms" id="login-terms">Al continuar aceptas nuestros <a href="#" id="link-terms">Términos</a> y <a href="#" id="link-privacy">Privacidad</a></p>
+      </div>
+    </div>
 
-        <div class="login-divider"><span id="login-or-text">o continúa sin cuenta</span></div>
-        <button class="btn-guest" id="btn-guest">
-          <span id="btn-guest-text">Explorar gratis sin iniciar sesión →</span>
-        </button>
+    <!-- ══ TERMS MODAL ══════════════════════════════════════════ -->
+    <div id="modal-terms" class="modal-overlay" hidden>
+      <div class="modal-card legal-modal-card">
+        <button class="modal-close" id="terms-modal-close" aria-label="Cerrar">×</button>
+        <h2 class="legal-title">Términos y Condiciones</h2>
+        <div class="legal-body">
+          <p><strong>FocusRead</strong> es una aplicación de lectura biónica diseñada para mejorar la concentración y velocidad de lectura.</p>
+          <h3>Uso del servicio</h3>
+          <p>Al crear una cuenta aceptas usar FocusRead únicamente para uso personal y no comercial. Está prohibido distribuir, copiar o modificar el servicio sin autorización.</p>
+          <h3>Cuenta de usuario</h3>
+          <p>Eres responsable de mantener la seguridad de tu cuenta de Google. FocusRead accede únicamente a tu nombre, foto y correo electrónico para identificarte.</p>
+          <h3>Contenido</h3>
+          <p>Todo el texto que proceses en FocusRead se analiza localmente en tu dispositivo. No almacenamos ni transmitimos el contenido de tus lecturas a nuestros servidores.</p>
+          <h3>Suscripción Pro</h3>
+          <p>El plan Pro se factura mensual o anualmente. Puedes cancelar en cualquier momento desde tu panel de Stripe. No se hacen reembolsos parciales de períodos ya pagados.</p>
+          <h3>Modificaciones</h3>
+          <p>Nos reservamos el derecho de modificar estos términos con previo aviso de 15 días mediante notificación en la app.</p>
+          <p class="legal-date">Última actualización: mayo 2026</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PRIVACY MODAL ════════════════════════════════════════ -->
+    <div id="modal-privacy" class="modal-overlay" hidden>
+      <div class="modal-card legal-modal-card">
+        <button class="modal-close" id="privacy-modal-close" aria-label="Cerrar">×</button>
+        <h2 class="legal-title">Política de Privacidad</h2>
+        <div class="legal-body">
+          <p><strong>FocusRead</strong> se compromete a proteger tu privacidad. Esta política explica qué datos recopilamos y cómo los usamos.</p>
+          <h3>Datos que recopilamos</h3>
+          <p>Al iniciar sesión con Google recopilamos: nombre, dirección de correo electrónico y foto de perfil. Estos datos se usan únicamente para identificarte dentro de la app.</p>
+          <h3>Lo que NO recopilamos</h3>
+          <p>No almacenamos el texto que procesas. Todo el procesamiento de lectura biónica ocurre en tu dispositivo (100% local). No vendemos ni compartimos tus datos con terceros.</p>
+          <h3>Servicios de terceros</h3>
+          <p><strong>Google Sign-In:</strong> Usamos Firebase Authentication de Google para el inicio de sesión. Consulta la política de privacidad de Google para más información.</p>
+          <p><strong>Stripe:</strong> Los pagos del plan Pro son procesados por Stripe. No almacenamos datos de tarjetas de crédito.</p>
+          <h3>Tus derechos</h3>
+          <p>Puedes solicitar la eliminación de tu cuenta y datos en cualquier momento contactándonos. Al cerrar sesión, ningún dato personal permanece en tu dispositivo salvo las preferencias locales (tema, idioma, tamaño de fuente).</p>
+          <h3>Cookies y almacenamiento local</h3>
+          <p>Usamos localStorage para guardar tus preferencias de tema, idioma y tamaño de fuente. No usamos cookies de rastreo.</p>
+          <p class="legal-date">Última actualización: mayo 2026</p>
+        </div>
       </div>
     </div>
 
     <!-- ══ STRIPE UPGRADE MODAL ══════════════════════════════ -->
     <div id="modal-upgrade" class="modal-overlay" hidden>
-      <div class="modal-card">
+      <div class="modal-card upgrade-modal-card">
         <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
 
-        <div class="modal-bio-mini" aria-hidden="true">
-          <svg viewBox="0 0 80 80" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="mb-g" cx="38%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#A394FF"/>
-                <stop offset="100%" stop-color="#7065E0"/>
-              </radialGradient>
-            </defs>
-            <circle cx="40" cy="48" r="28" fill="url(#mb-g)"/>
-            <circle cx="28" cy="23" r="12" fill="#9B8CFF"/>
-            <circle cx="40" cy="19" r="14" fill="#9B8CFF"/>
-            <circle cx="52" cy="23" r="12" fill="#9B8CFF"/>
-            <rect x="16" y="28" width="48" height="15" fill="url(#mb-g)"/>
-            <ellipse cx="32" cy="47" rx="7" ry="8" fill="white"/>
-            <ellipse cx="48" cy="47" rx="7" ry="8" fill="white"/>
-            <circle cx="33" cy="48" r="4" fill="#1E1148"/>
-            <circle cx="49" cy="48" r="4" fill="#1E1148"/>
-            <circle cx="34.5" cy="46" r="1.5" fill="white"/>
-            <circle cx="50.5" cy="46" r="1.5" fill="white"/>
-            <ellipse cx="23" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
-            <ellipse cx="57" cy="55" rx="5" ry="3.5" fill="#F857A6" opacity="0.28"/>
-            <path d="M34 58 Q40 63 46 58" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M60 35 L62 30 L64 35 L69 37 L64 39 L62 44 L60 39 L55 37 Z" fill="#FFD166" transform="scale(0.6) translate(38,-18)"/>
-          </svg>
-        </div>
-
-        <h2 class="modal-title" id="modal-title">¡Bio dice que vale la pena! ✦</h2>
-        <p class="modal-sub" id="modal-sub">Desbloquea todo el poder de la lectura biónica</p>
-
-        <ul class="modal-features">
-          <li id="mf-1">📚 PDFs de cualquier tamaño (libros completos)</li>
-          <li id="mf-2">📖 Soporte para EPUB y DOCX</li>
-          <li id="mf-3">⚡ Intensidad biónica personalizable</li>
-          <li id="mf-4">🗂️ Biblioteca personal de libros</li>
-          <li id="mf-5">🎨 Temas y tipografías adicionales</li>
-          <li id="mf-6">💬 Soporte prioritario con el equipo</li>
-        </ul>
-
-        <div class="modal-pricing">
-          <div class="modal-price-option active" id="mpo-month" data-period="month">
-            <span class="mpo-label" id="mpo-month-label">Mensual</span>
-            <span class="mpo-price">$4.99<small id="mpo-month-per">/mes</small></span>
+        <!-- Bio + header -->
+        <div class="upgrade-header">
+          <div class="upgrade-bio" aria-hidden="true">
+            <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" width="72" height="84">
+              <defs>
+                <radialGradient id="ug-hg" cx="38%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#A394FF"/>
+                  <stop offset="100%" stop-color="#7065E0"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="60" cy="136" rx="28" ry="6" fill="#3D2E8A" opacity="0.18"/>
+              <ellipse cx="60" cy="108" rx="22" ry="18" fill="#7C6CF0"/>
+              <ellipse cx="60" cy="92" rx="10" ry="9" fill="url(#ug-hg)"/>
+              <circle cx="44" cy="46" r="14" fill="#9B8CFF"/>
+              <circle cx="60" cy="40" r="16" fill="#9B8CFF"/>
+              <circle cx="76" cy="46" r="14" fill="#9B8CFF"/>
+              <circle cx="60" cy="68" r="32" fill="url(#ug-hg)"/>
+              <path d="M44 52 Q52 46 60 52" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <path d="M60 49 Q68 43 76 49" stroke="#7065E0" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <ellipse cx="50" cy="66" rx="8" ry="9" fill="white"/>
+              <ellipse cx="70" cy="66" rx="8" ry="9" fill="white"/>
+              <circle cx="51.5" cy="67" r="4.5" fill="#1E1148"/>
+              <circle cx="71.5" cy="67" r="4.5" fill="#1E1148"/>
+              <circle cx="53.5" cy="64.5" r="1.8" fill="white"/>
+              <circle cx="73.5" cy="64.5" r="1.8" fill="white"/>
+              <ellipse cx="39" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+              <ellipse cx="81" cy="74" rx="6" ry="4" fill="#F857A6" opacity="0.28"/>
+              <path d="M52 79 Q60 87 68 79" stroke="#1E1148" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- Left arm with coin -->
+              <path d="M38 100 Q22 90 18 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="16" cy="74" r="10" fill="#FFD166"/>
+              <text x="16" y="78" font-family="Inter,sans-serif" font-size="9" font-weight="800" fill="#B8860B" text-anchor="middle">$</text>
+              <!-- Right arm -->
+              <path d="M82 100 Q98 90 102 78" stroke="#8B7CF8" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="104" cy="74" r="7" fill="#9B8CFF"/>
+              <!-- Sparkle -->
+              <path d="M88 30 L90 24 L92 30 L98 32 L92 34 L90 40 L88 34 L82 32 Z" fill="#FFD166" transform="scale(0.75) translate(28,-8)"/>
+            </svg>
           </div>
-          <div class="modal-price-option" id="mpo-year" data-period="year">
-            <span class="mpo-label" id="mpo-year-label">Anual</span>
-            <span class="mpo-price">$39.99<small id="mpo-year-per">/año</small></span>
-            <span class="mpo-save" id="mpo-save">Ahorra 33%</span>
+          <div class="upgrade-header-text">
+            <h2 class="upgrade-title" id="modal-title">¡Bio dice que vale la pena! ✦</h2>
+            <p class="upgrade-sub" id="modal-sub">Desbloquea todo el poder de la lectura biónica</p>
           </div>
         </div>
 
-        <!-- Stripe Buy Button — configure in stripe-config.js -->
-        <div id="stripe-modal-btn-container">
-          <!-- Rendered by app.js once Stripe config is present -->
-          <button class="btn-primary btn-modal-cta" id="btn-modal-cta">
-            <span id="btn-modal-cta-text">Comenzar prueba gratis de 7 días →</span>
-          </button>
+        <!-- Billing toggle -->
+        <div class="billing-toggle">
+          <button class="billing-opt billing-opt-active" id="bill-monthly">Mensual</button>
+          <button class="billing-opt" id="bill-annual">Anual <span class="billing-save-chip">2 meses gratis</span></button>
         </div>
+
+        <!-- Plan cards -->
+        <div class="plan-cards-row">
+
+          <!-- Básico -->
+          <div class="plan-crd plan-crd-basic">
+            <div class="plan-crd-name">Básico</div>
+            <div class="plan-crd-price">
+              <span class="plan-crd-amount" id="price-basic">$100</span>
+              <small class="plan-crd-period" id="period-basic">MXN/mes</small>
+            </div>
+            <div class="plan-crd-annual-note" id="annual-note-basic" hidden>$1,000 MXN/año · ahorras $200</div>
+            <ul class="plan-crd-feats">
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Lectura biónica</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> PDFs y TXT sin límite</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Pegar texto sin límite</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Modo rápido RSVP</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Biblioteca personal</li>
+              <li class="feat-no"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(136,136,168,0.12)"/><path d="M5 5l4 4M9 5l-4 4" stroke="#8888a8" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> Índice de PDFs</li>
+            </ul>
+            <button class="plan-crd-btn plan-crd-btn-basic" id="btn-plan-basic">Elegir Básico</button>
+          </div>
+
+          <!-- Pro -->
+          <div class="plan-crd plan-crd-pro">
+            <div class="plan-crd-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Recomendado
+            </div>
+            <div class="plan-crd-name">Pro</div>
+            <div class="plan-crd-price">
+              <span class="plan-crd-amount" id="price-pro">$150</span>
+              <small class="plan-crd-period" id="period-pro">MXN/mes</small>
+            </div>
+            <div class="plan-crd-annual-note" id="annual-note-pro" hidden>$1,500 MXN/año · ahorras $300</div>
+            <ul class="plan-crd-feats">
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Todo lo de Básico</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Modo rápido RSVP</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Biblioteca personal</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Índice de PDFs</li>
+              <li class="feat-yes"><svg class="feat-svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="rgba(139,124,248,0.18)"/><path d="M4 7.5l2 2 4-4" stroke="#8b7cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Soporte prioritario</li>
+            </ul>
+            <button class="plan-crd-btn plan-crd-btn-pro" id="btn-plan-pro">Probar Pro 3 días gratis →</button>
+          </div>
+
+        </div>
+
+        <p class="plan-transparency-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" style="vertical-align:middle;margin-right:4px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Estos precios nos ayudan a mantener la página activa y seguir mejorándola con nuevas funciones.</p>
+
+        <!-- Stripe Pricing Table — se inyecta aquí cuando Stripe está configurado -->
+        <div id="stripe-pricing-table-wrap"></div>
 
         <p class="modal-legal" id="modal-legal">Cancela cuando quieras · Stripe · Sin compromisos</p>
+      </div>
+    </div>
+
+    <!-- ══ RSVP OVERLAY ═════════════════════════════════════════ -->
+    <div id="rsvp-overlay" class="rsvp-overlay" hidden>
+      <button id="rsvp-close" class="rsvp-close">×</button>
+      <div class="rsvp-meta">
+        <span class="rsvp-label-txt">Modo rápido</span>
+        <span class="rsvp-wpm-badge">·&nbsp;<span id="rsvp-wpm-val">300</span>&nbsp;ppm</span>
+      </div>
+      <div class="rsvp-stage">
+        <div class="rsvp-guide"></div>
+        <div id="rsvp-word" class="rsvp-word">···</div>
+      </div>
+      <div class="rsvp-prog-track"><div id="rsvp-prog-fill" class="rsvp-prog-fill"></div></div>
+      <div class="rsvp-btns">
+        <button id="rsvp-back" class="rsvp-btn-sm">← atrás</button>
+        <button id="rsvp-play" class="rsvp-btn-play">▶ iniciar</button>
+        <button id="rsvp-fwd"  class="rsvp-btn-sm">adelante →</button>
+      </div>
+      <div class="rsvp-speed-row">
+        <span class="rsvp-spd-lbl">100</span>
+        <input id="rsvp-slider" type="range" min="100" max="700" step="25" value="300" class="rsvp-slider">
+        <span class="rsvp-spd-lbl">700</span>
+      </div>
+      <div id="rsvp-count" class="rsvp-count">1 / 0</div>
+    </div>
+
+    <!-- ══ TOC MODAL ════════════════════════════════════════════ -->
+    <div id="modal-toc" class="modal-overlay" hidden>
+      <div class="modal-card toc-card">
+        <button class="modal-close" id="toc-close">×</button>
+        <div class="toc-header">
+          <span class="toc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+          <div>
+            <h2 class="toc-title" id="toc-title">Índice del documento</h2>
+            <p class="toc-doc-name" id="toc-doc-name"></p>
+          </div>
+        </div>
+        <p class="toc-hint" id="toc-hint">Elige una sección o rango de páginas para leer.</p>
+        <div id="toc-list" class="toc-list"></div>
+        <button class="btn-primary toc-all-btn" id="toc-read-all">Leer todo el documento →</button>
       </div>
     </div>
 
@@ -462,16 +918,93 @@
       </div>
     </div>
 
+    <!-- ══ PROFILE PANEL ══════════════════════════════════════════ -->
+    <div id="panel-profile" class="profile-panel" hidden>
+      <div class="profile-backdrop" id="profile-backdrop"></div>
+      <div class="profile-sheet" id="profile-sheet">
+        <div class="profile-handle"></div>
+        <div class="profile-sheet-hdr">
+          <h2 class="profile-sheet-title">Mi perfil</h2>
+          <button id="panel-profile-close" class="profile-close-btn" aria-label="Cerrar">×</button>
+        </div>
+        <!-- Identity -->
+        <div class="profile-identity">
+          <div class="profile-avatar-ring">
+            <img id="profile-photo-lg" src="" alt="" class="profile-avatar-lg" hidden referrerpolicy="no-referrer">
+            <span id="profile-fallback-lg" class="profile-fallback-lg">?</span>
+          </div>
+          <div class="profile-identity-text">
+            <div class="profile-full-name" id="user-display-name">—</div>
+            <div class="profile-email-text" id="user-email">—</div>
+          </div>
+        </div>
+        <!-- Plan -->
+        <div id="profile-plan-card" class="profile-plan-card"></div>
+        <!-- Books -->
+        <div class="profile-section">
+          <div class="profile-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Mis libros</div>
+          <div id="library-list" class="profile-library"></div>
+        </div>
+        <!-- Settings -->
+        <div class="profile-section">
+          <div class="profile-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Ajustes</div>
+          <div class="profile-settings">
+            <div class="profile-setting-row">
+              <span class="profile-setting-label">Idioma</span>
+              <button id="btn-lang" class="btn-chip" aria-label="Cambiar idioma">ES</button>
+            </div>
+            <div class="profile-setting-row">
+              <span class="profile-setting-label">Tema</span>
+              <button id="profile-btn-theme" class="btn-icon" aria-label="Cambiar tema">
+                <svg id="profile-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg id="profile-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Help & Suggestions -->
+        <div class="profile-section">
+          <div class="profile-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>Ayuda y sugerencias</div>
+          <div id="support-form-wrap">
+            <textarea id="support-text" class="suggestions-textarea" rows="3" placeholder="¿Tienes una idea o encontraste un problema? Cuéntanos..."></textarea>
+            <button class="btn-primary suggestions-send-btn" id="btn-support-send" style="margin-top:8px">Enviar →</button>
+          </div>
+          <div id="support-thanks" hidden>
+            <p style="font-size:13px;color:var(--accent);padding:12px 0">¡Gracias! Lo leeremos con mucho gusto.</p>
+          </div>
+        </div>
+
+        <!-- Sign out -->
+        <button id="btn-signout" class="profile-signout-btn" aria-label="Cerrar sesión">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span id="btn-signout-text">Cerrar sesión</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <!-- Firebase — loaded async, only activates when firebase-config.js is present -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" defer></script>
   <!-- Stripe.js — loaded async, only activates when configured -->
-  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+  <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
   <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <!-- Optional: create stripe-config.js with your keys -->
   <script src="stripe-config.js" onerror="void 0"></script>
+  <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

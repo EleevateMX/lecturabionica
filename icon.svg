@@ -1,28 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background -->
-  <rect width="512" height="512" rx="120" fill="#8b7cf8"/>
-  <!-- Subtle inner glow -->
-  <rect width="512" height="512" rx="120" fill="url(#glow)" opacity="0.3"/>
   <defs>
-    <radialGradient id="glow" cx="30%" cy="30%" r="70%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#8b7cf8"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#A394FF"/>
+      <stop offset="100%" stop-color="#5B4ECC"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.2)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
     </radialGradient>
   </defs>
-  <!-- F — bold part (bionic) -->
-  <text
-    x="90" y="350"
-    font-family="Inter, system-ui, sans-serif"
-    font-size="300"
-    font-weight="800"
-    fill="#ffffff"
-    opacity="1">F</text>
-  <!-- R — lighter part -->
-  <text
-    x="265" y="350"
-    font-family="Inter, system-ui, sans-serif"
-    font-size="300"
-    font-weight="400"
-    fill="#ffffff"
-    opacity="0.55">R</text>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+
+  <!-- Brain silhouette (top, subtle) -->
+  <circle cx="174" cy="156" r="72" fill="rgba(255,255,255,0.12)"/>
+  <circle cx="256" cy="128" r="88" fill="rgba(255,255,255,0.12)"/>
+  <circle cx="338" cy="156" r="72" fill="rgba(255,255,255,0.12)"/>
+
+  <!-- Face/body area -->
+  <ellipse cx="256" cy="300" rx="130" ry="110" fill="rgba(255,255,255,0.12)"/>
+
+  <!-- Eyes - bold and clear -->
+  <ellipse cx="210" cy="296" rx="30" ry="34" fill="white"/>
+  <ellipse cx="302" cy="296" rx="30" ry="34" fill="white"/>
+  <circle cx="210" cy="298" r="18" fill="#1E1148"/>
+  <circle cx="302" cy="298" r="18" fill="#1E1148"/>
+  <circle cx="218" cy="288" r="7" fill="rgba(255,255,255,0.9)"/>
+  <circle cx="310" cy="288" r="7" fill="rgba(255,255,255,0.9)"/>
+
+  <!-- Smile -->
+  <path d="M222 348 Q256 372 290 348" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Bold "FR" mark - bottom area -->
+  <text x="256" y="460" font-family="Inter,system-ui,-apple-system,sans-serif" font-size="88" font-weight="800" fill="rgba(255,255,255,0.22)" text-anchor="middle" letter-spacing="-2">FocusRead</text>
 </svg>
